@@ -1,0 +1,41 @@
+{% extends "core/base.html" %}
+
+{% block title %}Bitácora de Ingresos - Casarent App{% endblock %}
+
+{% block content %}
+  <div style="max-width:960px; margin:0 auto;">
+    <div class="page-header">
+      <h1>Bitácora de Ingresos</h1>
+      <a href="{% url 'core:profile' %}" class="back-link">← Volver al perfil</a>
+    </div>
+
+    <div class="card">
+      {% if logs %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Fecha y hora</th>
+              <th>IP</th>
+              <th>Navegador</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for log in logs %}
+              <tr>
+                <td>{{ log.user.username }}</td>
+                <td>{{ log.timestamp|date:"d/m/Y H:i:s" }}</td>
+                <td>{{ log.ip_address|default:"—" }}</td>
+                <td style="max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="{{ log.user_agent }}">{{ log.user_agent|default:"—" }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="empty-state">
+          <p>No hay registros de ingresos todavía.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

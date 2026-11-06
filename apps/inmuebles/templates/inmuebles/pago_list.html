@@ -1,0 +1,46 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Pagos" %} - {{ cuota.descripcion }} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div style="max-width:700px; margin:0 auto;">
+    <a href="{% url 'inmuebles:cuota_list' contrato_pk=cuota.contrato.pk %}" style="color:var(--color-text-secondary); font-size:0.88rem;">← {% trans "Volver a cuotas" %}</a>
+
+    <div class="page-header" style="margin-top:16px;">
+      <h1 style="margin:0;">{% trans "Pagos" %} — {{ cuota.descripcion }}</h1>
+      <a href="{% url 'inmuebles:pago_create' cuota_pk=cuota.pk %}" class="btn-primary">+ {% trans "Nuevo Pago" %}</a>
+    </div>
+
+    {% if pagos %}
+      <div class="card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{% trans "Fecha" %}</th>
+              <th>{% trans "Monto" %}</th>
+              <th>{% trans "Método" %}</th>
+              <th>{% trans "Comprobante" %}</th>
+              <th>{% trans "Observaciones" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in pagos %}
+              <tr>
+                <td>{{ p.fecha_pago|date:"d/m/Y" }}</td>
+                <td><strong>{{ p.moneda }} {{ p.monto|floatformat:2 }}</strong></td>
+                <td>{{ p.get_metodo_pago_display }}</td>
+                <td>{{ p.comprobante|default:"-" }}</td>
+                <td>{{ p.observaciones|default:"-" }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="card empty-state">
+        <p>{% trans "No hay pagos registrados para esta cuota." %}</p>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

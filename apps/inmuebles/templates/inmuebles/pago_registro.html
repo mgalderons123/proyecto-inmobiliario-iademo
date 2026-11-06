@@ -1,0 +1,65 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Registro de Cobros" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div style="max-width:960px; margin:0 auto;">
+    <div class="page-header">
+      <h1>{% trans "Registro de Cobros" %}</h1>
+    </div>
+
+    {% if pagos %}
+      <div class="card">
+        <div style="overflow-x:auto;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>{% trans "Cuota" %}</th>
+                <th>{% trans "Inmueble" %}</th>
+                <th>{% trans "Monto" %}</th>
+                <th>{% trans "Fecha" %}</th>
+                <th>{% trans "Método" %}</th>
+                <th>{% trans "Estado" %}</th>
+                <th>{% trans "Comprobante" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in pagos %}
+                <tr>
+                  <td>{{ p.cuota.descripcion }}</td>
+                  <td>{{ p.cuota.contrato.inmueble.titulo }}</td>
+                  <td><strong>{{ p.moneda }} {{ p.monto|floatformat:2 }}</strong></td>
+                  <td>{{ p.fecha_pago|date:"d/m/Y" }}</td>
+                  <td>{{ p.get_metodo_pago_display }}</td>
+                  <td>
+                    {% if p.estado == "aprobado" %}
+                      <span class="badge badge--success">{{ p.get_estado_display }}</span>
+                    {% elif p.estado == "rechazado" %}
+                      <span class="badge badge--danger">{{ p.get_estado_display }}</span>
+                    {% else %}
+                      <span class="badge badge--active">{{ p.get_estado_display }}</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if p.archivo_comprobante %}
+                       <a href="{% url 'inmuebles:descargar_comprobante' p.pk %}">{% trans "Ver" %}</a>
+                    {% elif p.comprobante %}
+                      {{ p.comprobante }}
+                    {% else %}
+                      —
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% else %}
+      <div class="card empty-state">
+         <p>{% trans "No hay cobros registrados." %}</p>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

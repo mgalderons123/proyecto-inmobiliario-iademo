@@ -1,0 +1,130 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Editar" %} {{ edit_user.username }} - Casarent App{% endblock %}
+
+{% block content %}
+  <div style="max-width:720px; margin:0 auto;">
+    <div class="page-header">
+      <h1>{% trans "Editar usuario" %}: {{ edit_user.username }}</h1>
+      <a href="{% url 'core:admin_users' %}" class="back-link">← {% trans "Volver a la lista" %}</a>
+    </div>
+
+    <div class="form-card" style="margin-bottom:24px;">
+      <div class="form-card__header">
+        <h2 class="form-card__title">{% trans "Información del usuario" %}</h2>
+        <p class="form-card__subtitle">{% trans "Modificar datos básicos de la cuenta" %}</p>
+      </div>
+      <div class="form-card__body">
+        <form method="post" class="form" novalidate>
+          {% csrf_token %}
+          <input type="hidden" name="action" value="edit">
+
+          <div class="form__field">
+            <label class="form__label">{% trans "Nombre de usuario" %}</label>
+            <input type="text" class="form__control" value="{{ edit_user.username }}" disabled
+                   style="background:var(--color-bg); cursor:not-allowed;">
+          </div>
+
+          <div class="form__field">
+            <label class="form__label" for="id_email">{% trans "Correo electrónico" %}</label>
+            <input type="email" name="email" id="id_email" class="form__control"
+                   value="{{ edit_user.email|default:'' }}" required>
+          </div>
+
+          <div class="form__field">
+            <label class="form__label" style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+              <input type="checkbox" name="is_staff" {% if edit_user.is_staff %}checked{% endif %}
+                     style="width:18px; height:18px;">
+              <span>{% trans "Acceso de administrador (Staff)" %}</span>
+            </label>
+            <p style="color:var(--color-text-secondary); font-size:0.82rem; margin:4px 0 0;">
+              {% trans "Permite acceder a funcionalidades de administración." %}
+            </p>
+          </div>
+
+          <div class="form-card__footer">
+            <a href="{% url 'core:admin_users' %}" class="btn-secondary">{% trans "Cancelar" %}</a>
+            <button type="submit" class="btn-primary">{% trans "Guardar cambios" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="form-card" style="margin-bottom:24px;">
+      <div class="form-card__header">
+        <h2 class="form-card__title">{% trans "Contraseña" %}</h2>
+        <p class="form-card__subtitle">{% trans "Restablecer la contraseña del usuario" %}</p>
+      </div>
+      <div class="form-card__body">
+        <form method="post" class="form" novalidate>
+          {% csrf_token %}
+          <input type="hidden" name="action" value="reset_password">
+
+          <div class="form__field">
+            <label class="form__label" for="id_new_password">{% trans "Nueva contraseña" %}</label>
+            <input type="password" name="new_password" id="id_new_password" class="form__control"
+                   minlength="8" placeholder="{% trans 'Mínimo 8 caracteres' %}" required>
+          </div>
+
+          <div class="form-card__footer">
+            <button type="submit" class="btn-primary"
+                    onclick="return confirm('{% trans "¿Actualizar la contraseña de" %} {{ edit_user.username }}?');">
+              {% trans "Actualizar contraseña" %}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card__header">
+        <h2 class="form-card__title">{% trans "Código de registro" %}</h2>
+        <p class="form-card__subtitle">{% trans "Código de verificación para el primer inicio de sesión" %}</p>
+      </div>
+      <div class="form-card__body">
+        {% if reg_code %}
+          <div style="display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap;">
+            <div>
+              <p style="color:var(--color-text-secondary); font-size:0.85rem; margin:0 0 4px;">{% trans "Código actual:" %}</p>
+              <p style="font-size:1.4rem; font-weight:700; font-family:monospace; letter-spacing:3px; margin:0;">
+                {{ reg_code.code }}
+              </p>
+            </div>
+            <div>
+              <p style="color:var(--color-text-secondary); font-size:0.85rem; margin:0 0 4px;">{% trans "Estado:" %}</p>
+              {% if reg_code.used %}
+                <span style="color:var(--color-success); font-weight:600;">{% trans "Usado" %}</span>
+              {% elif reg_code.expires_at > now %}
+                <span style="color:var(--color-warning); font-weight:600;">{% trans "Pendiente" %}</span>
+              {% else %}
+                <span style="color:var(--color-danger); font-weight:600;">{% trans "Expirado" %}</span>
+              {% endif %}
+            </div>
+            <div>
+              <p style="color:var(--color-text-secondary); font-size:0.85rem; margin:0 0 4px;">{% trans "Creado:" %}</p>
+              <p style="margin:0;">{{ reg_code.created_at|date:"d/m/Y H:i" }}</p>
+            </div>
+            <div>
+              <p style="color:var(--color-text-secondary); font-size:0.85rem; margin:0 0 4px;">{% trans "Expira:" %}</p>
+              <p style="margin:0;">{{ reg_code.expires_at|date:"d/m/Y H:i" }}</p>
+            </div>
+          </div>
+        {% else %}
+          <p style="color:var(--color-text-secondary); margin:0 0 16px;">
+            {% trans "Este usuario no tiene código de registro." %}
+          </p>
+        {% endif %}
+
+        <form method="post" style="margin-top:16px;">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="regenerate_code">
+          <button type="submit" class="btn-primary"
+                  onclick="return confirm('{% trans "¿Regenerar código y enviar correo a" %} {{ edit_user.username }}?');">
+            {% trans "Regenerar código y enviar correo" %}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

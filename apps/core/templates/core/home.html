@@ -1,0 +1,240 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Inicio" %} - Casarent App{% endblock %}
+
+{% block content %}
+
+  {% if user.is_authenticated %}
+    <div class="hero--sm">
+      <div class="hero--sm-body">
+        <h1 class="hero__title">{% trans "Bienvenido" %}, {{ user.get_short_name|default:user.username }}</h1>
+        <p class="page-subtitle">{% trans "Resumen operativo" %}</p>
+        <p class="hero__subtitle" style="color:var(--color-text-secondary)">{% trans "Lo que requiere atención en tu cuenta" %} {{ active_account.nombre }}</p>
+      </div>
+      <div class="hero__actions">
+        <a href="{% url 'inmuebles:create' %}" class="btn-primary">{% trans "Crear inmueble" %}</a>
+        <a href="{% url 'inmuebles:contrato_global_list' %}" class="btn-secondary">{% trans "Ver contratos" %}</a>
+      </div>
+    </div>
+
+    <section aria-labelledby="attention-title">
+      <h2 id="attention-title" class="page-subtitle">{% trans "Atención prioritaria" %}</h2>
+      <div class="dashboard-attention">
+        <a class="metric-card" style="--metric-color:var(--color-warning)" href="{% url 'inmuebles:pago_pendientes' %}">
+          <span class="metric-card__label">{% trans "Pagos por revisar" %}</span>
+          <strong class="metric-card__value">{{ stats.pagos_pendientes }}</strong>
+        </a>
+        <a class="metric-card" style="--metric-color:var(--color-danger)" href="{% url 'inmuebles:dashboard' %}">
+          <span class="metric-card__label">{% trans "Cuotas vencidas" %}</span>
+          <strong class="metric-card__value">{{ stats.cuotas_vencidas }}</strong>
+        </a>
+        <a class="metric-card" style="--metric-color:var(--color-info)" href="{% url 'inmuebles:contrato_global_list' %}">
+          <span class="metric-card__label">{% trans "Contratos por vencer" %}</span>
+          <strong class="metric-card__value">{{ stats.contratos_por_vencer }}</strong>
+        </a>
+        <a class="metric-card" href="{% url 'inmuebles:disponibles' %}">
+          <span class="metric-card__label">{% trans "Inmuebles disponibles" %}</span>
+          <strong class="metric-card__value">{{ stats.disponibles }}</strong>
+        </a>
+      </div>
+    </section>
+
+    <div class="dashboard-layout">
+      <section class="card card--accent" aria-labelledby="pending-title">
+        <div class="card__header"><h2 id="pending-title">{% trans "Pagos pendientes" %}</h2><a href="{% url 'inmuebles:pago_pendientes' %}">{% trans "Ver todos" %}</a></div>
+        <div class="table-region" tabindex="0" aria-label="{% trans 'Pagos pendientes' %}">
+          <table class="table">
+            <thead><tr><th scope="col">{% trans "Inmueble" %}</th><th scope="col">{% trans "Importe" %}</th><th scope="col">{% trans "Fecha" %}</th><th scope="col">{% trans "Acción" %}</th></tr></thead>
+            <tbody>
+              {% for payment in pending_payments %}
+                <tr><td>{{ payment.cuota.contrato.inmueble.titulo }}</td><td class="money">{{ payment.moneda }} {{ payment.monto|floatformat:2 }}</td><td>{{ payment.fecha_pago|date:"SHORT_DATE_FORMAT" }}</td><td><a href="{% url 'inmuebles:pago_aprobar_rechazar' payment.pk %}">{% trans "Revisar pago" %}</a></td></tr>
+              {% empty %}
+                <tr><td colspan="4">{% trans "No hay pagos pendientes de revisión." %}</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card card--accent" aria-labelledby="expiring-title">
+        <div class="card__header"><h2 id="expiring-title">{% trans "Próximos vencimientos" %}</h2></div>
+        <div class="card__body">
+          {% for contract in expiring_contracts %}
+            <p><a href="{% url 'inmuebles:contrato_detail' contract.pk %}"><strong>{{ contract.inmueble.titulo }}</strong></a><br><span class="form__help">{% trans "Vence" %} {{ contract.fecha_fin|date:"SHORT_DATE_FORMAT" }}</span></p>
+          {% empty %}
+            <div class="empty-state"><p>{% trans "No hay contratos que venzan en los próximos 30 días." %}</p></div>
+          {% endfor %}
+        </div>
+      </section>
+    </div>
+  {% else %}
+    <div class="hero">
+      <div class="hero__icon">
+        <svg viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="8" width="20" height="18" rx="1" stroke="currentColor" stroke-width="1.8"/>
+          <rect x="5.5" y="10.5" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.4"/>
+          <rect x="13.5" y="10.5" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.4"/>
+          <rect x="9" y="18" width="6" height="4" rx="0.5" fill="currentColor" opacity="0.25"/>
+        </svg>
+      </div>
+      <h1 class="hero__title">{% trans "Gestioná tu portfolio inmobiliario" %}</h1>
+      <p class="hero__subtitle">
+        {% trans "Una plataforma completa para administrar propiedades, contratos, inquilinos y cobranzas desde un solo lugar." %}
+      </p>
+      <div class="hero__actions">
+        <a href="{% url 'login' %}" class="btn-primary">{% trans "Iniciar sesión" %}</a>
+        <a href="{% url 'core:register' %}" class="btn-secondary">{% trans "Crear cuenta" %}</a>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if not user.is_authenticated %}<div class="feature-grid">
+
+    <div class="feature-card">
+      <div class="feature-card__meta">
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="8" width="20" height="18" rx="1" stroke="currentColor" stroke-width="1.8"/>
+            <rect x="5.5" y="10.5" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.4"/>
+            <rect x="13.5" y="10.5" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.4"/>
+            <rect x="9" y="18" width="6" height="8" rx="0.5" fill="currentColor" opacity="0.25"/>
+          </svg>
+        </div>
+      </div>
+      <div class="feature-card__content">
+        <h2>{% trans "Propiedades" %}</h2>
+        <p>{% trans "Agregá una propiedad en segundos. La dirección se geolocaliza sola, subí fotos y definí su estado al instante." %}</p>
+        {% if user.is_authenticated %}
+          <a href="{% url 'inmuebles:list' %}" class="feature-card__link">{% trans "Ir a Propiedades" %} →</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-card__meta">
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="8" r="5" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M3 26c0-5 4-9 9-9s9 4 9 9" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </div>
+      </div>
+      <div class="feature-card__content">
+        <h2>{% trans "Propietarios" %}</h2>
+        <p>{% trans "Administrá tus propietarios con toda su información de contacto y el historial completo de sus inmuebles." %}</p>
+        {% if user.is_authenticated %}
+          <a href="{% url 'inmuebles:propietario_list' %}" class="feature-card__link">{% trans "Ir a Propietarios" %} →</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-card__meta">
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7" cy="21" r="4" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M10 21L18 13M18 13l3 3M18 13l-4-4M15 16l-3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="feature-card__content">
+        <h2>{% trans "Inquilinos" %}</h2>
+        <p>{% trans "Registrá inquilinos y consultá al instante sus contratos activos, vencidos o finalizados." %}</p>
+        {% if user.is_authenticated %}
+          <a href="{% url 'inmuebles:inquilino_list' %}" class="feature-card__link">{% trans "Ir a Inquilinos" %} →</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-card__meta">
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="2" width="16" height="24" rx="2" stroke="currentColor" stroke-width="1.8"/>
+            <line x1="8" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="8" y1="13" x2="16" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="8" y1="17" x2="13" y2="17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="feature-card__content">
+        <h2>{% trans "Contratos" %}</h2>
+        <p>{% trans "Creá contratos de alquiler o venta que actualizan automáticamente la disponibilidad al finalizar." %}</p>
+        {% if user.is_authenticated %}
+          <a href="{% url 'inmuebles:contrato_global_list' %}" class="feature-card__link">{% trans "Ir a Contratos" %} →</a>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>{% endif %}
+
+  {% if user.is_authenticated and inmuebles_destacados %}
+    <div class="home-gallery">
+      <div class="home-gallery__header">
+        <h2>{% trans "Tus propiedades destacadas" %}</h2>
+        <a href="{% url 'inmuebles:list' %}" class="feature-card__link">{% trans "Ver todas" %}</a>
+      </div>
+      <div class="home-gallery__grid">
+        {% for inmueble in inmuebles_destacados %}
+          <a href="{% url 'inmuebles:detail' inmueble.pk %}" class="home-gallery__card">
+            {% with foto=inmueble.fotos.all|first %}
+              {% if foto and foto.imagen %}
+                <img src="{{ foto.imagen.url }}" alt="{{ inmueble.titulo }}" loading="lazy">
+              {% else %}
+                <div class="home-gallery__card-img">{% trans "Sin foto" %}</div>
+              {% endif %}
+            {% endwith %}
+            <div class="home-gallery__card-body">
+              <h3>{{ inmueble.titulo }}</h3>
+              <p>{{ inmueble.get_tipo_display }}</p>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="reg-modal-overlay" id="regModal" style="display:none;">
+    <div class="reg-modal">
+      <div class="reg-modal__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="M22 7l-10 6L2 7"/>
+        </svg>
+      </div>
+      <h2 class="reg-modal__title">{% trans "Revisá tu correo" %}</h2>
+      <p class="reg-modal__text">
+        {% trans "Te enviamos un enlace de verificación a tu correo electrónico." %}
+        {% trans "Hacé clic en el enlace para activar tu cuenta." %}
+      </p>
+      <div class="reg-modal__code-box">
+        <span class="reg-modal__code-label">{% trans "Tu código de seguridad para el primer ingreso llega en ese correo." %}</span>
+      </div>
+      <p class="reg-modal__hint">
+        {% trans "Guardalo. Lo necesitás para ingresar la primera vez." %}
+      </p>
+      <a href="{% url 'login' %}" class="btn-primary reg-modal__btn" style="text-decoration:none; text-align:center;">{% trans "Entendido" %}</a>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('registered') !== '1') return;
+      var overlay = document.getElementById('regModal');
+      if (!overlay) return;
+      overlay.style.display = 'flex';
+      function close() {
+        overlay.style.display = 'none';
+        var clean = window.location.pathname;
+        window.history.replaceState({}, '', clean);
+      }
+      overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    })();
+  </script>
+{% endblock %}

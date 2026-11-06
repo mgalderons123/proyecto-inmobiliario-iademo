@@ -1,0 +1,45 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Detalle de Pago" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+{% block content %}
+<div style="max-width:700px; margin:0 auto;">
+  <a href="{% url 'inmuebles:portal_cuotas' contrato_pk=pago.cuota.contrato.pk %}" class="back-link">← {% trans "Volver a cuotas" %}</a>
+  <div class="page-header">
+    <h1 class="page-title">{% trans "Detalle de Pago" %}</h1>
+  </div>
+
+  <div class="card">
+    <div class="card__body">
+      <table class="table">
+        <tr><td style="color:var(--color-text-secondary); width:160px; border:none; padding:8px 0;">{% trans "Monto" %}</td><td style="border:none; padding:8px 0; font-weight:600;">{{ pago.moneda }} {{ pago.monto|floatformat:2 }}</td></tr>
+        <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Fecha de pago" %}</td><td style="border:none; padding:8px 0;">{{ pago.fecha_pago|date:"d/m/Y" }}</td></tr>
+        <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Método" %}</td><td style="border:none; padding:8px 0;">{{ pago.get_metodo_pago_display }}</td></tr>
+        <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Estado" %}</td><td style="border:none; padding:8px 0;">
+          {% if pago.estado == "aprobado" %}
+            <span class="badge badge--success">{% trans "Aprobado" %}</span>
+          {% elif pago.estado == "rechazado" %}
+            <span class="badge badge--danger">{% trans "Rechazado" %}</span>
+          {% else %}
+            <span class="badge badge--warning">{% trans "Pendiente" %}</span>
+          {% endif %}
+        </td></tr>
+        {% if pago.observaciones %}
+        <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Observaciones" %}</td><td style="border:none; padding:8px 0;">{{ pago.observaciones }}</td></tr>
+        {% endif %}
+        {% if pago.motivo_rechazo %}
+        <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Motivo rechazo" %}</td><td style="border:none; padding:8px 0; color:var(--color-danger);">{{ pago.motivo_rechazo }}</td></tr>
+        {% endif %}
+      </table>
+
+      {% if pago.archivo_comprobante %}
+        <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--color-border);">
+          <p style="font-weight:600; margin-bottom:8px;">{% trans "Comprobante adjunto" %}</p>
+          <div style="display:flex; gap:12px; align-items:center;">
+            <a href="{% url 'inmuebles:descargar_comprobante' pago.pk %}" class="btn-secondary btn--sm">{% trans "Descargar comprobante" %}</a>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,344 @@
+:root {
+  --control-height: 44px;
+  --content-max: 1200px;
+  --z-sidebar: 70;
+  --z-overlay: 60;
+  --z-dialog: 100;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 200;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-150%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.mobile-appbar,
+.sidebar-backdrop {
+  display: none;
+}
+
+.sidebar__section-toggle,
+.sidebar__user-trigger {
+  width: 100%;
+  min-height: var(--control-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.84);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sidebar__section-toggle:hover,
+.sidebar__section-toggle[aria-expanded="true"],
+.sidebar__user-trigger:hover,
+.sidebar__user-trigger[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.09);
+  color: #fff;
+}
+
+.sidebar__section-toggle .caret {
+  transition: transform 180ms ease;
+}
+
+.sidebar__section-toggle[aria-expanded="true"] .caret {
+  transform: rotate(180deg);
+}
+
+.sidebar__subnav[hidden],
+.sidebar__user-popup[hidden] {
+  display: none;
+}
+
+.sidebar__subnav {
+  display: block;
+  padding-left: 12px;
+}
+
+.sidebar__nav a[aria-current="page"] {
+  background: rgba(20, 184, 166, 0.2);
+  color: #fff;
+}
+
+.sidebar__user-popup {
+  display: block;
+}
+
+.sidebar-toggle {
+  width: 44px;
+  height: 44px;
+  left: 238px;
+}
+
+.main {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+}
+
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="password"],
+.form input[type="number"],
+.form input[type="date"],
+.form input[type="url"],
+.form input[type="tel"],
+.form select,
+.form__control {
+  min-height: var(--control-height);
+  height: var(--control-height);
+}
+
+.password-control {
+  position: relative;
+}
+
+.password-control input {
+  padding-right: 48px !important;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.password-toggle:hover {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.password-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.table-region {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+.table-region > .table {
+  min-width: 680px;
+}
+
+.money {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.dashboard-attention {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.metric-card {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--metric-color, var(--color-primary));
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.metric-card:hover {
+  border-color: var(--metric-color, var(--color-primary));
+  text-decoration: none;
+}
+
+.metric-card__label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.metric-card__value {
+  display: block;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.65rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.75fr);
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .dashboard-attention {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .mobile-appbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 14px;
+    padding-top: max(8px, env(safe-area-inset-top));
+    border-bottom: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--color-surface) 94%, transparent);
+    backdrop-filter: blur(14px);
+  }
+
+  .mobile-appbar__menu {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--color-border);
+    border-radius: 9px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .mobile-appbar__title {
+    min-width: 0;
+    overflow: hidden;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: var(--z-sidebar);
+    width: min(88vw, 320px);
+    display: flex;
+    transform: translateX(-105%);
+    transition: transform 220ms ease;
+    box-shadow: var(--shadow-lg);
+  }
+
+  body.nav-open {
+    overflow: hidden;
+  }
+
+  body.nav-open .sidebar {
+    transform: translateX(0);
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-overlay);
+    display: block;
+    border: 0;
+    background: rgba(15, 23, 42, 0.58);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms ease;
+  }
+
+  body.nav-open .sidebar-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sidebar__nav {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .sidebar__group {
+    display: block;
+  }
+
+  .sidebar__user {
+    margin-top: auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .main {
+    padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
+  }
+
+  .dashboard-attention {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .metric-card {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 430px) {
+  .dashboard-attention {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .sidebar,
+  .sidebar-backdrop,
+  .sidebar__section-toggle .caret {
+    transition: none;
+  }
+}

@@ -1,0 +1,28 @@
+FROM python:3.13-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    DJANGO_SETTINGS_MODULE=PRY_INMOB.settings_production
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y libpq5 fonts-dejavu-core \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY requirements-production.txt ./
+RUN python -m pip install --no-cache-dir -r requirements-production.txt
+RUN useradd --create-home --uid 1000 casarent \
+    && mkdir -p /app/staticfiles /app/data/public /app/data/private \
+    && chown -R casarent:casarent /app
+
+# Copy only application runtime sources; omit QA data and developer tooling.
+COPY --chown=casarent:casarent manage.py ./
+COPY --chown=casarent:casarent PRY_INMOB ./PRY_INMOB
+COPY --chown=casarent:casarent apps ./apps
+COPY --chown=casarent:casarent locale ./locale
+COPY --chown=casarent:casarent scripts/production-entrypoint.sh ./scripts/production-entrypoint.sh
+
+USER casarent
+EXPOSE 8000
+ENTRYPOINT ["/bin/sh", "/app/scripts/production-entrypoint.sh"]

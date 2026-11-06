@@ -1,0 +1,62 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Inquilinos" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div style="max-width:1100px; margin:0 auto;">
+    <div class="page-header">
+      <h1>{% trans "Inquilinos" %}</h1>
+      {% if account.puede_crear_inquilino %}
+        <a href="{% url 'inmuebles:inquilino_create' %}" class="btn-primary">+ {% trans "Nuevo Inquilino" %}</a>
+      {% endif %}
+    </div>
+
+    <div class="card card--accent" style="margin-bottom:20px;">
+      <div class="card__body">
+        <strong>Plan {{ account.get_plan_display }}</strong>
+        <span style="color:var(--color-text-secondary);"> · {{ account.inquilinos_utilizados }} de {{ account.limite_inquilinos }} inquilinos utilizados</span>
+        {% if not account.puede_crear_inquilino %}
+          <p style="margin:8px 0 0;color:var(--color-danger);">Alcanzaste el límite del plan. Podés solicitar un cambio desde tu perfil.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if inquilinos %}
+      <div class="card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{% trans "Nombre" %}</th>
+              <th>{% trans "Documento" %}</th>
+              <th>Email</th>
+              <th>{% trans "Teléfono" %}</th>
+              <th>{% trans "Contratos" %}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in inquilinos %}
+              <tr>
+                <td><a href="{% url 'inmuebles:inquilino_detail' pk=i.pk %}">{{ i.nombre }}</a></td>
+                <td>{{ i.documento|default:"-" }}</td>
+                <td>{{ i.email|default:"-" }}</td>
+                <td>{{ i.telefono|default:"-" }}</td>
+                <td>{{ i.contratos.count }}</td>
+                <td>
+                  <a href="{% url 'inmuebles:inquilino_update' pk=i.pk %}" style="margin-right:8px;">{% trans "Editar" %}</a>
+                  <a href="{% url 'inmuebles:inquilino_delete' pk=i.pk %}" style="color:var(--color-danger);">{% trans "Eliminar" %}</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="card empty-state">
+        <p>{% trans "No hay inquilinos registrados." %}</p>
+        {% if account.puede_crear_inquilino %}<a href="{% url 'inmuebles:inquilino_create' %}" class="btn-primary">+ {% trans "Nuevo Inquilino" %}</a>{% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

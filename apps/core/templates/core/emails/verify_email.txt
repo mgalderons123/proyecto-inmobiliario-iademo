@@ -1,0 +1,14 @@
+{% load i18n %}{% blocktranslate with username=user.username %}Hola {{ username }},{% endblocktranslate %}
+
+{% blocktranslate %}Hacé clic en el siguiente enlace para verificar tu correo electrónico y activar tu cuenta en {{ site_name }}:{% endblocktranslate %}
+
+{{ verify_url }}
+
+{% blocktranslate %}Tu código de seguridad para el primer inicio de sesión es: {{ registration_code }}{% endblocktranslate %}
+
+{% translate "Guardalo. Lo necesitás para ingresar la primera vez." %}
+
+{% translate "Si no creaste una cuenta, podés ignorar este mensaje." %}
+
+{% translate "Saludos," %}
+{% blocktranslate %}El equipo de {{ site_name }}{% endblocktranslate %}

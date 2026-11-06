@@ -1,0 +1,219 @@
+{% extends "core/base.html" %}
+{% load static i18n %}
+
+{% block title %}{% if editando %}{% trans "Editar Inmueble" %}{% else %}{% trans "Nuevo Inmueble" %}{% endif %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div class="container-md">
+    <div class="form-card">
+      <div class="form-card__header">
+        <a href="{% url 'inmuebles:list' %}" class="back-link">← {% trans "Volver a mis inmuebles" %}</a>
+        <h1 class="form-card__title">{% if editando %}{% trans "Editar Inmueble" %}{% else %}{% trans "Nuevo Inmueble" %}{% endif %}</h1>
+      </div>
+      <div class="card__body">
+        <form method="post" enctype="multipart/form-data" class="form" novalidate>
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="non-field-error">{{ form.non_field_errors|join:" " }}</div>
+          {% endif %}
+
+          <div class="form-section">
+            <span class="form-section__label">{% trans "Información general" %}</span>
+            {% include "core/_field.html" with field=form.titulo %}
+            {% include "core/_field.html" with field=form.direccion %}
+
+            <div id="map" style="height:400px; margin-top:10px; margin-bottom:16px; border-radius:8px; border:1px solid var(--color-border);"></div>
+            {{ form.latitud }}
+            {{ form.longitud }}
+
+            {% include "core/_field.html" with field=form.descripcion %}
+          </div>
+
+          <div class="form-section">
+            <span class="form-section__label">{% trans "Características" %}</span>
+            <div class="form-row">
+              {% include "core/_field.html" with field=form.tipo %}
+              {% include "core/_field.html" with field=form.tipo_alquiler %}
+            </div>
+            {% include "core/_field.html" with field=form.superficie %}
+            <div class="form-row">
+              {% include "core/_field.html" with field=form.habitaciones %}
+              {% include "core/_field.html" with field=form.banos %}
+            </div>
+          </div>
+
+          <div class="form-section">
+            <span class="form-section__label">{% trans "Precio y estado" %}</span>
+            <div class="form-row">
+              {% include "core/_field.html" with field=form.precio %}
+              {% include "core/_field.html" with field=form.moneda %}
+            </div>
+            <div class="form-row">
+              {% include "core/_field.html" with field=form.estado %}
+              {% include "core/_field.html" with field=form.propietario %}
+            </div>
+          </div>
+
+          <div class="form-section">
+            <span class="form-section__label">{% trans "Fotografías" %}</span>
+            {{ fotos_formset.management_form }}
+            {% if fotos_formset.non_form_errors %}
+              <div class="non-field-error" role="alert">{{ fotos_formset.non_form_errors|join:" " }}</div>
+            {% endif %}
+            <div class="photo-grid" id="fotos-container">
+              {% for foto_form in fotos_formset %}
+                <div class="photo-grid__item{% if foto_form.instance.pk and foto_form.instance.imagen %} photo-grid__item--has-img{% endif %}">
+                  {{ foto_form.id }}
+                  {{ foto_form.orden.as_hidden }}
+                  {% if foto_form.non_field_errors %}<div class="form__error" role="alert">{{ foto_form.non_field_errors|join:" " }}</div>{% endif %}
+                  {% if foto_form.instance.pk and foto_form.instance.imagen %}
+                    <img src="{{ foto_form.instance.imagen.url }}" alt="{% trans 'Foto' %}">
+                  {% endif %}
+                  {{ foto_form.imagen }}
+                  {% if foto_form.imagen.errors %}<div class="form__error" role="alert">{{ foto_form.imagen.errors|join:" " }}</div>{% endif %}
+                  {% if foto_form.instance.pk %}
+                    <label class="foto-delete">{{ foto_form.DELETE }} ✕ {% trans "Eliminar" %}</label>
+                    {% if foto_form.DELETE.errors %}<div class="form__error" role="alert">{{ foto_form.DELETE.errors|join:" " }}</div>{% endif %}
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="form__actions">
+            <button type="submit" class="btn-primary">
+              {% if editando %}{% trans "Guardar cambios" %}{% else %}{% trans "Crear inmueble" %}{% endif %}
+            </button>
+            <a href="{% url 'inmuebles:list' %}" class="btn-ghost">{% trans "Cancelar" %}</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'inmuebles/leaflet/leaflet.css' %}" />
+<link rel="stylesheet" href="{% static 'inmuebles/leaflet/Control.Geocoder.css' %}" />
+<link rel="stylesheet" href="{% static 'inmuebles/leaflet/L.Control.Locate.css' %}" />
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'inmuebles/leaflet/leaflet.js' %}"></script>
+<script src="{% static 'inmuebles/leaflet/Control.Geocoder.js' %}"></script>
+<script src="{% static 'inmuebles/leaflet/L.Control.Locate.js' %}"></script>
+<script>
+document.querySelectorAll('.foto-delete').forEach(function(label) {
+  var cb = label.querySelector('input[type="checkbox"]');
+  if (!cb) return;
+  label.addEventListener('click', function(e) {
+    e.preventDefault();
+    if (cb.checked) {
+      cb.checked = false;
+    } else if (confirm('{% trans "¿Eliminar esta foto?" %}')) {
+      cb.checked = true;
+    }
+  });
+});
+
+(function() {
+  var tipoSelect = document.getElementById('id_tipo');
+  var tipoAlquilerSelect = document.getElementById('id_tipo_alquiler');
+  if (!tipoSelect || !tipoAlquilerSelect) return;
+
+  function updateTipoAlquiler() {
+    var isLocal = tipoSelect.value === 'local';
+    var hasPorLocal = tipoAlquilerSelect.querySelector('option[value="por_local"]');
+
+    if (isLocal && !hasPorLocal) {
+      var opt = document.createElement('option');
+      opt.value = 'por_local';
+      opt.textContent = '{% trans "Por Local" %}';
+      tipoAlquilerSelect.appendChild(opt);
+    } else if (!isLocal && hasPorLocal) {
+      if (tipoAlquilerSelect.value === 'por_local') {
+        tipoAlquilerSelect.value = 'completa';
+      }
+      tipoAlquilerSelect.removeChild(hasPorLocal);
+    }
+  }
+
+  tipoSelect.addEventListener('change', updateTipoAlquiler);
+  updateTipoAlquiler();
+})();
+
+(function() {
+  var latInput = document.getElementById('id_latitud');
+  var lngInput = document.getElementById('id_longitud');
+  var mapEl = document.getElementById('map');
+  if (!latInput || !lngInput || !mapEl) return;
+
+  var leafletBaseUrl = '{% static "inmuebles/leaflet/images/" %}';
+  L.Icon.Default.mergeOptions({
+    iconUrl: leafletBaseUrl + 'marker-icon.png',
+    iconRetinaUrl: leafletBaseUrl + 'marker-icon-2x.png',
+    shadowUrl: leafletBaseUrl + 'marker-shadow.png'
+  });
+
+  try {
+    var hasCoords = latInput.value && lngInput.value;
+    var defaultLat = hasCoords ? parseFloat(latInput.value) : -34.6037;
+    var defaultLng = hasCoords ? parseFloat(lngInput.value) : -58.3816;
+    var defaultZoom = hasCoords ? 16 : 14;
+
+    var map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    var marker = L.marker([defaultLat, defaultLng], {draggable: true}).addTo(map);
+
+    function updateCoords(latlng) {
+      latInput.value = latlng.lat.toFixed(6);
+      lngInput.value = latlng.lng.toFixed(6);
+    }
+
+    marker.on('dragend', function() {
+      updateCoords(marker.getLatLng());
+    });
+
+    map.on('click', function(e) {
+      marker.setLatLng(e.latlng);
+      updateCoords(e.latlng);
+    });
+
+    var locateCtrl = L.control.locate({
+      position: 'topright',
+      flyTo: true,
+      keepCurrentZoomLevel: true,
+      showPopup: false,
+      markerStyle: { weight: 1, opacity: 0.8, fillOpacity: 0.3 },
+      locateOptions: { enableHighAccuracy: true }
+    }).addTo(map);
+
+    map.on('locationfound', function(e) {
+      marker.setLatLng(e.latlng);
+      updateCoords(e.latlng);
+    });
+
+    var geocoder = L.Control.geocoder({
+      defaultMarkGeocode: false,
+      geocoder: L.Control.Geocoder.nominatim()
+    }).addTo(map);
+
+    geocoder.on('markgeocode', function(e) {
+      marker.setLatLng(e.geocode.center);
+      map.setView(e.geocode.center, 16);
+      updateCoords(e.geocode.center);
+      document.getElementById('id_direccion').value = e.geocode.name;
+    });
+  } catch(err) {
+    console.error('Error initializing map:', err);
+    mapEl.innerHTML = '<p style="padding:40px; text-align:center; color:#999;">{% trans "Error al cargar el mapa. Verificá la consola del navegador." %}</p>';
+  }
+})();
+</script>
+{% endblock %}

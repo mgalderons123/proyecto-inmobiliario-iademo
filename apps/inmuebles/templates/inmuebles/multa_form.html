@@ -1,0 +1,44 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Aplicar Multa" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div class="container-md">
+    <dl class="summary-ledger">
+      <div class="summary-ledger__header">{% trans "Resumen de la cuota" %}</div>
+      <div class="summary-ledger__row"><dt>{% trans "Cuota" %}</dt><dd>{{ cuota.descripcion }}</dd></div>
+      <div class="summary-ledger__row"><dt>{% trans "Monto base" %}</dt><dd>{{ cuota.moneda }} {{ cuota.monto|floatformat:2 }}</dd></div>
+      <div class="summary-ledger__row"><dt>{% trans "Multa actual" %}</dt><dd>{{ cuota.moneda }} {{ cuota.monto_multa|floatformat:2 }}</dd></div>
+      <div class="summary-ledger__row summary-ledger__row--total"><dt>{% trans "Total actual" %}</dt><dd>{{ cuota.moneda }} {{ cuota.total|floatformat:2 }}</dd></div>
+    </dl>
+
+    <div class="form-card">
+      <div class="form-card__header">
+        <a href="{% url 'inmuebles:cuota_list' contrato_pk=cuota.contrato.pk %}" class="back-link">← {% trans "Volver a cuotas" %}</a>
+        <h1 class="form-card__title">{% trans "Aplicar Multa" %}</h1>
+      </div>
+      <div class="card__body">
+        <form method="post" class="form" novalidate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="non-field-error">{{ form.non_field_errors|join:" " }}</div>
+          {% endif %}
+
+          <div class="form-row">
+            {% include "core/_field.html" with field=form.monto_fijo %}
+            {% include "core/_field.html" with field=form.porcentaje %}
+          </div>
+          {% include "core/_field.html" with field=form.motivo %}
+
+          <p class="form__aside">{% trans "Completá al menos uno: Monto fijo o Porcentaje." %}</p>
+
+          <div class="form__actions">
+            <button type="submit" class="btn-primary">{% trans "Aplicar multa" %}</button>
+            <a href="{% url 'inmuebles:cuota_list' contrato_pk=cuota.contrato.pk %}" class="btn-ghost">{% trans "Cancelar" %}</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

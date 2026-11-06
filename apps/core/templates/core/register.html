@@ -1,0 +1,83 @@
+{% extends "core/auth_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Registrarse" %} - Casarent App{% endblock %}
+
+{% block auth_card %}
+  <h1 class="big">{% trans "Crear cuenta" %}</h1>
+
+  {% if form.non_field_errors %}
+    <div class="non-field-error">
+      {{ form.non_field_errors|join:" " }}
+    </div>
+  {% endif %}
+
+  <form method="post" class="form" novalidate>
+    {% csrf_token %}
+
+    {% include "core/_field.html" with field=form.username %}
+    {% include "core/_field.html" with field=form.email %}
+    {% include "core/_field.html" with field=form.password1 %}
+    {% include "core/_field.html" with field=form.password2 %}
+    {{ form.requested_plan }}
+
+    {% if form.requested_plan.value %}
+      <p class="form__help">La cuenta se creará con el plan Prueba. El plan seleccionado quedará pendiente de aprobación.</p>
+    {% endif %}
+
+    <div class="form__actions">
+      <button type="submit" class="btn-primary btn--block">{% trans "Registrarme" %}</button>
+    </div>
+  </form>
+
+  <div class="auth-signup">
+    {% trans "¿Ya tenés cuenta?" %}
+    <a href="{% url 'login' %}">{% trans "Iniciar sesión" %}</a>
+  </div>
+
+  <div class="reg-modal-overlay" id="regModal" style="display:none;">
+    <div class="reg-modal">
+      <div class="reg-modal__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="M22 7l-10 6L2 7"/>
+        </svg>
+      </div>
+      <h2 class="reg-modal__title">{% trans "Revisá tu correo" %}</h2>
+      <p class="reg-modal__text">
+        {% trans "Te enviamos un enlace de verificación a tu correo electrónico." %}
+        {% trans "Hacé clic en el enlace para activar tu cuenta." %}
+      </p>
+      <div class="reg-modal__code-box">
+        <span class="reg-modal__code-label">{% trans "Tu código de seguridad para el primer ingreso llega en ese correo." %}</span>
+      </div>
+      <p class="reg-modal__hint">
+        {% trans "Guardalo. Lo necesitás para ingresar la primera vez." %}
+      </p>
+      <button type="button" class="btn-primary reg-modal__btn" id="regModalClose">{% trans "Entendido" %}</button>
+    </div>
+  </div>
+{% endblock %}
+
+{% block auth_scripts %}
+  <script>
+    document.getElementById('id_username')?.focus();
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('registered') !== '1') return;
+      var overlay = document.getElementById('regModal');
+      var btn = document.getElementById('regModalClose');
+      if (!overlay) return;
+      overlay.style.display = 'flex';
+      function close() {
+        overlay.style.display = 'none';
+        params.delete('registered');
+        var clean = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+        window.history.replaceState({}, '', clean);
+      }
+      btn?.addEventListener('click', close);
+      overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    })();
+  </script>
+{% endblock %}

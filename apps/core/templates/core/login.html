@@ -1,0 +1,148 @@
+{% extends "core/auth_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Ingresar" %} - Casarent App{% endblock %}
+
+{% block auth_card %}
+  <h1>{% trans "Inicio de sesión" %}</h1>
+
+  {% if form.non_field_errors or form.errors %}
+    <div class="non-field-error">
+      {% if form.non_field_errors %}
+        {{ form.non_field_errors|join:" " }}
+      {% else %}
+        {% trans "Usuario o contraseña inválidos." %}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <form method="post" class="form" novalidate>
+    {% csrf_token %}
+
+    <div class="form__field">
+      <label class="form__label" for="id_username">{% trans "Usuario o correo electrónico" %}</label>
+      <input type="text" name="username" id="id_username" class="form__control"
+             placeholder="{% trans 'Nombre de usuario o email' %}"
+             autocomplete="username" value="{{ form.username.value|default:'' }}" required autofocus>
+    </div>
+
+    <div class="form__field">
+      <label class="form__label" for="id_password">{% trans "Contraseña" %}</label>
+      <input type="password" name="password" id="id_password" class="form__control"
+             autocomplete="current-password" required>
+      <div id="caps-warn" class="caps-warn" aria-live="polite">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M7 1l6 5v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6l6-5z"/>
+        </svg>
+        <span>{% trans "Bloq Mayús está activado." %}</span>
+      </div>
+    </div>
+
+    <div class="checkbox-row">
+      <input type="checkbox" name="remember_me" id="id_remember_me">
+      <label for="id_remember_me">{% trans "Recordarme" %}</label>
+    </div>
+
+    <div class="form__actions">
+      <button type="submit" class="btn-primary btn--block">{% trans "Iniciar sesión" %}</button>
+    </div>
+  </form>
+
+  <div class="auth-links">
+    <a href="{% url 'password_reset' %}">{% trans "¿Olvidó la contraseña?" %}</a>
+  </div>
+
+  <div class="auth-signup">
+    {% trans "¿No tenés cuenta?" %}
+    <a href="{% url 'core:register' %}">{% trans "Crear cuenta" %}</a>
+  </div>
+
+  {% if needs_code %}
+  <div id="code-overlay" class="reg-modal-overlay" style="display:flex;">
+  {% else %}
+  <div id="code-overlay" class="reg-modal-overlay" style="display:none;">
+  {% endif %}
+    <div class="reg-modal">
+      <h2 class="reg-modal__title" style="margin-bottom:8px;">{% trans "Código de seguridad" %}</h2>
+      <p style="color:var(--color-text-secondary); font-size:14px; margin:0 0 16px;">
+        {% trans "Ingresá tu contraseña y el código de 6 dígitos que recibiste por correo." %}
+      </p>
+      {% if form.non_field_errors %}
+        <div id="code-form-errors" class="non-field-error" role="alert">
+          {{ form.non_field_errors|join:" " }}
+        </div>
+      {% endif %}
+      <form id="code-form" method="post" class="form" novalidate>
+        {% csrf_token %}
+        <div class="form__field">
+          <label class="form__label" for="id_code_user">{% trans "Usuario" %}</label>
+          <input type="text" name="username" id="id_code_user" class="form__control"
+                 value="{{ pending_username|default:'' }}" readonly
+                 style="background:var(--color-bg); cursor:not-allowed;">
+        </div>
+        <div class="form__field">
+          <label class="form__label" for="id_code_password">{% trans "Contraseña" %}</label>
+          <input type="password" name="password" id="id_code_password" class="form__control"
+                 autocomplete="current-password" required>
+        </div>
+        <div class="form__field">
+          <label class="form__label" for="id_code_input">{% trans "Código de verificación" %}</label>
+          <input type="text" name="security_code" id="id_code_input" maxlength="6"
+                 pattern="[0-9]{6}" placeholder="{% trans '6 dígitos' %}"
+                 class="form__control form__control--code"
+                  autocomplete="one-time-code" inputmode="numeric" required autofocus>
+        </div>
+        <div class="consent-choice">
+          <input type="checkbox" name="privacy_consent" id="id_privacy_consent" required
+                 {% if form.non_field_errors %}aria-describedby="code-form-errors" aria-invalid="true"{% endif %}
+                 {% if request.POST.privacy_consent %}checked{% endif %}>
+          <label for="id_privacy_consent">
+            {% trans "Acepto la" %}
+            <a href="{% url 'core:home' %}" target="_blank" rel="noopener noreferrer">
+              {% trans "Política de privacidad y tratamiento de datos personales" %}
+            </a>.
+          </label>
+        </div>
+        <div class="form__actions" style="margin-top:16px;">
+          <button type="submit" class="btn-primary btn--block">{% trans "Verificar" %}</button>
+        </div>
+      </form>
+      <div style="text-align:center; margin-top:12px;">
+        <button id="code-cancel-btn" class="btn-cancel" type="button">{% trans "Cancelar" %}</button>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block auth_scripts %}
+  <script>
+    (function() {
+      var pwd = document.getElementById("id_password");
+      var warn = document.getElementById("caps-warn");
+      if (pwd && warn) {
+        function check(e) {
+          if (typeof e.getModifierState === "function" && e.getModifierState("CapsLock")) {
+            warn.classList.add("is-on");
+          } else {
+            warn.classList.remove("is-on");
+          }
+        }
+        pwd.addEventListener("keyup", check);
+        pwd.addEventListener("keypress", check);
+        pwd.addEventListener("focus", check);
+      }
+
+      var cancelBtn = document.getElementById("code-cancel-btn");
+      var codeOverlay = document.getElementById("code-overlay");
+      function closePopup() {
+        if (codeOverlay) codeOverlay.style.display = "none";
+      }
+      if (cancelBtn) cancelBtn.addEventListener("click", closePopup);
+      if (codeOverlay) {
+        codeOverlay.addEventListener("click", function(e) {
+          if (e.target === codeOverlay) closePopup();
+        });
+      }
+    })();
+  </script>
+{% endblock %}

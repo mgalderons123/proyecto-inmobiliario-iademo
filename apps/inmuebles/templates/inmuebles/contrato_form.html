@@ -1,0 +1,187 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% if editando %}{% trans "Editar Contrato" %}{% else %}{% trans "Nuevo Contrato" %}{% endif %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div class="container-md">
+    <div class="form-card">
+      <div class="form-card__header">
+        {% if editando %}
+          <a href="{% url 'inmuebles:contrato_detail' pk=form.instance.pk %}" class="back-link">← {% trans "Volver al contrato" %}</a>
+          <h1 class="form-card__title">{% trans "Editar Contrato" %} — {{ form.instance.inmueble.titulo }}</h1>
+        {% else %}
+          <a href="{% url 'inmuebles:contrato_list' inmueble_pk=inmueble.pk %}" class="back-link">← {% trans "Volver a contratos" %}</a>
+          <h1 class="form-card__title">{% trans "Nuevo Contrato" %} — {{ inmueble.titulo }}</h1>
+        {% endif %}
+      </div>
+      <div class="card__body">
+        <form method="post" class="form" novalidate>
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="non-field-error">{{ form.non_field_errors|join:" " }}</div>
+          {% endif %}
+
+          <div class="form-section">
+            <span class="form-section__label">{% trans "Partes del contrato" %}</span>
+            {% if tipo_fijo %}
+              <div class="form__field">
+                <label class="form__label">{% trans "Tipo de contrato" %}</label>
+                <div style="padding:9px 12px; background:var(--color-bg); border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; color:var(--color-text);">
+                  {{ tipo_display }}
+                </div>
+                <input type="hidden" name="tipo" value="{{ tipo_fijo }}">
+              </div>
+            {% else %}
+              {% include "core/_field.html" with field=form.tipo %}
+            {% endif %}
+            <div class="form-row">
+              {% include "core/_field.html" with field=form.inquilino_registrado %}
+            </div>
+            <div id="inqInfo" class="inq-info" style="display:none;">
+              <div class="inq-info__row"><span class="inq-info__label">{% trans "Nombre" %}</span> <span id="inqNombre"></span></div>
+              <div class="inq-info__row"><span class="inq-info__label">Email</span> <span id="inqEmail"></span></div>
+              <div class="inq-info__row"><span class="inq-info__label">{% trans "Teléfono" %}</span> <span id="inqTel"></span></div>
+              <div class="inq-info__row"><span class="inq-info__label">{% trans "Documento" %}</span> <span id="inqDoc"></span></div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <span class="form-section__label">{% trans "Frecuencia de pago" %}</span>
+            {% include "core/_field.html" with field=form.frecuencia_pago %}
+            <div id="duracionAnosRow" style="display:none;">
+              {% include "core/_field.html" with field=form.duracion_anos %}
+            </div>
+          </div>
+
+          <div class="form-section">
+            <span class="form-section__label">{% trans "Vigencia" %}</span>
+            <div class="form-row">
+              {% include "core/_field.html" with field=form.fecha_inicio %}
+              {% include "core/_field.html" with field=form.fecha_fin %}
+            </div>
+          </div>
+
+          <div class="form-section">
+            <span class="form-section__label">{% trans "Términos económicos" %}</span>
+            <div class="form-row">
+              {% include "core/_field.html" with field=form.monto %}
+              {% include "core/_field.html" with field=form.moneda %}
+            </div>
+            <div class="form-row">
+              {% include "core/_field.html" with field=form.comision %}
+            </div>
+            <div class="form-row">
+              {% include "core/_field.html" with field=form.garantia %}
+            </div>
+          </div>
+
+          <div class="form__actions">
+            <button type="submit" class="btn-primary">
+              {% if editando %}{% trans "Guardar cambios" %}{% else %}{% trans "Crear contrato" %}{% endif %}
+            </button>
+            {% if editando %}
+              <a href="{% url 'inmuebles:contrato_detail' pk=form.instance.pk %}" class="btn-ghost">{% trans "Cancelar" %}</a>
+            {% else %}
+              <a href="{% url 'inmuebles:contrato_list' inmueble_pk=inmueble.pk %}" class="btn-ghost">{% trans "Cancelar" %}</a>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="reg-modal-overlay" id="contratoVigenteModal" style="display:none;">
+    <div class="reg-modal">
+      <div class="reg-modal__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
+        </svg>
+      </div>
+      <h2 class="reg-modal__title">{% trans "Contrato vigente encontrado" %}</h2>
+      <p class="reg-modal__text">{% trans "Este inquilino ya tiene un contrato activo:" %}</p>
+      <div id="contratoVigenteLista" class="inq-info" style="margin-bottom:16px;"></div>
+      <p class="reg-modal__hint">{% trans "Podés continuar igualmente o elegir otro inquilino." %}</p>
+      <button type="button" class="btn-primary reg-modal__btn" id="contratoVigenteClose">{% trans "Entendido" %}</button>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+<style>
+  .inq-info {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: -4px 0 16px;
+  }
+  .inq-info__row { font-size: 0.88rem; line-height: 1.6; }
+  .inq-info__label { font-weight: 600; color: var(--color-text-secondary); min-width: 90px; display: inline-block; }
+</style>
+<script>
+(function () {
+  var sel = document.getElementById('id_inquilino_registrado');
+  if (!sel) return;
+  var panel = document.getElementById('inqInfo');
+  var sNombre = document.getElementById('inqNombre');
+  var sEmail = document.getElementById('inqEmail');
+  var sTel = document.getElementById('inqTel');
+  var sDoc = document.getElementById('inqDoc');
+  var vigenteModal = document.getElementById('contratoVigenteModal');
+  var vigenteClose = document.getElementById('contratoVigenteClose');
+  var vigenteLista = document.getElementById('contratoVigenteLista');
+
+  function closeVigente() {
+    if (vigenteModal) vigenteModal.style.display = 'none';
+  }
+  if (vigenteClose) vigenteClose.addEventListener('click', closeVigente);
+  if (vigenteModal) vigenteModal.addEventListener('click', function (e) { if (e.target === vigenteModal) closeVigente(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeVigente(); });
+
+  function checkContratosActivos(id) {
+    fetch('/api/inquilinos/' + id + '/contratos-activos/')
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.tiene_contratos_activos || !vigenteLista) return;
+        var html = '';
+        d.contratos.forEach(function (c) {
+          html += '<div class="inq-info__row">' +
+            '<strong>' + c.inmueble + '</strong> — ' + c.tipo +
+            ' ($' + c.monto + ', {% trans "desde" %} ' + c.fecha_inicio + ')' +
+            '</div>';
+        });
+        vigenteLista.innerHTML = html;
+        vigenteModal.style.display = 'flex';
+      });
+  }
+
+  sel.addEventListener('change', function () {
+    var id = sel.value;
+    if (!id) {
+      if (panel) panel.style.display = 'none';
+      return;
+    }
+    checkContratosActivos(id);
+    fetch('/api/inquilinos/' + id + '/')
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (sNombre) sNombre.textContent = d.nombre || '—';
+        if (sEmail) sEmail.textContent = d.email || '—';
+        if (sTel) sTel.textContent = d.telefono || '—';
+        if (sDoc) sDoc.textContent = d.documento || '—';
+        if (panel) panel.style.display = 'block';
+      });
+  });
+
+  var freq = document.getElementById('id_frecuencia_pago');
+  var durRow = document.getElementById('duracionAnosRow');
+  if (freq && durRow) {
+    function toggleDuracion() { durRow.style.display = freq.value === 'anual' ? 'block' : 'none'; }
+    toggleDuracion();
+    freq.addEventListener('change', toggleDuracion);
+  }
+})();
+</script>
+{% endblock %}

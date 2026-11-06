@@ -1,0 +1,20 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Eliminar Inmueble" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div class="container-sm">
+    <div class="card confirm-card">
+      <h1 class="confirm-card__title">{% trans "Eliminar Inmueble" %}</h1>
+      <p class="confirm-card__text">{% blocktrans with titulo=inmueble.titulo %}¿Estás seguro de que querés eliminar <strong>{{ titulo }}</strong>?{% endblocktrans %}</p>
+      <p class="confirm-card__warn">{% trans "Esta acción no se puede deshacer." %}</p>
+
+      <form method="post" class="confirm-card__actions">
+        {% csrf_token %}
+        <a href="{% url 'inmuebles:detail' pk=inmueble.pk %}" class="btn-ghost">{% trans "Cancelar" %}</a>
+        <button type="submit" class="btn-danger">{% trans "Eliminar inmueble" %}</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

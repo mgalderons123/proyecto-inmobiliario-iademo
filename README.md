@@ -1,16 +1,26 @@
 # PRY_INMOB
 
-Aplicación web en Django con vistas tradicionales (templates) y una API REST
-con autenticación JWT. La base de datos es un SQLite local que se recrea
-automáticamente al iniciar el server (no persiste entre reinicios). Pensado
-para desarrollo, demos y prototipos descartables.
+Aplicación web en Django con vistas tradicionales (templates), una API REST
+con autenticación JWT y PostgreSQL como base de datos persistente.
+
+## Versión actual
+
+CasaRent gestiona cuentas y membresías, propiedades, propietarios, inquilinos,
+contratos, cuotas, pagos y reportes. Incluye una web con sesiones y una API con
+JWT, aislamiento por cuenta y almacenamiento separado para documentos privados.
+
+La configuración Docker mantiene desarrollo, QA y producción en entornos
+independientes. Producción utiliza PostgreSQL con TLS, Redis, Gunicorn, Nginx y
+Cloudflare Tunnel para publicar `https://casarent.app` desde el servidor local.
+Consulta [la guía de producción y respaldos](PRODUCTION.md) antes de desplegar.
+Los secretos, datos y documentos no forman parte del repositorio.
 
 ## Stack
 
 - **Python** 3.12+
 - **Django** 5.x
 - **Django REST Framework** + `djangorestframework-simplejwt` (JWT)
-- **SQLite en archivo** (`db.sqlite3`, recreado en cada arranque)
+- **PostgreSQL** 16
 - **Templates** Django + sesiones para la web
 - **python-decouple** para variables de entorno
 - **pytest** + **pytest-django` para tests
@@ -19,6 +29,7 @@ para desarrollo, demos y prototipos descartables.
 
 - Python 3.12 o superior
 - pip
+- Docker Desktop
 - (Opcional) virtualenv
 
 ## Instalación
@@ -39,10 +50,10 @@ pip install -r requirements.txt
 cp .env.example .env
 # Editar .env y definir SECRET_KEY (y opcionalmente DEBUG)
 
-# 5. (Dev) Levantar el server con bootstrap de DB
+# 5. Levantar PostgreSQL y el servidor de desarrollo
 ./scripts/dev.sh
-# Equivale a: migrate + create default superuser + runserver_dev
-# Default: admin / admin12345 (configurable via DJANGO_SUPERUSER_*)
+# La primera ejecucion genera .env.postgres con permisos 0600.
+# Equivale a: postgres-up + migrate + ensure_superuser + runserver_dev
 
 # 5b. (Producción-like) Flujo manual
 python manage.py migrate
@@ -61,7 +72,15 @@ Definidas en `.env` (ver `.env.example`):
 |---------------|-------------|---------|----------------------------------------|
 | `SECRET_KEY`  | Sí          | —       | Clave secreta de Django.               |
 | `DEBUG`       | No          | `False` | `True` para activar modo debug.        |
-| `ALLOWED_HOSTS` | No        | `*`     | Hosts permitidos (CSV).                |
+| `ALLOWED_HOSTS` | Sí        | —       | Hosts permitidos (CSV).                |
+| `POSTGRES_DB` | No | `casarent_dev` | Nombre de la base local. |
+| `POSTGRES_USER` | No | `casarent_dev` | Usuario de la base local. |
+| `POSTGRES_PASSWORD` | Sí | — | Contraseña de PostgreSQL. |
+| `POSTGRES_HOST` | No | `127.0.0.1` | Host de PostgreSQL. |
+| `POSTGRES_PORT` | No | `5432` | Puerto de PostgreSQL. |
+
+En desarrollo, `./scripts/postgres-up.sh` genera estas variables en
+`.env.postgres`. Las variables del proceso y `.env` tienen precedencia.
 
 ## Estructura del proyecto
 
@@ -122,7 +141,7 @@ PRY_INMOB/
 
 | URL                        | Vista                            | Auth    |
 |----------------------------|----------------------------------|---------|
-| `/`                        | Home                             | Pública |
+| `/`                        | Landing pública / resumen operativo | Mixta |
 | `/login/`                  | `CustomLoginView` (Django)       | Pública |
 | `/logout/`                 | `LogoutView` (Django, POST)      | Sesión  |
 | `/register/`               | Registro                         | Pública |
@@ -217,27 +236,124 @@ El layout está inspirado en Salesforce login:
 ## Tests
 
 ```bash
+set -a; source .env.postgres; set +a
 pytest
 ```
 
-- `pytest-django` usa SQLite in-memory por test (consistente con el stack).
+- `pytest-django` crea una base PostgreSQL aislada por ejecución.
 - Cobertura incluida:
   - `tests/test_web.py` → vistas con templates, login, registro, password
     reset, recordarme, logout POST-only.
   - `tests/test_api.py` → endpoints REST, JWT, usuario autenticado.
 
+### Verificación incremental
+
+Para no repetir una ejecución idéntica cuando no cambió ningún input:
+
+```bash
+./scripts/verify-changed.py
+./scripts/verify-changed.py -- tests/test_web.py -x
+./scripts/verify-changed.py --force
+```
+
+La herramienta guarda únicamente resultados exitosos en `.cache/`, usando una
+huella del código, dependencias, versión de Python, settings y comando. Los
+cambios globales y las validaciones previas a despliegue deben seguir ejecutando
+la suite completa.
+
+Para comparar el landing público de desarrollo y QA:
+
+```bash
+./scripts/compare-envs.py
+./scripts/compare-envs.py --force
+```
+
+La comparación normaliza los hashes de archivos estáticos y se reutiliza solo
+si no cambiaron el código local ni la imagen Docker de QA.
+
+## Ambiente QA local
+
+El stack QA es independiente del desarrollo en el puerto 4000 y utiliza
+Docker Compose con PostgreSQL, Redis, Mailpit y Gunicorn.
+
+### Requisitos
+
+- Docker Desktop iniciado.
+- Puertos locales `4100` y `8025` disponibles.
+
+### Iniciar
+
+```bash
+./scripts/qa-up.sh
+```
+
+La primera ejecución crea `.env.qa` con secretos y contraseñas aleatorias,
+permisos `0600`, construye las imágenes, aplica migraciones y carga datos
+sintéticos idempotentes.
+
+- Aplicación: `http://localhost:4100`
+- Mailpit: `http://localhost:8025`
+- Credenciales locales: `.env.qa`
+
+Usuarios sintéticos:
+
+- `qa-superadmin`
+- `qa-admin-a`
+- `qa-admin-b`
+- `qa-inquilino-a`
+- `qa-inquilino-b`
+
+### Ejecutar tests en PostgreSQL
+
+```bash
+./scripts/qa-test.sh
+```
+
+Se pueden pasar argumentos adicionales a pytest:
+
+```bash
+./scripts/qa-test.sh tests/test_api.py -x
+```
+
+### Operaciones
+
+```bash
+./scripts/qa-seed.sh       # reconstruye el dataset sintético
+./scripts/qa-down.sh       # detiene QA y conserva datos
+./scripts/qa-reset.sh      # solicita confirmación y elimina volúmenes QA
+./scripts/qa-reset.sh --yes
+./scripts/qa-security.sh   # Django check, Bandit y pip-audit
+```
+
+PostgreSQL y Redis no publican puertos en el host. Los volúmenes y servicios
+usan el proyecto Compose `casarent-qa`, por lo que no interfieren con el
+ambiente de desarrollo.
+
+### Caché de aplicación
+
+- Desarrollo usa caché en memoria y desactiva por defecto el caché del landing.
+- QA usa Redis con espacios de claves separados para aplicación y rate limiting.
+- Producción requiere `REDIS_URL` y usa prefijos independientes de QA.
+- El landing anónimo se cachea por idioma durante 300 segundos, configurable
+  con `PUBLIC_LANDING_CACHE_TIMEOUT`.
+- Las respuestas públicas incluyen `ETag` y revalidación privada. Login, JWT,
+  dashboard autenticado y medios privados no se cachean como páginas.
+
 ## Notas sobre la DB
 
-Se usa un archivo SQLite local (`db.sqlite3`) en lugar de `:memory:` porque
-SQLite en memoria real no se puede compartir entre conexiones, lo que rompe
-el patrón request-response de Django (cada request abre su propia conexión).
+El entorno de desarrollo usa el proyecto Compose `casarent-dev`. PostgreSQL
+se publica exclusivamente en `127.0.0.1:5432` y persiste sus datos en el
+volumen `dev_postgres`.
 
-Para DB descartable, `./scripts/dev.sh` aplica migraciones y crea un
-superusuario `admin` / `admin12345` (configurable via `DJANGO_SUPERUSER_*`)
-antes de levantar el server con `runserver_dev`.
+```bash
+./scripts/postgres-up.sh    # inicia PostgreSQL y conserva los datos
+./scripts/postgres-down.sh  # detiene PostgreSQL y conserva el volumen
+./scripts/dev.sh            # inicia DB, migra y levanta Django
+```
 
-Para una DB persistente real, usá `python manage.py migrate` + `runserver`
-estándar (no `runserver_dev`).
+`db.sqlite3` se conserva solamente como respaldo de la migración inicial y
+está excluido de Git. Producción debe usar `PRY_INMOB.settings_production`,
+credenciales administradas externamente y una conexión PostgreSQL con TLS.
 
 ## Licencia
 

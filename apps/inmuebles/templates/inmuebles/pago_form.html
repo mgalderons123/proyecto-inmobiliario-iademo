@@ -1,0 +1,46 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Registrar Pago" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div class="container-md">
+    <dl class="summary-ledger">
+      <div class="summary-ledger__header">{% trans "Resumen de la cuota" %}</div>
+      <div class="summary-ledger__row"><dt>{% trans "Cuota" %}</dt><dd>{{ cuota.descripcion }}</dd></div>
+      {% if cuota.monto_multa > 0 %}
+        <div class="summary-ledger__row summary-ledger__row--alert"><dt>{% trans "Multa incluida" %}</dt><dd>{{ cuota.moneda }} {{ cuota.monto_multa|floatformat:2 }}</dd></div>
+      {% endif %}
+      <div class="summary-ledger__row summary-ledger__row--total"><dt>{% trans "Total adeudado" %}</dt><dd>{{ cuota.moneda }} {{ cuota.total|floatformat:2 }}</dd></div>
+    </dl>
+
+    <div class="form-card">
+      <div class="form-card__header">
+        <a href="{% url 'inmuebles:cuota_list' contrato_pk=cuota.contrato.pk %}" class="back-link">← {% trans "Volver a cuotas" %}</a>
+        <h1 class="form-card__title">{% trans "Registrar Pago" %}</h1>
+      </div>
+      <div class="card__body">
+        <form method="post" enctype="multipart/form-data" class="form" novalidate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="non-field-error">{{ form.non_field_errors|join:" " }}</div>
+          {% endif %}
+
+          <div class="form-row">
+            {% include "core/_field.html" with field=form.monto %}
+            {% include "core/_field.html" with field=form.fecha_pago %}
+          </div>
+          {% include "core/_field.html" with field=form.metodo_pago %}
+          {% include "core/_field.html" with field=form.archivo_comprobante %}
+          {% include "core/_field.html" with field=form.comprobante %}
+          {% include "core/_field.html" with field=form.observaciones %}
+
+          <div class="form__actions">
+            <button type="submit" class="btn-primary">{% trans "Registrar pago" %}</button>
+            <a href="{% url 'inmuebles:cuota_list' contrato_pk=cuota.contrato.pk %}" class="btn-ghost">{% trans "Cancelar" %}</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

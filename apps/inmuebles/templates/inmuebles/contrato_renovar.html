@@ -1,0 +1,48 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Renovar Contrato" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div class="container-md">
+    <dl class="summary-ledger">
+      <div class="summary-ledger__header">{% trans "Contrato actual" %}</div>
+      <div class="summary-ledger__row"><dt>{% trans "Vigencia" %}</dt><dd>{{ contrato.fecha_inicio|date:"d/m/Y" }} → {{ contrato.fecha_fin|date:"d/m/Y"|default:_('indefinido') }}</dd></div>
+      <div class="summary-ledger__row"><dt>{% trans "Monto" %}</dt><dd>{{ contrato.moneda }} {{ contrato.monto|floatformat:2 }}</dd></div>
+      {% if contrato.comision %}
+        <div class="summary-ledger__row"><dt>{% trans "Comisión" %}</dt><dd>{{ contrato.moneda }} {{ contrato.comision|floatformat:2 }}</dd></div>
+      {% endif %}
+    </dl>
+
+    <div class="form-card">
+      <div class="form-card__header">
+        <a href="{% url 'inmuebles:contrato_detail' pk=contrato.pk %}" class="back-link">← {% trans "Volver al contrato" %}</a>
+        <h1 class="form-card__title">{% trans "Renovar Contrato" %}</h1>
+        <p class="form-card__subtitle">{{ contrato.get_tipo_display }} — {{ contrato.inmueble.titulo }}</p>
+      </div>
+      <div class="card__body">
+        <form method="post" class="form" novalidate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="non-field-error">{{ form.non_field_errors|join:" " }}</div>
+          {% endif %}
+
+          <div class="form-row">
+            {% include "core/_field.html" with field=form.fecha_inicio %}
+            {% include "core/_field.html" with field=form.fecha_fin %}
+          </div>
+          <div class="form-row">
+      {% include "core/_field.html" with field=form.monto %}
+      {% include "core/_field.html" with field=form.moneda %}
+            {% include "core/_field.html" with field=form.comision %}
+          </div>
+
+          <div class="form__actions">
+            <button type="submit" class="btn-primary">{% trans "Renovar contrato" %}</button>
+            <a href="{% url 'inmuebles:contrato_detail' pk=contrato.pk %}" class="btn-ghost">{% trans "Cancelar" %}</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

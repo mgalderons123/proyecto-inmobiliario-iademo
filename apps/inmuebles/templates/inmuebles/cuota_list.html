@@ -1,0 +1,143 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Cuotas" %} - {{ contrato.inmueble.titulo }} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div class="container-lg">
+    <a href="{% url 'inmuebles:contrato_detail' pk=contrato.pk %}" class="back-link">← {% trans "Volver al contrato" %}</a>
+
+    <div class="page-header" style="margin-top:16px;">
+      <h1 style="margin:0;">{% trans "Cuotas" %} — {{ contrato.inmueble.titulo }}</h1>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        {% if contrato.tipo == 'alquiler' and contrato.estado == 'activo' %}
+          <form method="post" action="{% url 'inmuebles:cuota_create_mensual' contrato_pk=contrato.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn-primary">+ {% trans "Generar próxima cuota" %}</button>
+          </form>
+        {% endif %}
+        {% if contrato.estado == 'activo' %}
+          <button onclick="abrirModalAgregarCuota()" class="btn-primary" type="button">+ {% trans "Agregar cuota" %}</button>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if saldo > 0 %}
+      <div class="info-box info-box--warning" style="font-weight:600;">
+        {% trans "Saldo pendiente:" %} {{ contrato.moneda }} {{ saldo|floatformat:2 }}
+      </div>
+    {% endif %}
+
+    {% if cuotas %}
+      <div class="card">
+          <div style="overflow-x:auto;">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                   <th>{% trans "Descripción" %}</th>
+                   <th>{% trans "Vencimiento" %}</th>
+                   <th>{% trans "Monto" %}</th>
+                   <th>{% trans "Estado" %}</th>
+                   <th>{% trans "Pago" %}</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for c in cuotas %}
+                  <tr>
+                    <td>{{ c.numero }}</td>
+                    <td>{{ c.descripcion }}</td>
+                    <td>{{ c.fecha_vencimiento|date:"d/m/Y" }}</td>
+                    <td>
+                      <strong>{{ c.moneda }} {{ c.monto|floatformat:2 }}</strong>
+                      {% if c.monto_multa > 0 %}
+                        <span style="color:var(--color-danger); font-size:0.75rem;"> + {{ c.moneda }} {{ c.monto_multa|floatformat:2 }}</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      <span class="badge
+                        {% if c.estado == 'pagado' %}badge--success
+                        {% elif c.estado == 'vencido' %}badge--danger
+                        {% elif c.estado == 'parcial' %}badge--active
+                        {% else %}badge--muted{% endif %}">{{ c.get_estado_display }}</span>
+                    </td>
+                    <td>{{ c.fecha_pago|date:"d/m/Y"|default:"-" }}</td>
+                    <td style="white-space:nowrap;">
+                      <a href="{% url 'inmuebles:pago_create' cuota_pk=c.pk %}" class="btn-primary btn--sm">{% trans "Pagar" %}</a>
+                      {% if c.estado == 'vencido' %}
+                        <a href="{% url 'inmuebles:aplicar_multa' cuota_pk=c.pk %}" class="btn-ghost btn--sm btn-ghost--danger">{% trans "Multa" %}</a>
+                      {% endif %}
+                      {% if c.monto_multa > 0 %}
+                        <a href="{% url 'inmuebles:editar_multa' cuota_pk=c.pk %}" class="btn-ghost btn--sm">{% trans "Editar multa" %}</a>
+                        <form method="post" action="{% url 'inmuebles:eliminar_multa' cuota_pk=c.pk %}" onsubmit="return confirm('{% trans "¿Eliminar la multa de esta cuota?" %}');">
+                          {% csrf_token %}
+                          <button type="submit" class="btn-ghost btn--sm btn-ghost--danger">{% trans "Eliminar multa" %}</button>
+                        </form>
+                      {% endif %}
+                  {% if user.is_superuser or active_membership.is_admin %}
+                        <a href="{% url 'inmuebles:cuota_update' pk=c.pk %}" class="btn-ghost btn--sm">{% trans "Editar" %}</a>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+      </div>
+    {% else %}
+      <div class="card empty-state">
+        <p>{% trans "No hay cuotas para este contrato." %}</p>
+        {% if contrato.tipo == 'alquiler' and contrato.estado == 'activo' %}
+          <form method="post" action="{% url 'inmuebles:cuota_create_mensual' contrato_pk=contrato.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn-primary">{% trans "Generar primera cuota" %}</button>
+          </form>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Modal Agregar Cuota -->
+  <div class="modal-overlay" id="agregarCuotaModal">
+    <div class="modal" style="max-width:480px;">
+      <div class="modal__header">
+        <h2>{% trans "Agregar Cuota" %}</h2>
+        <button onclick="cerrarModalAgregarCuota()">×</button>
+      </div>
+      <form method="post" action="{% url 'inmuebles:cuota_create_personalizada' contrato_pk=contrato.pk %}" class="form">
+        {% csrf_token %}
+        <div class="modal__body">
+          <div class="form__field">
+            <label class="form__label" for="cuotaDescripcion">{% trans "Descripción" %}</label>
+            <input type="text" id="cuotaDescripcion" name="descripcion" required class="form__control"
+                   placeholder="{% trans 'Ej: Cuota 1 - Reserva' %}">
+          </div>
+          <div class="form__field">
+            <label class="form__label" for="cuotaMonto">{% trans "Monto" %}</label>
+            <input type="number" id="cuotaMonto" name="monto" step="0.01" min="0.01" required class="form__control"
+                   {% if contrato.tipo == 'alquiler' %}value="{{ contrato.monto }}"{% endif %}>
+          </div>
+          <div class="form__field">
+            <label class="form__label" for="cuotaFechaVenc">{% trans "Fecha de vencimiento" %}</label>
+            <input type="date" id="cuotaFechaVenc" name="fecha_vencimiento" required class="form__control">
+          </div>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn-ghost" onclick="cerrarModalAgregarCuota()">{% trans "Cancelar" %}</button>
+          <button type="submit" class="btn-primary">{% trans "Crear cuota" %}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function abrirModalAgregarCuota() {
+      document.getElementById('agregarCuotaModal').classList.add('is-open');
+    }
+
+    function cerrarModalAgregarCuota() {
+      document.getElementById('agregarCuotaModal').classList.remove('is-open');
+    }
+  </script>
+{% endblock %}

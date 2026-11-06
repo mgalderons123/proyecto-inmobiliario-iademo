@@ -1,0 +1,27 @@
+{% extends "core/auth_base.html" %}
+
+{% block title %}Verificación - Casarent App{% endblock %}
+
+{% block auth_card %}
+  <h1 class="big">Verificación de correo</h1>
+  <p style="color:#54698D; margin-top:0;">
+    {% if request.GET.valid == "1" %}
+      Tu correo fue verificado exitosamente.
+    {% else %}
+      El enlace de verificación es inválido o expiró. Solicitá uno nuevo.
+    {% endif %}
+  </p>
+
+  {% if request.GET.valid == "1" and request.GET.code %}
+    <div style="background:#1a1f2e; border-radius:8px; padding:20px; margin:16px 0; text-align:center;">
+      <p style="color:#a0aec0; margin:0 0 8px; font-size:13px;">Tu código de seguridad para el primer inicio de sesión:</p>
+      <p id="reg-code" style="color:#fff; font-size:28px; font-family:monospace; font-weight:bold; margin:0; letter-spacing:4px;">{{ request.GET.code }}</p>
+      <button onclick="navigator.clipboard.writeText(document.getElementById('reg-code').textContent)" style="margin-top:12px; background:#2d3748; color:#a0aec0; border:1px solid #4a5568; border-radius:6px; padding:6px 16px; cursor:pointer; font-size:13px;">Copiar código</button>
+    </div>
+    <p style="color:#54698D; font-size:13px;">Guardalo. Lo necesitás para ingresar la primera vez.</p>
+  {% endif %}
+
+  <div class="auth-signup">
+    <a href="{% url 'login' %}">Ir a iniciar sesión</a>
+  </div>
+{% endblock %}

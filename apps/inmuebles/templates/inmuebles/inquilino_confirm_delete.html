@@ -1,0 +1,22 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Eliminar Inquilino" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div class="container-sm">
+    <div class="card confirm-card">
+      <h1 class="confirm-card__title">{% trans "Eliminar Inquilino" %}</h1>
+      <p class="confirm-card__text">{% blocktrans with nombre=inquilino.nombre %}¿Estás seguro de eliminar a <strong>{{ nombre }}</strong>?{% endblocktrans %}</p>
+      {% if inquilino.contratos.count > 0 %}
+        <p class="confirm-card__warn">{% blocktrans count counter=inquilino.contratos.count %}Tiene {{ counter }} contrato asociado. El contrato no se eliminará, pero quedará sin inquilino registrado.{% plural %}Tiene {{ counter }} contratos asociados. Los contratos no se eliminarán, pero quedarán sin inquilino registrado.{% endblocktrans %}</p>
+      {% endif %}
+
+      <form method="post" class="confirm-card__actions">
+        {% csrf_token %}
+        <a href="{% url 'inmuebles:inquilino_detail' pk=inquilino.pk %}" class="btn-ghost">{% trans "Cancelar" %}</a>
+        <button type="submit" class="btn-danger">{% trans "Eliminar inquilino" %}</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

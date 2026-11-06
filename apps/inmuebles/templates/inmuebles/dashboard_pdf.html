@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Reportes</title>
+  <style>
+    @page { size: A4 landscape; margin: 1.5cm; }
+    body { font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: #134E4A; }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    h2 { font-size: 14px; margin: 20px 0 8px; border-bottom: 2px solid #0F766E; padding-bottom: 4px; }
+    .periodo { color: #475569; font-size: 12px; margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    th { background: #F0FDFA; text-align: left; padding: 6px 8px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #D8EDE8; }
+    td { padding: 5px 8px; border-bottom: 1px solid #D8EDE8; font-size: 10px; }
+    .total-row td { font-weight: bold; border-top: 2px solid #0F766E; }
+    .resumen-table td { font-size: 12px; padding: 8px 12px; }
+    .resumen-table td:first-child { font-weight: bold; width: 200px; }
+  </style>
+</head>
+<body>
+  <h1>Dashboard - Reportes</h1>
+  <p class="periodo">Período: {{ desde }} — {{ hasta }}</p>
+
+  <h2>Ingresos Mensuales</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Mes</th>
+        <th style="text-align:right;">Cantidad de Pagos</th>
+        <th style="text-align:right;">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in ingresos %}
+        <tr>
+          <td>{{ item.label }}</td>
+          <td style="text-align:right;">{{ item.cantidad }}</td>
+          <td style="text-align:right;">{{ item.moneda }} {{ item.total|floatformat:2 }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="3" style="text-align:center;">Sin datos</td></tr>
+      {% endfor %}
+      {% if totales_ingresos %}
+        {% for moneda, total in totales_ingresos %}
+        <tr class="total-row">
+          <td><strong>Total</strong></td>
+          <td></td>
+          <td style="text-align:right;"><strong>{{ moneda }} {{ total|floatformat:2 }}</strong></td>
+        </tr>
+        {% endfor %}
+      {% endif %}
+    </tbody>
+  </table>
+
+  <h2>Cartera Vencida - Resumen</h2>
+  <table class="resumen-table">
+    {% for item in resumen.totales_adeudados %}<tr><td>Total Adeudado</td><td>{{ item.moneda }} {{ item.total|floatformat:2 }}</td></tr>{% endfor %}
+    <tr><td>Cuotas Vencidas</td><td>{{ resumen.cantidad_cuotas }}</td></tr>
+    <tr><td>Contratos Afectados</td><td>{{ resumen.cantidad_contratos }}</td></tr>
+  </table>
+
+  <h2>Cartera Vencida - Detalle</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Inmueble</th>
+        <th>Inquilino</th>
+        <th>Cuota</th>
+        <th>Vencimiento</th>
+        <th>Días Vencido</th>
+        <th style="text-align:right;">Monto</th>
+        <th style="text-align:right;">Multa</th>
+        <th style="text-align:right;">Total</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cuota in vencidas %}
+        <tr>
+          <td>{{ cuota.contrato.inmueble.titulo }}</td>
+          <td>{{ cuota.contrato.inquilino_nombre|default:"—" }}</td>
+          <td>#{{ cuota.numero }}</td>
+          <td>{{ cuota.fecha_vencimiento|date:"d/m/Y" }}</td>
+          <td>{{ cuota.dias_vencido }}</td>
+          <td style="text-align:right;">{{ cuota.moneda }} {{ cuota.monto|floatformat:2 }}</td>
+          <td style="text-align:right;">{{ cuota.moneda }} {{ cuota.monto_multa|floatformat:2 }}</td>
+          <td style="text-align:right;"><strong>{{ cuota.moneda }} {{ cuota.total|floatformat:2 }}</strong></td>
+          <td>{{ cuota.get_estado_display }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="9" style="text-align:center;">Sin datos</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Pagos por Inquilino e Inmueble</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Inquilino</th>
+        <th>Inmueble</th>
+        <th>Cuota</th>
+        <th>Vencimiento</th>
+        <th style="text-align:right;">Monto</th>
+        <th>Pagado el</th>
+        <th>Método</th>
+        <th>Estado</th>
+        <th>Recibo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in pagos %}
+        <tr>
+          <td>{{ p.inquilino }}</td>
+          <td>{{ p.inmueble }}</td>
+          <td>#{{ p.cuota_numero }} {{ p.cuota_descripcion }}</td>
+          <td>{{ p.vencimiento|date:"d/m/Y" }}</td>
+          <td style="text-align:right;">{{ p.moneda }} {{ p.monto|floatformat:2 }}</td>
+          <td>{{ p.fecha_pago|date:"d/m/Y" }}</td>
+          <td>{{ p.metodo_pago }}</td>
+          <td>{{ p.estado_pago }}</td>
+          <td>{{ p.recibo_codigo|default:"—" }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="9" style="text-align:center;">Sin datos</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

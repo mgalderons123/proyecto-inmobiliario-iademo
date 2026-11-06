@@ -1,0 +1,35 @@
+{% load i18n %}
+{% if field.is_hidden %}
+  {{ widget }}
+  {% if field.errors %}<div class="form__error" role="alert">{{ field.errors|join:" " }}</div>{% endif %}
+{% elif is_checkbox %}
+  <div class="form__field form__field--choice{% if field.errors %} form__field--error{% endif %}">
+    <label class="form__choice" for="{{ field.id_for_label }}">
+      {{ widget }}
+      <span>{{ field.label }}</span>
+      {% if field.field.required %}<span class="form__required" aria-hidden="true">*</span><span class="sr-only">{% trans "obligatorio" %}</span>{% endif %}
+    </label>
+    {% if field.help_text %}<div class="form__help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</div>{% endif %}
+    {% if field.errors %}<div class="form__error" id="{{ field.auto_id }}_error" role="alert">{{ field.errors|join:" " }}</div>{% endif %}
+  </div>
+{% elif is_choice_group %}
+  <fieldset class="form__field form__fieldset{% if field.errors %} form__field--error{% endif %}">
+    <legend class="form__label">
+      {{ field.label }}
+      {% if field.field.required %}<span class="form__required" aria-hidden="true">*</span><span class="sr-only">{% trans "obligatorio" %}</span>{% endif %}
+    </legend>
+    <div class="form__choices">{{ widget }}</div>
+    {% if field.help_text %}<div class="form__help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</div>{% endif %}
+    {% if field.errors %}<div class="form__error" id="{{ field.auto_id }}_error" role="alert">{{ field.errors|join:" " }}</div>{% endif %}
+  </fieldset>
+{% else %}
+  <div class="form__field{% if field.errors %} form__field--error{% endif %}">
+    <label class="form__label" for="{{ field.id_for_label }}">
+      {{ field.label }}
+      {% if field.field.required %}<span class="form__required" aria-hidden="true">*</span><span class="sr-only">{% trans "obligatorio" %}</span>{% endif %}
+    </label>
+    {{ widget }}
+    {% if field.help_text %}<div class="form__help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</div>{% endif %}
+    {% if field.errors %}<div class="form__error" id="{{ field.auto_id }}_error" role="alert">{{ field.errors|join:" " }}</div>{% endif %}
+  </div>
+{% endif %}

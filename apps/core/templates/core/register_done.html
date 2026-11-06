@@ -1,0 +1,17 @@
+{% extends "core/auth_base.html" %}
+
+{% block title %}Revisá tu correo - Casarent App{% endblock %}
+
+{% block auth_card %}
+  <h1 class="big">Casi listo</h1>
+  <p style="color:#54698D; margin-top:0;">
+    Te enviamos un enlace de verificación a tu correo electrónico.
+    Hacé clic en el enlace para activar tu cuenta.
+  </p>
+  <p style="color:#54698D; font-size:0.85rem;">
+    Si no lo ves, revisá la carpeta de spam.
+  </p>
+  <div class="auth-signup">
+    <a href="{% url 'login' %}">← Ir a iniciar sesión</a>
+  </div>
+{% endblock %}

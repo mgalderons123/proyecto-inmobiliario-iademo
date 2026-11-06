@@ -1,0 +1,71 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Cuotas" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+{% block content %}
+<div style="max-width:900px; margin:0 auto;">
+  <a href="{% url 'inmuebles:portal_contratos' %}" class="back-link">← {% trans "Volver a contratos" %}</a>
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">{% trans "Cuotas" %} - {{ contrato.inmueble.titulo }}</h1>
+      <p class="page-subtitle">{% trans "Inicio:" %} {{ contrato.fecha_inicio|date:"d/m/Y" }} · {% trans "Monto:" %} {{ contrato.moneda }} {{ contrato.monto|floatformat:2 }}</p>
+    </div>
+  </div>
+
+  <div class="summary-ledger" style="margin-bottom:24px;">
+    <div class="summary-ledger__header">{% trans "Resumen" %}</div>
+    <div class="summary-ledger__row">
+      <dt>{% trans "Saldo adeudado" %}</dt>
+      <dd>{{ contrato.moneda }} {{ saldo|floatformat:2 }}</dd>
+    </div>
+  </div>
+
+  {% if cuotas %}
+    <div class="card">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>{% trans "Nro" %}</th>
+            <th>{% trans "Vencimiento" %}</th>
+            <th>{% trans "Monto" %}</th>
+            <th>{% trans "Multa" %}</th>
+            <th>{% trans "Total" %}</th>
+            <th>{% trans "Estado" %}</th>
+            <th>{% trans "Acciones" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in cuotas %}
+            <tr>
+              <td>{{ c.numero }}</td>
+              <td>{{ c.fecha_vencimiento|date:"d/m/Y" }}</td>
+              <td>{{ c.moneda }} {{ c.monto|floatformat:2 }}</td>
+              <td>{% if c.monto_multa > 0 %}{{ c.moneda }} {{ c.monto_multa|floatformat:2 }}{% else %}-{% endif %}</td>
+              <td>{{ c.moneda }} {{ c.total|floatformat:2 }}</td>
+              <td>
+                {% if c.estado == "pagado" %}
+                  <span class="badge badge--success">{% trans "Pagado" %}</span>
+                {% elif c.estado == "vencido" %}
+                  <span class="badge badge--danger">{% trans "Vencido" %}</span>
+                {% elif c.estado == "parcial" %}
+                  <span class="badge badge--warning">{% trans "Parcial" %}</span>
+                {% else %}
+                  <span class="badge badge--info">{% trans "Pendiente" %}</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if c.estado != "pagado" %}
+                  <a href="{% url 'inmuebles:portal_pago_subir' cuota_pk=c.pk %}" class="btn-primary btn--sm">{% trans "Pagar" %}</a>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <p>{% trans "No hay cuotas generadas para este contrato." %}</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

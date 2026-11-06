@@ -1,0 +1,179 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Carga Masiva de Datos" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div class="container-lg">
+    <div class="form-card">
+      <div class="form-card__header">
+        <a href="{% url 'core:profile' %}" class="back-link">← Volver al perfil</a>
+        <h1 class="form-card__title">Carga Masiva de Datos</h1>
+      </div>
+      <div class="card__body">
+        <p class="page-subtitle">
+          Seleccioná un archivo Excel (.xlsx) con las hojas <strong>Inquilinos</strong>, <strong>Propietarios</strong> e <strong>Inmuebles</strong>.
+          <a href="{% url 'inmuebles:descargar_plantilla_excel' %}" style="color:var(--color-primary);">Descargá la plantilla</a> para conocer el formato correcto.
+        </p>
+        <form method="post" enctype="multipart/form-data" id="uploadForm" class="form">
+          {% csrf_token %}
+          <div id="dropZone" class="drop-zone" style="margin-bottom:16px;">
+            <div class="drop-zone__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 28" width="40" height="46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 2h11l5 5v19H4z" stroke="currentColor" stroke-width="1.8" fill="rgba(255,255,255,0.6)"/>
+                <path d="M15 2v6h5" stroke="currentColor" stroke-width="1.8" fill="none"/>
+                <rect x="8" y="13" width="8" height="1.6" rx="0.8" fill="currentColor"/>
+                <rect x="8" y="17" width="8" height="1.6" rx="0.8" fill="currentColor"/>
+                <rect x="8" y="21" width="5" height="1.6" rx="0.8" fill="currentColor"/>
+              </svg>
+            </div>
+            <p style="margin:0 0 8px; font-size:0.95rem; font-weight:500;">Arrastrá el archivo aquí o hacé click para seleccionar</p>
+            <p style="margin:0; font-size:0.82rem; color:var(--color-text-secondary);">Formato: .xlsx (máximo 10 MB)</p>
+            <input type="file" name="archivo" id="archivoInput" accept=".xlsx,.xls" style="display:none;">
+          </div>
+          <div id="fileInfo" class="info-box" style="display:none;">
+            <strong>Archivo seleccionado:</strong> <span id="fileName"></span>
+            <span id="fileSize" style="color:var(--color-text-secondary); margin-left:8px;"></span>
+          </div>
+          <div class="form__actions">
+            <button type="submit" class="btn-primary" id="submitBtn" disabled style="cursor:pointer;">Validar y cargar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Resultados -->
+    {% if resultado %}
+      <div class="card" style="margin-bottom:24px;">
+        <div class="card__body">
+          <h2 style="font-size:1rem; font-weight:600; margin:0 0 16px;">Resultado de la carga</h2>
+
+          {% if resultado.mensaje %}
+            <div class="info-box info-box--warning" style="margin-bottom:16px;">
+              {{ resultado.mensaje }}
+            </div>
+          {% endif %}
+
+          {% if resultado.resumen %}
+            <div class="stat-grid">
+              {% for hoja, stats in resultado.resumen.items %}
+                <div class="stat-cell">
+                  <div class="stat-cell__title">{{ hoja }}</div>
+                  <div class="stat-cell__line">✓ {{ stats.creados }} creados</div>
+                  {% if stats.errores > 0 %}
+                    <div style="font-size:0.85rem; color:var(--color-danger);">✗ {{ stats.errores }} errores</div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {% if resultado.errores %}
+            <div style="margin-bottom:16px;">
+              <h3 style="font-size:0.9rem; font-weight:600; color:var(--color-danger); margin:0 0 8px;">Errores (importancia alta)</h3>
+              <div class="scroll-box">
+                <table class="table" style="font-size:0.82rem;">
+                  <thead>
+                    <tr>
+                      <th>Hoja</th>
+                      <th>Fila</th>
+                      <th>Campo</th>
+                      <th>Mensaje</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for err in resultado.errores %}
+                      <tr>
+                        <td>{{ err.hoja }}</td>
+                        <td>{{ err.fila }}</td>
+                        <td>{{ err.campo }}</td>
+                        <td>{{ err.mensaje }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if resultado.advertencias %}
+            <div>
+              <h3 style="font-size:0.9rem; font-weight:600; color:#92400E; margin:0 0 8px;">Advertencias (importancia baja)</h3>
+              <div class="scroll-box scroll-box--sm">
+                <table class="table" style="font-size:0.82rem;">
+                  <thead>
+                    <tr>
+                      <th>Hoja</th>
+                      <th>Fila</th>
+                      <th>Campo</th>
+                      <th>Mensaje</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for adv in resultado.advertencias %}
+                      <tr>
+                        <td>{{ adv.hoja }}</td>
+                        <td>{{ adv.fila }}</td>
+                        <td>{{ adv.campo }}</td>
+                        <td>{{ adv.mensaje }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if resultado.total_creados > 0 %}
+            <div class="info-box info-box--success" style="margin-top:16px;">
+              <strong>¡Carga completada!</strong> Se crearon {{ resultado.total_creados }} registro(s) exitosamente.
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('archivoInput');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const submitBtn = document.getElementById('submitBtn');
+
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('drop-zone--active');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('drop-zone--active');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('drop-zone--active');
+      if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        updateFileInfo(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length) {
+        updateFileInfo(fileInput.files[0]);
+      }
+    });
+
+    function updateFileInfo(file) {
+      fileName.textContent = file.name;
+      const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      fileSize.textContent = `(${sizeMB} MB)`;
+      fileInfo.style.display = 'block';
+      submitBtn.disabled = false;
+    }
+  </script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Nueva Cuota" %} - {{ contrato.inmueble.titulo }} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div class="container-md">
+    <div class="form-card">
+      <div class="form-card__header">
+        <a href="{% url 'inmuebles:cuota_list' contrato_pk=contrato.pk %}" class="back-link">← {% trans "Volver a cuotas" %}</a>
+        <h1 class="form-card__title">{% trans "Nueva Cuota Personalizada" %} — {{ contrato.inmueble.titulo }}</h1>
+      </div>
+      <div class="card__body">
+        <form method="post" class="form" novalidate>
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="non-field-error">{{ form.non_field_errors|join:" " }}</div>
+          {% endif %}
+
+          {% include "core/_field.html" with field=form.monto %}
+          {% include "core/_field.html" with field=form.descripcion %}
+          {% include "core/_field.html" with field=form.fecha_vencimiento %}
+
+          <div class="form__actions">
+            <button type="submit" class="btn-primary">{% trans "Crear cuota" %}</button>
+            <a href="{% url 'inmuebles:cuota_list' contrato_pk=contrato.pk %}" class="btn-ghost">{% trans "Cancelar" %}</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

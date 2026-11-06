@@ -1,0 +1,2237 @@
+# English translations for Mi Proyecto.
+msgid ""
+msgstr ""
+"Project-Id-Version: mi_proyecto\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-08 16:10+0000\n"
+"PO-Revision-Date: 2026-08-31 15:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: PRY_INMOB/settings.py:121
+msgid "Español"
+msgstr "Spanish"
+
+#: PRY_INMOB/settings.py:122
+msgid "English"
+msgstr "English"
+
+#: PRY_INMOB/settings.py:123
+msgid "Português"
+msgstr "Portuguese"
+
+#: apps/core/templates/core/admin_user_edit.html:4
+#: apps/core/templates/core/admin_users.html:101
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:13
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:79
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:11
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:13
+#: apps/inmuebles/templates/inmuebles/inquilino_list.html:35
+#: apps/inmuebles/templates/inmuebles/propietario_detail.html:13
+#: apps/inmuebles/templates/inmuebles/propietario_list.html:35
+msgid "Editar"
+msgstr "Edit"
+
+#: apps/core/templates/core/admin_user_edit.html:9
+msgid "Editar usuario"
+msgstr "Edit user"
+
+#: apps/core/templates/core/admin_user_edit.html:10
+msgid "Volver a la lista"
+msgstr "Back to list"
+
+#: apps/core/templates/core/admin_user_edit.html:15
+msgid "Información del usuario"
+msgstr "User information"
+
+#: apps/core/templates/core/admin_user_edit.html:16
+msgid "Modificar datos básicos de la cuenta"
+msgstr "Modify basic account data"
+
+#: apps/core/templates/core/admin_user_edit.html:24
+msgid "Nombre de usuario"
+msgstr "Username"
+
+#: apps/core/templates/core/admin_user_edit.html:30 apps/devtools/forms.py:7
+#: apps/inmuebles/forms.py:13
+msgid "Correo electrónico"
+msgstr "Email"
+
+#: apps/core/templates/core/admin_user_edit.html:39
+msgid "Acceso de administrador (Staff)"
+msgstr "Administrator access (Staff)"
+
+#: apps/core/templates/core/admin_user_edit.html:42
+msgid "Permite acceder a funcionalidades de administración."
+msgstr "Allows access to administrative features."
+
+#: apps/core/templates/core/admin_user_edit.html:47
+#: apps/core/templates/core/login.html:111
+#: apps/devtools/templates/devtools/form_catalog.html:35
+#: apps/inmuebles/templates/inmuebles/contact_form.html:74
+#: apps/inmuebles/templates/inmuebles/contact_form.html:76
+#: apps/inmuebles/templates/inmuebles/contrato_confirm_finalizar.html:21
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:170
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:85
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:87
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:112
+#: apps/inmuebles/templates/inmuebles/contrato_renovar.html:42
+#: apps/inmuebles/templates/inmuebles/contrato_subir_documento.html:23
+#: apps/inmuebles/templates/inmuebles/cuota_edit.html:29
+#: apps/inmuebles/templates/inmuebles/cuota_form.html:27
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:127
+#: apps/inmuebles/templates/inmuebles/inmueble_confirm_delete.html:15
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:88
+#: apps/inmuebles/templates/inmuebles/inquilino_confirm_delete.html:17
+#: apps/inmuebles/templates/inmuebles/multa_edit.html:34
+#: apps/inmuebles/templates/inmuebles/multa_form.html:38
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:59
+#: apps/inmuebles/templates/inmuebles/pago_form.html:40
+#: apps/inmuebles/templates/inmuebles/portal_pago_form.html:66
+#: apps/inmuebles/templates/inmuebles/propietario_confirm_delete.html:17
+msgid "Cancelar"
+msgstr "Cancel"
+
+#: apps/core/templates/core/admin_user_edit.html:48
+#: apps/devtools/templates/devtools/form_catalog.html:34
+#: apps/inmuebles/templates/inmuebles/contact_form.html:71
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:82
+#: apps/inmuebles/templates/inmuebles/cuota_edit.html:28
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:86
+msgid "Guardar cambios"
+msgstr "Save changes"
+
+#: apps/core/templates/core/admin_user_edit.html:56
+#: apps/core/templates/core/login.html:30
+#: apps/core/templates/core/login.html:84
+msgid "Contraseña"
+msgstr "Password"
+
+#: apps/core/templates/core/admin_user_edit.html:57
+msgid "Restablecer la contraseña del usuario"
+msgstr "Reset user password"
+
+#: apps/core/templates/core/admin_user_edit.html:65
+#: apps/core/templates/core/profile.html:37
+msgid "Nueva contraseña"
+msgstr "New password"
+
+#: apps/core/templates/core/admin_user_edit.html:67
+msgid "Mínimo 8 caracteres"
+msgstr "Minimum 8 characters"
+
+#: apps/core/templates/core/admin_user_edit.html:72
+msgid "¿Actualizar la contraseña de"
+msgstr "Update password for"
+
+#: apps/core/templates/core/admin_user_edit.html:73
+#: apps/core/templates/core/profile.html:47
+msgid "Actualizar contraseña"
+msgstr "Update password"
+
+#: apps/core/templates/core/admin_user_edit.html:82
+msgid "Código de registro"
+msgstr "Registration code"
+
+#: apps/core/templates/core/admin_user_edit.html:83
+msgid "Código de verificación para el primer inicio de sesión"
+msgstr "Verification code for first login"
+
+#: apps/core/templates/core/admin_user_edit.html:89
+msgid "Código actual:"
+msgstr "Current code:"
+
+#: apps/core/templates/core/admin_user_edit.html:95
+msgid "Estado:"
+msgstr "Status:"
+
+#: apps/core/templates/core/admin_user_edit.html:97
+#: apps/core/templates/core/admin_users.html:87
+msgid "Usado"
+msgstr "Used"
+
+#: apps/core/templates/core/admin_user_edit.html:99
+#: apps/core/templates/core/admin_users.html:89
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:52
+#: apps/inmuebles/templates/inmuebles/portal_pago_detalle.html:23
+msgid "Pendiente"
+msgstr "Pending"
+
+#: apps/core/templates/core/admin_user_edit.html:101
+#: apps/core/templates/core/admin_users.html:91
+msgid "Expirado"
+msgstr "Expired"
+
+#: apps/core/templates/core/admin_user_edit.html:105
+msgid "Creado:"
+msgstr "Created:"
+
+#: apps/core/templates/core/admin_user_edit.html:109
+msgid "Expira:"
+msgstr "Expires:"
+
+#: apps/core/templates/core/admin_user_edit.html:115
+msgid "Este usuario no tiene código de registro."
+msgstr "This user has no registration code."
+
+#: apps/core/templates/core/admin_user_edit.html:123
+msgid "¿Regenerar código y enviar correo a"
+msgstr "Regenerate code and send email to"
+
+#: apps/core/templates/core/admin_user_edit.html:124
+msgid "Regenerar código y enviar correo"
+msgstr "Regenerate code and send email"
+
+#: apps/core/templates/core/admin_users.html:4
+#: apps/core/templates/core/admin_users.html:9
+#: apps/core/templates/core/profile.html:428
+#: apps/core/templates/core/profile.html:432
+msgid "Gestionar Usuarios"
+msgstr "Manage Users"
+
+#: apps/core/templates/core/admin_users.html:10
+msgid "Volver al perfil"
+msgstr "Back to profile"
+
+#: apps/core/templates/core/admin_users.html:15
+msgid "Buscar por usuario o email..."
+msgstr "Search by username or email..."
+
+#: apps/core/templates/core/admin_users.html:17
+msgid "Buscar"
+msgstr "Search"
+
+#: apps/core/templates/core/admin_users.html:19
+msgid "Limpiar"
+msgstr "Clear"
+
+#: apps/core/templates/core/admin_users.html:24
+msgid "Usuarios registrados"
+msgstr "Registered users"
+
+#: apps/core/templates/core/admin_users.html:29
+#: apps/core/templates/core/login.html:78
+msgid "Usuario"
+msgstr "User"
+
+#: apps/core/templates/core/admin_users.html:31
+#: apps/core/templates/core/profile.html:15
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:38
+msgid "Activo"
+msgstr "Active"
+
+#: apps/core/templates/core/admin_users.html:33
+msgid "Código"
+msgstr "Code"
+
+#: apps/core/templates/core/admin_users.html:34
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:33
+msgid "Acciones"
+msgstr "Actions"
+
+#: apps/core/templates/core/admin_users.html:43
+msgid "vos"
+msgstr "you"
+
+#: apps/core/templates/core/admin_users.html:52
+msgid "Editar email"
+msgstr "Edit email"
+
+#: apps/core/templates/core/admin_users.html:76
+msgid "Desactivar"
+msgstr "Deactivate"
+
+#: apps/core/templates/core/admin_users.html:76
+msgid "Activar"
+msgstr "Activate"
+
+#: apps/core/templates/core/admin_users.html:103
+msgid "¿Eliminar usuario"
+msgstr "Delete user"
+
+#: apps/core/templates/core/admin_users.html:105
+#: apps/core/templates/core/profile.html:88
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:12
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:76
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:14
+#: apps/inmuebles/templates/inmuebles/inquilino_list.html:36
+#: apps/inmuebles/templates/inmuebles/propietario_detail.html:14
+#: apps/inmuebles/templates/inmuebles/propietario_list.html:36
+msgid "Eliminar"
+msgstr "Delete"
+
+#: apps/core/templates/core/admin_users.html:116
+msgid "No se encontraron usuarios con"
+msgstr "No users found with"
+
+#: apps/core/templates/core/admin_users.html:116
+msgid "No hay usuarios registrados."
+msgstr "No registered users."
+
+#: apps/core/templates/core/auth_base.html:6
+msgid "Gestión inmobiliaria simple y profesional."
+msgstr "Simple and professional real estate management."
+
+#: apps/core/templates/core/auth_base.html:30
+msgid "Privacidad"
+msgstr "Privacy"
+
+#: apps/core/templates/core/base.html:1307
+msgid "Mostrar menú"
+msgstr "Show menu"
+
+#: apps/core/templates/core/base.html:1307
+msgid "Ocultar menú"
+msgstr "Hide menu"
+
+#: apps/core/templates/core/base.html:1307
+msgid "Mostrar contraseña"
+msgstr "Show password"
+
+#: apps/core/templates/core/base.html:1307
+msgid "Ocultar contraseña"
+msgstr "Hide password"
+
+#: apps/core/templates/core/base.html:1308
+msgid "Saltar al contenido"
+msgstr "Skip to content"
+
+#: apps/core/templates/core/base.html:1310
+msgid "Abrir menú"
+msgstr "Open menu"
+
+#: apps/core/templates/core/base.html:1315
+msgid "Cerrar menú"
+msgstr "Close menu"
+
+#: apps/core/templates/core/base.html:1339 apps/core/templates/core/home.html:4
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:14
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:49
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:63
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:95
+#: apps/inmuebles/templates/inmuebles/portal_contratos.html:17
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:83
+msgid "Inicio"
+msgstr "Home"
+
+#: apps/core/templates/core/base.html:1343
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:3
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:8
+msgid "Mi Portal"
+msgstr "My Portal"
+
+#: apps/core/templates/core/base.html:1344
+#: apps/inmuebles/templates/inmuebles/portal_contratos.html:3
+#: apps/inmuebles/templates/inmuebles/portal_contratos.html:8
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:45
+msgid "Mis Contratos"
+msgstr "My Contracts"
+
+#: apps/core/templates/core/base.html:1345
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:46
+msgid "Próximos Pagos"
+msgstr "Upcoming Payments"
+
+#: apps/core/templates/core/base.html:1349
+#: apps/inmuebles/templates/inmuebles/propietario_list.html:22
+msgid "Inmuebles"
+msgstr "Properties"
+
+#: apps/core/templates/core/base.html:1351
+#: apps/core/templates/core/home.html:162
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:5
+#: apps/inmuebles/templates/inmuebles/inquilino_list.html:22
+msgid "Contratos"
+msgstr "Contracts"
+
+#: apps/core/templates/core/base.html:1352
+#: apps/inmuebles/templates/inmuebles/inmueble_list.html:4
+#: apps/inmuebles/templates/inmuebles/inmueble_list.html:9
+msgid "Mis Inmuebles"
+msgstr "My Properties"
+
+#: apps/core/templates/core/base.html:1353
+msgid "Disponibles"
+msgstr "Available"
+
+#: apps/core/templates/core/base.html:1354
+#: apps/core/templates/core/home.html:124
+#: apps/inmuebles/templates/inmuebles/propietario_list.html:4
+#: apps/inmuebles/templates/inmuebles/propietario_list.html:9
+msgid "Propietarios"
+msgstr "Owners"
+
+#: apps/core/templates/core/base.html:1355
+#: apps/core/templates/core/home.html:142
+#: apps/inmuebles/templates/inmuebles/inquilino_list.html:4
+#: apps/inmuebles/templates/inmuebles/inquilino_list.html:9
+msgid "Inquilinos"
+msgstr "Tenants"
+
+#: apps/core/templates/core/base.html:1359
+msgid "Cobros"
+msgstr "Billing"
+
+#: apps/core/templates/core/base.html:1361
+msgid "Pendientes"
+msgstr "Pending"
+
+#: apps/core/templates/core/base.html:1362
+msgid "Registro"
+msgstr "Records"
+
+#: apps/core/templates/core/base.html:1363
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: apps/core/templates/core/base.html:1368
+#: apps/core/templates/core/login.html:4
+msgid "Ingresar"
+msgstr "Sign in"
+
+#: apps/core/templates/core/base.html:1369
+#: apps/core/templates/core/register.html:4
+msgid "Registrarse"
+msgstr "Sign up"
+
+#: apps/core/templates/core/base.html:1378
+#: apps/core/templates/core/profile.html:4
+msgid "Perfil"
+msgstr "Profile"
+
+#: apps/core/templates/core/base.html:1380
+msgid "Administrar"
+msgstr "Admin"
+
+#: apps/core/templates/core/base.html:1386
+msgid "Cerrar sesión"
+msgstr "Sign out"
+
+#: apps/core/templates/core/components/form_error_summary.html:4
+msgid "Revisá los campos indicados"
+msgstr "Review the highlighted fields"
+
+#: apps/core/templates/core/components/form_error_summary.html:5
+msgid "Hay información que necesita corrección antes de continuar."
+msgstr "Some information needs to be corrected before continuing."
+
+#: apps/core/templates/core/components/form_field.html:10
+#: apps/core/templates/core/components/form_field.html:19
+#: apps/core/templates/core/components/form_field.html:29
+msgid "obligatorio"
+msgstr "required"
+
+#: apps/core/templates/core/emails/verify_email.txt:1
+#, python-format
+msgid "Hola %(username)s,"
+msgstr "Hello %(username)s,"
+
+#: apps/core/templates/core/emails/verify_email.txt:3
+#, python-format
+msgid "Hacé clic en el siguiente enlace para verificar tu correo electrónico y activar tu cuenta en %(site_name)s:"
+msgstr "Click the following link to verify your email address and activate your account on %(site_name)s:"
+
+#: apps/core/templates/core/emails/verify_email.txt:7
+#, python-format
+msgid "Tu código de seguridad para el primer inicio de sesión es: %(registration_code)s"
+msgstr "Your security code for your first login is: %(registration_code)s"
+
+#: apps/core/templates/core/emails/verify_email.txt:9
+#: apps/core/templates/core/home.html:215
+#: apps/core/templates/core/register.html:50
+msgid "Guardalo. Lo necesitás para ingresar la primera vez."
+msgstr "Save it. You'll need it for your first login."
+
+#: apps/core/templates/core/emails/verify_email.txt:11
+msgid "Si no creaste una cuenta, podés ignorar este mensaje."
+msgstr "If you didn't create an account, you can ignore this message."
+
+#: apps/core/templates/core/emails/verify_email.txt:13
+msgid "Saludos,"
+msgstr "Regards,"
+
+#: apps/core/templates/core/emails/verify_email.txt:14
+#: apps/core/templates/registration/password_reset_email.html:12
+#, python-format
+msgid "El equipo de %(site_name)s"
+msgstr "The %(site_name)s team"
+
+#: apps/core/templates/core/home.html:11
+msgid "Bienvenido"
+msgstr "Welcome"
+
+#: apps/core/templates/core/home.html:12
+msgid "Resumen operativo"
+msgstr "Operational overview"
+
+#: apps/core/templates/core/home.html:13
+msgid "Lo que requiere atención en tu cuenta"
+msgstr "Items requiring attention in your account"
+
+#: apps/core/templates/core/home.html:16
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:86
+#: tests/test_i18n.py:7 tests/test_i18n.py:13
+msgid "Crear inmueble"
+msgstr "Create property"
+
+#: apps/core/templates/core/home.html:17
+msgid "Ver contratos"
+msgstr "View contracts"
+
+#: apps/core/templates/core/home.html:22
+msgid "Atención prioritaria"
+msgstr "Priority attention"
+
+#: apps/core/templates/core/home.html:25
+msgid "Pagos por revisar"
+msgstr "Payments to review"
+
+#: apps/core/templates/core/home.html:29
+msgid "Cuotas vencidas"
+msgstr "Overdue installments"
+
+#: apps/core/templates/core/home.html:33
+msgid "Contratos por vencer"
+msgstr "Contracts expiring soon"
+
+#: apps/core/templates/core/home.html:37
+msgid "Inmuebles disponibles"
+msgstr "Available properties"
+
+#: apps/core/templates/core/home.html:45 apps/core/templates/core/home.html:46
+msgid "Pagos pendientes"
+msgstr "Pending payments"
+
+#: apps/core/templates/core/home.html:45
+msgid "Ver todos"
+msgstr "View all"
+
+#: apps/core/templates/core/home.html:48
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:26
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:46
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:94
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:61
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:93
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:11
+#: apps/inmuebles/templates/inmuebles/pago_pendientes.html:18
+#: apps/inmuebles/templates/inmuebles/pago_registro.html:19
+#: apps/inmuebles/templates/inmuebles/portal_contratos.html:15
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:81
+msgid "Inmueble"
+msgstr "Property"
+
+#: apps/core/templates/core/home.html:48
+msgid "Importe"
+msgstr "Amount"
+
+#: apps/core/templates/core/home.html:48
+#: apps/inmuebles/templates/inmuebles/pago_list.html:20
+#: apps/inmuebles/templates/inmuebles/pago_pendientes.html:20
+#: apps/inmuebles/templates/inmuebles/pago_registro.html:21
+msgid "Fecha"
+msgstr "Date"
+
+#: apps/core/templates/core/home.html:48
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:39
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:40
+msgid "Acción"
+msgstr "Action"
+
+#: apps/core/templates/core/home.html:51
+msgid "Revisar pago"
+msgstr "Review payment"
+
+#: apps/core/templates/core/home.html:53
+msgid "No hay pagos pendientes de revisión."
+msgstr "There are no payments awaiting review."
+
+#: apps/core/templates/core/home.html:61
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:50
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:51
+msgid "Próximos vencimientos"
+msgstr "Upcoming expirations"
+
+#: apps/core/templates/core/home.html:64
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:56
+msgid "Vence"
+msgstr "Due"
+
+#: apps/core/templates/core/home.html:66
+msgid "No hay contratos que venzan en los próximos 30 días."
+msgstr "No contracts expire in the next 30 days."
+
+#: apps/core/templates/core/home.html:81
+msgid "Gestioná tu portfolio inmobiliario"
+msgstr "Manage your real estate portfolio"
+
+#: apps/core/templates/core/home.html:83
+msgid "Una plataforma completa para administrar propiedades, contratos, inquilinos y cobranzas desde un solo lugar."
+msgstr "A complete platform to manage properties, contracts, tenants and billing from one place."
+
+#: apps/core/templates/core/home.html:86 apps/core/templates/core/login.html:47
+#: apps/core/templates/core/register.html:30
+msgid "Iniciar sesión"
+msgstr "Sign in"
+
+#: apps/core/templates/core/home.html:87 apps/core/templates/core/login.html:57
+#: apps/core/templates/core/register.html:7
+msgid "Crear cuenta"
+msgstr "Create account"
+
+#: apps/core/templates/core/home.html:106
+msgid "Propiedades"
+msgstr "Properties"
+
+#: apps/core/templates/core/home.html:107
+msgid "Agregá una propiedad en segundos. La dirección se geolocaliza sola, subí fotos y definí su estado al instante."
+msgstr "Add a property in seconds. The address geolocates automatically, upload photos and set its status instantly."
+
+#: apps/core/templates/core/home.html:109
+msgid "Ir a Propiedades"
+msgstr "Go to Properties"
+
+#: apps/core/templates/core/home.html:125
+msgid "Administrá tus propietarios con toda su información de contacto y el historial completo de sus inmuebles."
+msgstr "Manage your owners with all their contact information and complete property history."
+
+#: apps/core/templates/core/home.html:127
+msgid "Ir a Propietarios"
+msgstr "Go to Owners"
+
+#: apps/core/templates/core/home.html:143
+msgid "Registrá inquilinos y consultá al instante sus contratos activos, vencidos o finalizados."
+msgstr "Register tenants and instantly view their active, expired or finished contracts."
+
+#: apps/core/templates/core/home.html:145
+msgid "Ir a Inquilinos"
+msgstr "Go to Tenants"
+
+#: apps/core/templates/core/home.html:163
+msgid "Creá contratos de alquiler o venta que actualizan automáticamente la disponibilidad al finalizar."
+msgstr "Create rental or sale contracts that automatically update availability when finished."
+
+#: apps/core/templates/core/home.html:165
+msgid "Ir a Contratos"
+msgstr "Go to Contracts"
+
+#: apps/core/templates/core/home.html:175
+msgid "Tus propiedades destacadas"
+msgstr "Your featured properties"
+
+#: apps/core/templates/core/home.html:176
+msgid "Ver todas"
+msgstr "View all"
+
+#: apps/core/templates/core/home.html:185
+#: apps/inmuebles/templates/inmuebles/inmueble_list.html:22
+#: apps/inmuebles/templates/inmuebles/inmuebles_disponibles.html:21
+msgid "Sin foto"
+msgstr "No photo"
+
+#: apps/core/templates/core/home.html:206
+#: apps/core/templates/core/register.html:41
+msgid "Revisá tu correo"
+msgstr "Check your email"
+
+#: apps/core/templates/core/home.html:208
+#: apps/core/templates/core/register.html:43
+msgid "Te enviamos un enlace de verificación a tu correo electrónico."
+msgstr "We sent a verification link to your email."
+
+#: apps/core/templates/core/home.html:209
+#: apps/core/templates/core/register.html:44
+msgid "Hacé clic en el enlace para activar tu cuenta."
+msgstr "Click the link to activate your account."
+
+#: apps/core/templates/core/home.html:212
+#: apps/core/templates/core/register.html:47
+msgid "Tu código de seguridad para el primer ingreso llega en ese correo."
+msgstr "Your security code for first login is in that email."
+
+#: apps/core/templates/core/home.html:217
+#: apps/core/templates/core/register.html:52
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:106
+msgid "Entendido"
+msgstr "Got it"
+
+#: apps/core/templates/core/login.html:7
+msgid "Inicio de sesión"
+msgstr "Sign in"
+
+#: apps/core/templates/core/login.html:14
+msgid "Usuario o contraseña inválidos."
+msgstr "Invalid username or password."
+
+#: apps/core/templates/core/login.html:23
+msgid "Usuario o correo electrónico"
+msgstr "Username or email"
+
+#: apps/core/templates/core/login.html:25
+msgid "Nombre de usuario o email"
+msgstr "Username or email"
+
+#: apps/core/templates/core/login.html:37
+msgid "Bloq Mayús está activado."
+msgstr "Caps Lock is on."
+
+#: apps/core/templates/core/login.html:43
+msgid "Recordarme"
+msgstr "Remember me"
+
+#: apps/core/templates/core/login.html:52
+msgid "¿Olvidó la contraseña?"
+msgstr "Forgot your password?"
+
+#: apps/core/templates/core/login.html:56
+msgid "¿No tenés cuenta?"
+msgstr "Don't have an account?"
+
+#: apps/core/templates/core/login.html:66
+msgid "Código de seguridad"
+msgstr "Security code"
+
+#: apps/core/templates/core/login.html:68
+msgid "Ingresá tu contraseña y el código de 6 dígitos que recibiste por correo."
+msgstr "Enter your password and the 6-digit code you received by email."
+
+#: apps/core/templates/core/login.html:89
+msgid "Código de verificación"
+msgstr "Verification code"
+
+#: apps/core/templates/core/login.html:91
+msgid "6 dígitos"
+msgstr "6 digits"
+
+#: apps/core/templates/core/login.html:100
+msgid "Acepto la"
+msgstr "I accept the"
+
+#: apps/core/templates/core/login.html:102
+msgid "Política de privacidad y tratamiento de datos personales"
+msgstr "Privacy Policy and Personal Data Processing Policy"
+
+#: apps/core/templates/core/login.html:107
+msgid "Verificar"
+msgstr "Verify"
+
+#: apps/core/templates/core/profile.html:21
+msgid "Cambiar Contraseña"
+msgstr "Change Password"
+
+#: apps/core/templates/core/profile.html:23
+msgid "Actualizá tu contraseña de acceso. Necesitás la contraseña actual para confirmar el cambio."
+msgstr "Update your password. You need your current password to confirm the change."
+
+#: apps/core/templates/core/profile.html:31
+msgid "Contraseña actual"
+msgstr "Current password"
+
+#: apps/core/templates/core/profile.html:41
+msgid "Repetir contraseña"
+msgstr "Repeat password"
+
+#: apps/core/templates/core/profile.html:51
+msgid "Personalización"
+msgstr "Customization"
+
+#: apps/core/templates/core/profile.html:53
+msgid "Cambiar el nombre del proyecto y tu imagen de perfil."
+msgstr "Change the project name and your profile image."
+
+#: apps/core/templates/core/profile.html:60
+msgid "Nombre del proyecto"
+msgstr "Project name"
+
+#: apps/core/templates/core/profile.html:69
+msgid "Imagen de perfil"
+msgstr "Profile image"
+
+#: apps/core/templates/core/profile.html:84
+msgid "Seleccionar imagen"
+msgstr "Select image"
+
+#: apps/core/templates/core/profile.html:99
+msgid "Guardar personalización"
+msgstr "Save customization"
+
+#: apps/core/templates/core/profile.html:116
+msgid "Idioma"
+msgstr "Language"
+
+#: apps/core/templates/core/profile.html:118
+msgid "Seleccioná el idioma de la interfaz. El cambio se aplica inmediatamente."
+msgstr "Select the interface language. Changes apply immediately."
+
+#: apps/core/templates/core/profile.html:131
+msgid "Guardar idioma"
+msgstr "Save language"
+
+#: apps/core/templates/core/profile.html:135
+msgid "Apariencia de la aplicación"
+msgstr "Application appearance"
+
+#: apps/core/templates/core/profile.html:137
+msgid "Elegí un tema de color predefinido o personalizá la paleta. El cambio se aplica a toda la app y queda guardado en tu cuenta."
+msgstr "Choose a predefined color theme or customize the palette. Changes apply across the app and are saved to your account."
+
+#: apps/core/templates/core/profile.html:150
+msgid "Teal Profesional"
+msgstr "Professional Teal"
+
+#: apps/core/templates/core/profile.html:159
+msgid "Navy &amp; Oro"
+msgstr "Navy &amp; Gold"
+
+#: apps/core/templates/core/profile.html:168
+msgid "Índigo Confianza"
+msgstr "Indigo Trust"
+
+#: apps/core/templates/core/profile.html:177
+msgid "Verde Esmeralda"
+msgstr "Emerald Green"
+
+#: apps/core/templates/core/profile.html:186
+msgid "Violeta Creativo"
+msgstr "Creative Violet"
+
+#: apps/core/templates/core/profile.html:195
+msgid "Personalizada"
+msgstr "Custom"
+
+#: apps/core/templates/core/profile.html:201
+msgid "Colores personalizados"
+msgstr "Custom colors"
+
+#: apps/core/templates/core/profile.html:202
+msgid "Usá el selector de cada token. Los tintes (hover, ring, luz) se calculan automáticamente."
+msgstr "Use each token's color picker. Tints (hover, ring, light) are calculated automatically."
+
+#: apps/core/templates/core/profile.html:205
+msgid "Color principal"
+msgstr "Primary color"
+
+#: apps/core/templates/core/profile.html:221
+msgid "Fondo"
+msgstr "Background"
+
+#: apps/core/templates/core/profile.html:225
+msgid "Bordes"
+msgstr "Borders"
+
+#: apps/core/templates/core/profile.html:229
+msgid "Texto"
+msgstr "Text"
+
+#: apps/core/templates/core/profile.html:240
+msgid "Guardar tema"
+msgstr "Save theme"
+
+#: apps/core/templates/core/profile.html:241
+msgid "Restablecer"
+msgstr "Reset"
+
+#: apps/core/templates/core/profile.html:367
+#: apps/inmuebles/templates/inmuebles/carga_excel.html:4
+msgid "Carga Masiva de Datos"
+msgstr "Bulk Data Import"
+
+#: apps/core/templates/core/profile.html:371
+msgid "Importar desde Excel"
+msgstr "Import from Excel"
+
+#: apps/core/templates/core/profile.html:373
+msgid "Cargá inquilinos, propietarios e inmuebles en forma masiva desde un archivo Excel."
+msgstr "Bulk import tenants, owners and properties from an Excel file."
+
+#: apps/core/templates/core/profile.html:376
+msgid "Descargá la plantilla con los formatos correctos"
+msgstr "Download the template with correct formats"
+
+#: apps/core/templates/core/profile.html:377
+msgid "Completá los datos en cada hoja (Inquilinos, Propietarios, Inmuebles)"
+msgstr "Fill in data on each sheet (Tenants, Owners, Properties)"
+
+#: apps/core/templates/core/profile.html:378
+msgid "Subí el archivo y validá los resultados antes de cargar"
+msgstr "Upload the file and validate results before importing"
+
+#: apps/core/templates/core/profile.html:381
+msgid "Descargar Plantilla"
+msgstr "Download Template"
+
+#: apps/core/templates/core/profile.html:382
+msgid "Cargar Datos"
+msgstr "Import Data"
+
+#: apps/core/templates/core/profile.html:389
+msgid "Administración del sistema"
+msgstr "System administration"
+
+#: apps/core/templates/core/profile.html:394
+msgid "API REST"
+msgstr "REST API"
+
+#: apps/core/templates/core/profile.html:396
+msgid "API completa con autenticación JWT para integración con otros sistemas."
+msgstr "Full API with JWT authentication for integration with other systems."
+
+#: apps/core/templates/core/profile.html:400
+msgid "Rate limiting por IP"
+msgstr "Rate limiting by IP"
+
+#: apps/core/templates/core/profile.html:401
+msgid "Endpoints: inmuebles, contratos, propietarios, inquilinos"
+msgstr "Endpoints: properties, contracts, owners, tenants"
+
+#: apps/core/templates/core/profile.html:402
+msgid "Aislamiento de datos por usuario"
+msgstr "Data isolation per user"
+
+#: apps/core/templates/core/profile.html:409
+msgid "Seguridad"
+msgstr "Security"
+
+#: apps/core/templates/core/profile.html:411
+msgid "Verificación de email · Rate limiting · JWT · CSRF · Headers de seguridad · Aislamiento de datos"
+msgstr "Email verification · Rate limiting · JWT · CSRF · Security headers · Data isolation"
+
+#: apps/core/templates/core/profile.html:418
+msgid "Bitácora de Ingresos"
+msgstr "Login Audit Log"
+
+#: apps/core/templates/core/profile.html:420
+msgid "Consultá el registro de ingresos de todos los usuarios de la plataforma."
+msgstr "View the login records of all platform users."
+
+#: apps/core/templates/core/profile.html:422
+msgid "Ver Bitácora"
+msgstr "View Log"
+
+#: apps/core/templates/core/profile.html:430
+msgid "Administrar cuentas, contraseñas y códigos de acceso de los usuarios."
+msgstr "Manage user accounts, passwords and access codes."
+
+#: apps/core/templates/core/register.html:24
+msgid "Registrarme"
+msgstr "Sign up"
+
+#: apps/core/templates/core/register.html:29
+msgid "¿Ya tenés cuenta?"
+msgstr "Already have an account?"
+
+#: apps/core/templates/core/required_password_change.html:4
+msgid "Cambiar contraseña temporal"
+msgstr "Change temporary password"
+
+#: apps/core/templates/core/required_password_change.html:7
+msgid "Protegé tu cuenta"
+msgstr "Protect your account"
+
+#: apps/core/templates/core/required_password_change.html:8
+msgid "Antes de continuar, reemplazá la contraseña temporal por una contraseña personal."
+msgstr "Before continuing, replace the temporary password with a personal password."
+
+#: apps/core/templates/core/required_password_change.html:17
+msgid "Guardar nueva contraseña"
+msgstr "Save new password"
+
+#: apps/core/templates/registration/password_reset_email.html:2
+#, python-format
+msgid "Ha recibido este correo electrónico porque ha solicitado restablecer la contraseña de su cuenta en %(site_name)s."
+msgstr "You received this email because you requested a password reset for your account at %(site_name)s."
+
+#: apps/core/templates/registration/password_reset_email.html:4
+msgid "Por favor, vaya a la página siguiente y escoja una nueva contraseña:"
+msgstr "Please go to the following page and choose a new password:"
+
+#: apps/core/templates/registration/password_reset_email.html:8
+msgid "Por si lo ha olvidado, usted es:"
+msgstr "In case you forgot, your username is:"
+
+#: apps/core/templates/registration/password_reset_email.html:10
+msgid "¡Gracias por usar nuestro sitio!"
+msgstr "Thank you for using our site!"
+
+#: apps/core/views.py:64
+msgid "Contraseña actualizada. Ya podés usar la aplicación."
+msgstr "Password updated. You can now use the application."
+
+#: apps/core/views.py:140
+msgid "Todos los campos de contraseña son obligatorios."
+msgstr "All password fields are required."
+
+#: apps/core/views.py:144
+msgid "La contraseña actual es incorrecta."
+msgstr "The current password is incorrect."
+
+#: apps/core/views.py:148
+msgid "Las nuevas contraseñas no coinciden."
+msgstr "The new passwords do not match."
+
+#: apps/core/views.py:164
+msgid "Contraseña actualizada correctamente."
+msgstr "Password updated successfully."
+
+#: apps/core/views.py:177
+msgid "Imagen de perfil eliminada."
+msgstr "Profile image removed."
+
+#: apps/core/views.py:201
+msgid "Formato de imagen no válido. Use JPG, PNG, WEBP o GIF."
+msgstr "Invalid image format. Use JPG, PNG, WEBP, or GIF."
+
+#: apps/core/views.py:209
+msgid "Preferencia de idioma guardada."
+msgstr "Language preference saved."
+
+#: apps/core/views.py:216
+msgid "Tema no válido."
+msgstr "Invalid theme."
+
+#: apps/core/views.py:235
+msgid "Colores personalizados no válidos: usá formato #RRGGBB en todos los campos."
+msgstr "Invalid custom colors: use #RRGGBB format in all fields."
+
+#: apps/core/views.py:247
+msgid "Preferencia de tema guardada."
+msgstr "Theme preference saved."
+
+#: apps/core/views.py:253
+msgid "Personalización guardada."
+msgstr "Customization saved."
+
+#: apps/core/views.py:334
+msgid "Debés aceptar la Política de privacidad y tratamiento de datos personales para continuar."
+msgstr "You must accept the Privacy Policy and Personal Data Processing Policy to continue."
+
+#: apps/devtools/forms.py:6 apps/inmuebles/forms.py:12
+msgid "Nombre completo"
+msgstr "Full name"
+
+#: apps/devtools/forms.py:6
+msgid "Como figura en el documento."
+msgstr "As shown on the document."
+
+#: apps/devtools/forms.py:9
+msgid "Tipo de contacto"
+msgstr "Contact type"
+
+#: apps/devtools/forms.py:10
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:34
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:48
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:15
+msgid "Inquilino"
+msgstr "Tenant"
+
+#: apps/devtools/forms.py:10
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:42
+msgid "Propietario"
+msgstr "Owner"
+
+#: apps/devtools/forms.py:13
+msgid "Contacto activo"
+msgstr "Active contact"
+
+#: apps/devtools/forms.py:14
+msgid "Documento adjunto"
+msgstr "Attached document"
+
+#: apps/devtools/forms.py:15 apps/inmuebles/forms.py:17
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:25
+#: apps/inmuebles/templates/inmuebles/propietario_detail.html:25
+msgid "Notas"
+msgstr "Notes"
+
+#: apps/devtools/forms.py:17
+msgid "Referencia interna"
+msgstr "Internal reference"
+
+#: apps/devtools/templates/devtools/form_catalog.html:4
+msgid "Catálogo de formularios"
+msgstr "Form catalog"
+
+#: apps/devtools/templates/devtools/form_catalog.html:11
+msgid "Catálogo vivo de formularios"
+msgstr "Live form catalog"
+
+#: apps/devtools/templates/devtools/form_catalog.html:12
+msgid "Referencia productiva para diseño, accesibilidad, estados y comportamiento responsive."
+msgstr "Production reference for design, accessibility, states, and responsive behavior."
+
+#: apps/devtools/templates/devtools/form_catalog.html:19
+msgid "Estado vacío"
+msgstr "Empty state"
+
+#: apps/devtools/templates/devtools/form_catalog.html:20
+msgid "Campos, ayudas, opciones, archivos y controles deshabilitados."
+msgstr "Fields, help text, options, files, and disabled controls."
+
+#: apps/devtools/templates/devtools/form_catalog.html:43
+msgid "Estado con errores"
+msgstr "Error state"
+
+#: apps/devtools/templates/devtools/form_catalog.html:44
+msgid "Resumen enfocable y errores vinculados a cada control."
+msgstr "Focusable summary and errors linked to each control."
+
+#: apps/devtools/templates/devtools/form_catalog.html:61
+msgid "Estado completo"
+msgstr "Completed state"
+
+#: apps/devtools/templates/devtools/form_catalog.html:62
+msgid "Ejemplo para revisar jerarquía, densidad y textos extensos."
+msgstr "Example for reviewing hierarchy, density, and long text."
+
+#: apps/inmuebles/forms.py:14
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:42
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:45
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:23
+#: apps/inmuebles/templates/inmuebles/inquilino_list.html:21
+#: apps/inmuebles/templates/inmuebles/propietario_detail.html:23
+#: apps/inmuebles/templates/inmuebles/propietario_list.html:21
+msgid "Teléfono"
+msgstr "Phone"
+
+#: apps/inmuebles/forms.py:15
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:122
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:46
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:21
+#: apps/inmuebles/templates/inmuebles/inquilino_list.html:19
+#: apps/inmuebles/templates/inmuebles/propietario_detail.html:21
+#: apps/inmuebles/templates/inmuebles/propietario_list.html:19
+msgid "Documento"
+msgstr "Document"
+
+#: apps/inmuebles/forms.py:16
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:41
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:24
+#: apps/inmuebles/templates/inmuebles/propietario_detail.html:24
+msgid "Dirección"
+msgstr "Address"
+
+#: apps/inmuebles/forms.py:27
+msgid "Ingresá el nombre completo tal como figura en su documentación."
+msgstr "Enter the full name exactly as it appears on the documentation."
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:6
+msgid "Editar Inquilino"
+msgstr "Edit Tenant"
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:6
+#: apps/inmuebles/templates/inmuebles/inquilino_list.html:10
+#: apps/inmuebles/templates/inmuebles/inquilino_list.html:46
+msgid "Nuevo Inquilino"
+msgstr "New Tenant"
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:8
+msgid "Editar Propietario"
+msgstr "Edit Owner"
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:8
+#: apps/inmuebles/templates/inmuebles/propietario_list.html:10
+#: apps/inmuebles/templates/inmuebles/propietario_list.html:46
+msgid "Nuevo Propietario"
+msgstr "New Owner"
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:14
+msgid "Guardando..."
+msgstr "Saving..."
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:18
+msgid "Directorio de personas"
+msgstr "People directory"
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:21
+msgid "Editar inquilino"
+msgstr "Edit tenant"
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:21
+msgid "Registrar inquilino"
+msgstr "Register tenant"
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:23
+msgid "Editar propietario"
+msgstr "Edit owner"
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:23
+msgid "Registrar propietario"
+msgstr "Register owner"
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:28
+msgid "Centralizá sus datos de contacto y documentación para asociarlos a contratos."
+msgstr "Centralize contact details and documentation for linking to contracts."
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:30
+msgid "Centralizá sus datos de contacto y documentación para asociarlos a inmuebles."
+msgstr "Centralize contact details and documentation for linking to properties."
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:35
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:8
+msgid "Volver a inquilinos"
+msgstr "Back to tenants"
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:37
+#: apps/inmuebles/templates/inmuebles/propietario_detail.html:8
+msgid "Volver a propietarios"
+msgstr "Back to owners"
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:43
+msgid "Expediente de contacto"
+msgstr "Contact record"
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:44
+msgid "Los campos marcados con * son obligatorios."
+msgstr "Fields marked with * are required."
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:52
+msgid "Identificación y contacto"
+msgstr "Identification and contact"
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:62
+msgid "Información complementaria"
+msgstr "Additional information"
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:71
+msgid "Crear inquilino"
+msgstr "Create tenant"
+
+#: apps/inmuebles/templates/inmuebles/contact_form.html:71
+msgid "Crear propietario"
+msgstr "Create owner"
+
+#: apps/inmuebles/templates/inmuebles/contrato_confirm_finalizar.html:4
+#: apps/inmuebles/templates/inmuebles/contrato_confirm_finalizar.html:9
+msgid "Rescindir Contrato"
+msgstr "Terminate Contract"
+
+#: apps/inmuebles/templates/inmuebles/contrato_confirm_finalizar.html:4
+#: apps/inmuebles/templates/inmuebles/contrato_confirm_finalizar.html:9
+msgid "Finalizar Contrato"
+msgstr "Finalize Contract"
+
+#: apps/inmuebles/templates/inmuebles/contrato_confirm_finalizar.html:12
+#, python-format
+msgid "¿Estás seguro de rescindir el contrato de <strong>%(tipo)s</strong> para <strong>%(titulo)s</strong>? Esta acción liberará el inmueble."
+msgstr "Are you sure you want to terminate the <strong>%(tipo)s</strong> contract for <strong>%(titulo)s</strong>? This action will release the property."
+
+#: apps/inmuebles/templates/inmuebles/contrato_confirm_finalizar.html:14
+#, python-format
+msgid "¿Estás seguro de finalizar el contrato de <strong>%(tipo)s</strong> para <strong>%(titulo)s</strong>?"
+msgstr "Are you sure you want to finalize the <strong>%(tipo)s</strong> contract for <strong>%(titulo)s</strong>?"
+
+#: apps/inmuebles/templates/inmuebles/contrato_confirm_finalizar.html:17
+msgid "Inquilino:"
+msgstr "Tenant:"
+
+#: apps/inmuebles/templates/inmuebles/contrato_confirm_finalizar.html:23
+msgid "Rescindir contrato"
+msgstr "Terminate contract"
+
+#: apps/inmuebles/templates/inmuebles/contrato_confirm_finalizar.html:25
+msgid "Finalizar contrato"
+msgstr "Finalize contract"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:4
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:55
+msgid "Contrato"
+msgstr "Contract"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:8
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:14
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:6
+msgid "Volver a contratos"
+msgstr "Back to contracts"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:14
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:143
+#: apps/inmuebles/templates/inmuebles/contrato_subir_documento.html:22
+msgid "Subir documento"
+msgstr "Upload document"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:16
+msgid "Renovar"
+msgstr "Renew"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:17
+msgid "Finalizar"
+msgstr "Finalize"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:18
+msgid "Rescindir"
+msgstr "Terminate"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:27
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:68
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:52
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:41
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:38
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:66
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:98
+#: apps/inmuebles/templates/inmuebles/pago_registro.html:23
+#: apps/inmuebles/templates/inmuebles/portal_contratos.html:20
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:32
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:86
+#: apps/inmuebles/templates/inmuebles/portal_pago_detalle.html:17
+msgid "Estado"
+msgstr "Status"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:33
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:47
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:62
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:94
+#: apps/inmuebles/templates/inmuebles/portal_contratos.html:16
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:82
+msgid "Tipo"
+msgstr "Type"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:43
+msgid "Fecha inicio"
+msgstr "Start date"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:44
+msgid "Fecha fin"
+msgstr "End date"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:45
+msgid "Finalizado el"
+msgstr "Finalized on"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:46
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:51
+#: apps/inmuebles/templates/inmuebles/contrato_renovar.html:11
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:40
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:117
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:65
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:97
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:12
+#: apps/inmuebles/templates/inmuebles/pago_list.html:21
+#: apps/inmuebles/templates/inmuebles/pago_pendientes.html:19
+#: apps/inmuebles/templates/inmuebles/pago_registro.html:20
+#: apps/inmuebles/templates/inmuebles/portal_contratos.html:19
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:29
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:57
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:85
+#: apps/inmuebles/templates/inmuebles/portal_pago_detalle.html:14
+msgid "Monto"
+msgstr "Amount"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:47
+#: apps/inmuebles/templates/inmuebles/contrato_renovar.html:13
+msgid "Comisión"
+msgstr "Commission"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:48
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:55
+msgid "Creado"
+msgstr "Created"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:55
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:4
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:11
+#: apps/inmuebles/templates/inmuebles/portal_contratos.html:41
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:3
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:9
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:99
+msgid "Cuotas"
+msgstr "Installments"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:56
+msgid "Ver cuotas"
+msgstr "View installments"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:65
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:38
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:112
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:43
+msgid "Descripción"
+msgstr "Description"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:66
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:39
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:28
+msgid "Vencimiento"
+msgstr "Due date"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:67
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:31
+msgid "Total"
+msgstr "Total"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:91
+#, python-format
+msgid "Ver las %(count)s cuotas"
+msgstr "View %(count)s installments"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:96
+msgid "No hay cuotas registradas."
+msgstr "No installments are registered."
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:97
+msgid "Ir a cuotas"
+msgstr "Go to installments"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:106
+msgid "Documentos"
+msgstr "Documents"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:107
+msgid "Subir"
+msgstr "Upload"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:114
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:43
+#: apps/inmuebles/templates/inmuebles/inquilino_list.html:18
+#: apps/inmuebles/templates/inmuebles/propietario_list.html:18
+msgid "Nombre"
+msgstr "Name"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:115
+msgid "Subido"
+msgstr "Uploaded"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:124
+msgid "Descargar"
+msgstr "Download"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:131
+msgid "No hay documentos. Arrastrá un archivo con el botón \"Subir\"."
+msgstr "There are no documents. Drag a file using the “Upload” button."
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:148
+msgid "Nombre del documento"
+msgstr "Document name"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:149
+msgid "Ej: Contrato firmado"
+msgstr "Example: Signed contract"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:161
+msgid "Arrastrá un archivo aquí o hacé clic para seleccionar"
+msgstr "Drag a file here or click to select"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:171
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:264
+msgid "Aceptar"
+msgstr "Accept"
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:244
+msgid "Subiendo..."
+msgstr "Uploading..."
+
+#: apps/inmuebles/templates/inmuebles/contrato_detail.html:266
+msgid "Error al subir el documento. Intentalo de nuevo."
+msgstr "Error uploading the document. Try again."
+
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:4
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:12
+msgid "Editar Contrato"
+msgstr "Edit Contract"
+
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:4
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:15
+msgid "Nuevo Contrato"
+msgstr "New Contract"
+
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:11
+#: apps/inmuebles/templates/inmuebles/contrato_renovar.html:19
+#: apps/inmuebles/templates/inmuebles/contrato_subir_documento.html:10
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:8
+msgid "Volver al contrato"
+msgstr "Back to contract"
+
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:27
+msgid "Partes del contrato"
+msgstr "Contract parties"
+
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:30
+msgid "Tipo de contrato"
+msgstr "Contract type"
+
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:51
+msgid "Frecuencia de pago"
+msgstr "Payment frequency"
+
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:59
+#: apps/inmuebles/templates/inmuebles/contrato_renovar.html:10
+msgid "Vigencia"
+msgstr "Term"
+
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:67
+msgid "Términos económicos"
+msgstr "Financial terms"
+
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:82
+msgid "Crear contrato"
+msgstr "Create contract"
+
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:102
+msgid "Contrato vigente encontrado"
+msgstr "Active contract found"
+
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:103
+msgid "Este inquilino ya tiene un contrato activo:"
+msgstr "This tenant already has an active contract:"
+
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:105
+msgid "Podés continuar igualmente o elegir otro inquilino."
+msgstr "You can continue anyway or choose another tenant."
+
+#: apps/inmuebles/templates/inmuebles/contrato_form.html:152
+msgid "desde"
+msgstr "from"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:12
+#, python-format
+msgid "Volver a %(titulo)s"
+msgstr "Back to %(titulo)s"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:18
+msgid "Todos los Contratos"
+msgstr "All Contracts"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:18
+#, python-format
+msgid "Contratos de %(titulo)s"
+msgstr "Contracts for %(titulo)s"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:20
+msgid "Carga de Contrato"
+msgstr "Contract Entry"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:28
+msgid "Todos"
+msgstr "All"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:32
+msgid "Alquiler"
+msgstr "Rental"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:36
+msgid "Autorización de Venta"
+msgstr "Sale Authorization"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:50
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:64
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:96
+#: apps/inmuebles/templates/inmuebles/portal_contratos.html:18
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:84
+msgid "Fin"
+msgstr "End"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:71
+#: apps/inmuebles/templates/inmuebles/pago_pendientes.html:36
+#: apps/inmuebles/templates/inmuebles/pago_registro.html:46
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:67
+msgid "Ver"
+msgstr "View"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:79
+msgid "No hay contratos registrados."
+msgstr "No contracts are registered."
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:79
+msgid "Este inmueble no tiene contratos."
+msgstr "This property has no contracts."
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:88
+msgid "Cargar Contrato"
+msgstr "Add Contract"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:96
+msgid "Seleccioná un inmueble"
+msgstr "Select a property"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:104
+msgid "Tipo de Contrato"
+msgstr "Contract Type"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:106
+msgid "Contrato de Alquiler"
+msgstr "Rental Agreement"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:107
+msgid "Contrato de Venta"
+msgstr "Sale Contract"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:113
+msgid "Continuar"
+msgstr "Continue"
+
+#: apps/inmuebles/templates/inmuebles/contrato_list.html:133
+msgid "Seleccioná un inmueble."
+msgstr "Select a property."
+
+#: apps/inmuebles/templates/inmuebles/contrato_renovar.html:4
+#: apps/inmuebles/templates/inmuebles/contrato_renovar.html:20
+msgid "Renovar Contrato"
+msgstr "Renew Contract"
+
+#: apps/inmuebles/templates/inmuebles/contrato_renovar.html:9
+msgid "Contrato actual"
+msgstr "Current contract"
+
+#: apps/inmuebles/templates/inmuebles/contrato_renovar.html:10
+msgid "indefinido"
+msgstr "indefinite"
+
+#: apps/inmuebles/templates/inmuebles/contrato_renovar.html:41
+msgid "Renovar contrato"
+msgstr "Renew contract"
+
+#: apps/inmuebles/templates/inmuebles/contrato_subir_documento.html:4
+#: apps/inmuebles/templates/inmuebles/contrato_subir_documento.html:11
+msgid "Subir Documento"
+msgstr "Upload Document"
+
+#: apps/inmuebles/templates/inmuebles/cuota_edit.html:4
+#: apps/inmuebles/templates/inmuebles/cuota_edit.html:11
+msgid "Editar Cuota"
+msgstr "Edit Installment"
+
+#: apps/inmuebles/templates/inmuebles/cuota_edit.html:10
+#: apps/inmuebles/templates/inmuebles/cuota_form.html:10
+#: apps/inmuebles/templates/inmuebles/multa_edit.html:18
+#: apps/inmuebles/templates/inmuebles/multa_form.html:18
+#: apps/inmuebles/templates/inmuebles/pago_form.html:19
+#: apps/inmuebles/templates/inmuebles/pago_list.html:8
+#: apps/inmuebles/templates/inmuebles/portal_pago_detalle.html:6
+#: apps/inmuebles/templates/inmuebles/portal_pago_form.html:6
+msgid "Volver a cuotas"
+msgstr "Back to installments"
+
+#: apps/inmuebles/templates/inmuebles/cuota_form.html:4
+msgid "Nueva Cuota"
+msgstr "New Installment"
+
+#: apps/inmuebles/templates/inmuebles/cuota_form.html:11
+msgid "Nueva Cuota Personalizada"
+msgstr "New Custom Installment"
+
+#: apps/inmuebles/templates/inmuebles/cuota_form.html:26
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:128
+msgid "Crear cuota"
+msgstr "Create installment"
+
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:16
+msgid "Generar próxima cuota"
+msgstr "Generate next installment"
+
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:20
+msgid "Agregar cuota"
+msgstr "Add installment"
+
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:27
+msgid "Saldo pendiente:"
+msgstr "Outstanding balance:"
+
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:42
+msgid "Pago"
+msgstr "Payment"
+
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:67
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:57
+msgid "Pagar"
+msgstr "Pay"
+
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:69
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:30
+msgid "Multa"
+msgstr "Late fee"
+
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:72
+msgid "Editar multa"
+msgstr "Edit late fee"
+
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:73
+msgid "¿Eliminar la multa de esta cuota?"
+msgstr "Remove the late fee from this installment?"
+
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:75
+msgid "Eliminar multa"
+msgstr "Remove late fee"
+
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:90
+msgid "No hay cuotas para este contrato."
+msgstr "There are no installments for this contract."
+
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:94
+msgid "Generar primera cuota"
+msgstr "Generate first installment"
+
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:105
+msgid "Agregar Cuota"
+msgstr "Add Installment"
+
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:114
+msgid "Ej: Cuota 1 - Reserva"
+msgstr "Example: Installment 1 - Reservation"
+
+#: apps/inmuebles/templates/inmuebles/cuota_list.html:122
+msgid "Fecha de vencimiento"
+msgstr "Due date"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_confirm_delete.html:4
+#: apps/inmuebles/templates/inmuebles/inmueble_confirm_delete.html:9
+msgid "Eliminar Inmueble"
+msgstr "Delete Property"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_confirm_delete.html:10
+#, python-format
+msgid "¿Estás seguro de que querés eliminar <strong>%(titulo)s</strong>?"
+msgstr "Are you sure you want to delete <strong>%(titulo)s</strong>?"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_confirm_delete.html:11
+msgid "Esta acción no se puede deshacer."
+msgstr "This action cannot be undone."
+
+#: apps/inmuebles/templates/inmuebles/inmueble_confirm_delete.html:16
+msgid "Eliminar inmueble"
+msgstr "Delete property"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:9
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:10
+msgid "Volver a mis inmuebles"
+msgstr "Back to my properties"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:26
+msgid "Anterior"
+msgstr "Previous"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:27
+msgid "Siguiente"
+msgstr "Next"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:44
+msgid "Precio"
+msgstr "Price"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:45
+msgid "Superficie"
+msgstr "Area"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:46
+msgid "Habitaciones"
+msgstr "Rooms"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:47
+msgid "Tipo de alquiler"
+msgstr "Rental type"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:49
+msgid "Habitaciones alquiladas"
+msgstr "Rented rooms"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:49
+#, python-format
+msgid "%(ocupadas)s de %(total)s"
+msgstr "%(ocupadas)s of %(total)s"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:51
+msgid "Baños"
+msgstr "Bathrooms"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:53
+msgid "Coordenadas"
+msgstr "Coordinates"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:56
+msgid "Actualizado"
+msgstr "Updated"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_detail.html:61
+msgid "Ubicación en mapa"
+msgstr "Map location"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:4
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:11
+msgid "Editar Inmueble"
+msgstr "Edit Property"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:4
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:11
+#: apps/inmuebles/templates/inmuebles/inmueble_list.html:10
+#: apps/inmuebles/templates/inmuebles/inmueble_list.html:56
+msgid "Nuevo Inmueble"
+msgstr "New Property"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:22
+msgid "Información general"
+msgstr "General information"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:34
+msgid "Características"
+msgstr "Features"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:47
+msgid "Precio y estado"
+msgstr "Price and status"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:59
+msgid "Fotografías"
+msgstr "Photos"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:71
+msgid "Foto"
+msgstr "Photo"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:114
+msgid "¿Eliminar esta foto?"
+msgstr "Delete this photo?"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:132
+msgid "Por Local"
+msgstr "By Unit"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_form.html:215
+msgid "Error al cargar el mapa. Verificá la consola del navegador."
+msgstr "Error loading the map. Check the browser console."
+
+#: apps/inmuebles/templates/inmuebles/inmueble_list.html:36
+#: apps/inmuebles/templates/inmuebles/inmuebles_disponibles.html:35
+msgid "hab."
+msgstr "rooms"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_list.html:38
+#: apps/inmuebles/templates/inmuebles/inmuebles_disponibles.html:37
+#, python-format
+msgid "%(count)s ocupadas"
+msgstr "%(count)s occupied"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_list.html:48
+msgid "Ver detalle"
+msgstr "View details"
+
+#: apps/inmuebles/templates/inmuebles/inmueble_list.html:55
+msgid "No tenés inmuebles registrados."
+msgstr "You have no registered properties."
+
+#: apps/inmuebles/templates/inmuebles/inmuebles_disponibles.html:4
+#: apps/inmuebles/templates/inmuebles/inmuebles_disponibles.html:9
+msgid "Inmuebles Disponibles"
+msgstr "Available Properties"
+
+#: apps/inmuebles/templates/inmuebles/inmuebles_disponibles.html:54
+msgid "No hay inmuebles disponibles en este momento."
+msgstr "There are no properties available at this time."
+
+#: apps/inmuebles/templates/inmuebles/inquilino_confirm_delete.html:4
+#: apps/inmuebles/templates/inmuebles/inquilino_confirm_delete.html:9
+msgid "Eliminar Inquilino"
+msgstr "Delete Tenant"
+
+#: apps/inmuebles/templates/inmuebles/inquilino_confirm_delete.html:10
+#: apps/inmuebles/templates/inmuebles/propietario_confirm_delete.html:10
+#, python-format
+msgid "¿Estás seguro de eliminar a <strong>%(nombre)s</strong>?"
+msgstr "Are you sure you want to delete <strong>%(nombre)s</strong>?"
+
+#: apps/inmuebles/templates/inmuebles/inquilino_confirm_delete.html:12
+#, python-format
+msgid "Tiene %(counter)s contrato asociado. El contrato no se eliminará, pero quedará sin inquilino registrado."
+msgid_plural "Tiene %(counter)s contratos asociados. Los contratos no se eliminarán, pero quedarán sin inquilino registrado."
+msgstr[0] "It has %(counter)s associated contract. The contract will not be deleted, but it will no longer have a registered tenant."
+msgstr[1] "It has %(counter)s associated contracts. The contracts will not be deleted, but they will no longer have a registered tenant."
+
+#: apps/inmuebles/templates/inmuebles/inquilino_confirm_delete.html:18
+msgid "Eliminar inquilino"
+msgstr "Delete tenant"
+
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:30
+msgid "Usuario vinculado"
+msgstr "Linked user"
+
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:37
+msgid "Último login"
+msgstr "Last login"
+
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:37
+msgid "Nunca"
+msgstr "Never"
+
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:38
+msgid "Inactivo"
+msgstr "Inactive"
+
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:40
+msgid "¿Desvincular este usuario? El inquilino perderá acceso al portal."
+msgstr "Unlink this user? The tenant will lose access to the portal."
+
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:42
+msgid "Desvincular usuario"
+msgstr "Unlink user"
+
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:45
+msgid "Este inquilino no tiene un usuario vinculado. Creá uno para que pueda acceder al portal."
+msgstr "This tenant does not have a linked user. Create one so they can access the portal."
+
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:46
+msgid "Se generará un usuario y contraseña temporal automáticamente, y se enviará un email con las credenciales de acceso."
+msgstr "A user and temporary password will be generated automatically, and an email with the access credentials will be sent."
+
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:49
+msgid "Crear usuario y enviar credenciales"
+msgstr "Create user and send credentials"
+
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:55
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:14
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:29
+msgid "Contratos activos"
+msgstr "Active contracts"
+
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:84
+msgid "No tiene contratos activos."
+msgstr "There are no active contracts."
+
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:87
+msgid "Contratos vencidos / finalizados"
+msgstr "Expired / finalized contracts"
+
+#: apps/inmuebles/templates/inmuebles/inquilino_detail.html:116
+msgid "No tiene contratos vencidos ni finalizados."
+msgstr "There are no expired or finalized contracts."
+
+#: apps/inmuebles/templates/inmuebles/inquilino_list.html:45
+msgid "No hay inquilinos registrados."
+msgstr "No tenants are registered."
+
+#: apps/inmuebles/templates/inmuebles/multa_edit.html:4
+#: apps/inmuebles/templates/inmuebles/multa_edit.html:19
+msgid "Editar Multa"
+msgstr "Edit Late Fee"
+
+#: apps/inmuebles/templates/inmuebles/multa_edit.html:9
+#: apps/inmuebles/templates/inmuebles/multa_form.html:9
+#: apps/inmuebles/templates/inmuebles/pago_form.html:9
+msgid "Resumen de la cuota"
+msgstr "Installment summary"
+
+#: apps/inmuebles/templates/inmuebles/multa_edit.html:10
+#: apps/inmuebles/templates/inmuebles/multa_edit.html:19
+#: apps/inmuebles/templates/inmuebles/multa_form.html:10
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:10
+#: apps/inmuebles/templates/inmuebles/pago_form.html:10
+#: apps/inmuebles/templates/inmuebles/pago_pendientes.html:17
+#: apps/inmuebles/templates/inmuebles/pago_registro.html:18
+#: apps/inmuebles/templates/inmuebles/portal_pago_form.html:11
+msgid "Cuota"
+msgstr "Installment"
+
+#: apps/inmuebles/templates/inmuebles/multa_edit.html:11
+#: apps/inmuebles/templates/inmuebles/multa_form.html:11
+msgid "Monto base"
+msgstr "Base amount"
+
+#: apps/inmuebles/templates/inmuebles/multa_edit.html:12
+#: apps/inmuebles/templates/inmuebles/multa_form.html:12
+msgid "Multa actual"
+msgstr "Current late fee"
+
+#: apps/inmuebles/templates/inmuebles/multa_edit.html:13
+#: apps/inmuebles/templates/inmuebles/multa_form.html:13
+msgid "Total actual"
+msgstr "Current total"
+
+#: apps/inmuebles/templates/inmuebles/multa_edit.html:30
+msgid "Para eliminar la multa, usá \"Eliminar Multa\" en la lista de cuotas."
+msgstr "To remove the late fee, use “Remove Late Fee” in the installment list."
+
+#: apps/inmuebles/templates/inmuebles/multa_edit.html:33
+msgid "Guardar multa"
+msgstr "Save late fee"
+
+#: apps/inmuebles/templates/inmuebles/multa_form.html:4
+#: apps/inmuebles/templates/inmuebles/multa_form.html:19
+msgid "Aplicar Multa"
+msgstr "Apply Late Fee"
+
+#: apps/inmuebles/templates/inmuebles/multa_form.html:34
+msgid "Completá al menos uno: Monto fijo o Porcentaje."
+msgstr "Complete at least one field: Fixed amount or Percentage."
+
+#: apps/inmuebles/templates/inmuebles/multa_form.html:37
+msgid "Aplicar multa"
+msgstr "Apply late fee"
+
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:4
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:29
+msgid "Revisar Pago"
+msgstr "Review Payment"
+
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:9
+msgid "Detalle del pago"
+msgstr "Payment details"
+
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:13
+#: apps/inmuebles/templates/inmuebles/portal_pago_detalle.html:15
+#: apps/inmuebles/templates/inmuebles/portal_pago_form.html:34
+msgid "Fecha de pago"
+msgstr "Payment date"
+
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:14
+#: apps/inmuebles/templates/inmuebles/pago_list.html:22
+#: apps/inmuebles/templates/inmuebles/pago_pendientes.html:21
+#: apps/inmuebles/templates/inmuebles/pago_registro.html:22
+#: apps/inmuebles/templates/inmuebles/portal_pago_detalle.html:16
+msgid "Método"
+msgstr "Method"
+
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:17
+#: apps/inmuebles/templates/inmuebles/pago_list.html:24
+#: apps/inmuebles/templates/inmuebles/portal_pago_detalle.html:27
+msgid "Observaciones"
+msgstr "Notes"
+
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:20
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:22
+#: apps/inmuebles/templates/inmuebles/pago_list.html:23
+#: apps/inmuebles/templates/inmuebles/pago_pendientes.html:22
+#: apps/inmuebles/templates/inmuebles/pago_registro.html:24
+#: apps/inmuebles/templates/inmuebles/portal_pago_form.html:48
+msgid "Comprobante"
+msgstr "Proof of payment"
+
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:20
+msgid "Ver archivo"
+msgstr "View file"
+
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:28
+msgid "Volver a pendientes"
+msgstr "Back to pending payments"
+
+#: apps/inmuebles/templates/inmuebles/pago_aprobar_rechazar.html:58
+msgid "Confirmar decisión"
+msgstr "Confirm decision"
+
+#: apps/inmuebles/templates/inmuebles/pago_form.html:4
+#: apps/inmuebles/templates/inmuebles/pago_form.html:20
+msgid "Registrar Pago"
+msgstr "Record Payment"
+
+#: apps/inmuebles/templates/inmuebles/pago_form.html:12
+msgid "Multa incluida"
+msgstr "Late fee included"
+
+#: apps/inmuebles/templates/inmuebles/pago_form.html:14
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:22
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:37
+msgid "Total adeudado"
+msgstr "Total due"
+
+#: apps/inmuebles/templates/inmuebles/pago_form.html:39
+msgid "Registrar pago"
+msgstr "Record payment"
+
+#: apps/inmuebles/templates/inmuebles/pago_list.html:4
+#: apps/inmuebles/templates/inmuebles/pago_list.html:11
+msgid "Pagos"
+msgstr "Payments"
+
+#: apps/inmuebles/templates/inmuebles/pago_list.html:12
+msgid "Nuevo Pago"
+msgstr "New Payment"
+
+#: apps/inmuebles/templates/inmuebles/pago_list.html:42
+msgid "No hay pagos registrados para esta cuota."
+msgstr "No payments are registered for this installment."
+
+#: apps/inmuebles/templates/inmuebles/pago_pendientes.html:4
+msgid "Pagos Pendientes"
+msgstr "Pending Payments"
+
+#: apps/inmuebles/templates/inmuebles/pago_pendientes.html:9
+#: tests/test_i18n.py:8 tests/test_i18n.py:14
+msgid "Pagos Pendientes de Aprobación"
+msgstr "Payments Awaiting Approval"
+
+#: apps/inmuebles/templates/inmuebles/pago_pendientes.html:42
+msgid "Revisar"
+msgstr "Review"
+
+#: apps/inmuebles/templates/inmuebles/pago_pendientes.html:51
+msgid "No hay pagos pendientes de aprobación."
+msgstr "There are no payments awaiting approval."
+
+#: apps/inmuebles/templates/inmuebles/pago_registro.html:4
+#: apps/inmuebles/templates/inmuebles/pago_registro.html:9
+msgid "Registro de Cobros"
+msgstr "Payment Records"
+
+#: apps/inmuebles/templates/inmuebles/pago_registro.html:61
+msgid "No hay cobros registrados."
+msgstr "No payments are registered."
+
+#: apps/inmuebles/templates/inmuebles/portal_contratos.html:6
+msgid "Volver al portal"
+msgstr "Back to portal"
+
+#: apps/inmuebles/templates/inmuebles/portal_contratos.html:51
+msgid "No tiene contratos registrados."
+msgstr "There are no registered contracts."
+
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:10
+msgid "Inicio:"
+msgstr "Start:"
+
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:10
+msgid "Monto:"
+msgstr "Amount:"
+
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:15
+msgid "Resumen"
+msgstr "Summary"
+
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:17
+msgid "Saldo adeudado"
+msgstr "Outstanding balance"
+
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:27
+msgid "Nro"
+msgstr "No."
+
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:46
+msgid "Pagado"
+msgstr "Paid"
+
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:48
+msgid "Vencido"
+msgstr "Overdue"
+
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:50
+msgid "Parcial"
+msgstr "Partial"
+
+#: apps/inmuebles/templates/inmuebles/portal_cuotas.html:67
+msgid "No hay cuotas generadas para este contrato."
+msgstr "No installments have been generated for this contract."
+
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:9
+#, python-format
+msgid "Bienvenido, %(nombre)s"
+msgstr "Welcome, %(nombre)s"
+
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:18
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:33
+msgid "Cuotas pendientes"
+msgstr "Pending installments"
+
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:75
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:77
+msgid "Mis contratos"
+msgstr "My contracts"
+
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:107
+msgid "Ver todos los contratos"
+msgstr "View all contracts"
+
+#: apps/inmuebles/templates/inmuebles/portal_dashboard.html:112
+msgid "No tiene contratos activos actualmente."
+msgstr "There are currently no active contracts."
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_detalle.html:3
+#: apps/inmuebles/templates/inmuebles/portal_pago_detalle.html:8
+msgid "Detalle de Pago"
+msgstr "Payment Details"
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_detalle.html:19
+msgid "Aprobado"
+msgstr "Approved"
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_detalle.html:21
+msgid "Rechazado"
+msgstr "Rejected"
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_detalle.html:30
+msgid "Motivo rechazo"
+msgstr "Rejection reason"
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_detalle.html:36
+msgid "Comprobante adjunto"
+msgstr "Attached proof of payment"
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_detalle.html:38
+msgid "Descargar comprobante"
+msgstr "Download proof of payment"
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_form.html:3
+msgid "Subir Comprobante"
+msgstr "Upload Proof of Payment"
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_form.html:10
+msgid "Subir Comprobante de Pago"
+msgstr "Upload Proof of Payment"
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_form.html:11
+msgid "Vence:"
+msgstr "Due:"
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_form.html:25
+msgid "Datos del pago"
+msgstr "Payment information"
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_form.html:29
+msgid "Monto a pagar"
+msgstr "Amount to pay"
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_form.html:41
+msgid "Método de pago"
+msgstr "Payment method"
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_form.html:51
+msgid "Archivo del comprobante"
+msgstr "Proof of payment file"
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_form.html:54
+msgid "Imágenes o PDF (máx. 5 MB)"
+msgstr "Images or PDF (max. 5 MB)"
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_form.html:58
+msgid "Notas (opcional)"
+msgstr "Notes (optional)"
+
+#: apps/inmuebles/templates/inmuebles/portal_pago_form.html:67
+msgid "Enviar comprobante"
+msgstr "Submit proof of payment"
+
+#: apps/inmuebles/templates/inmuebles/propietario_confirm_delete.html:4
+#: apps/inmuebles/templates/inmuebles/propietario_confirm_delete.html:9
+msgid "Eliminar Propietario"
+msgstr "Delete Owner"
+
+#: apps/inmuebles/templates/inmuebles/propietario_confirm_delete.html:12
+#, python-format
+msgid "Tiene %(counter)s inmueble asociado. El inmueble no se eliminará, pero quedará sin propietario."
+msgid_plural "Tiene %(counter)s inmuebles asociados. Los inmuebles no se eliminarán, pero quedarán sin propietario."
+msgstr[0] "It has %(counter)s associated property. The property will not be deleted, but it will no longer have an owner."
+msgstr[1] "It has %(counter)s associated properties. The properties will not be deleted, but they will no longer have an owner."
+
+#: apps/inmuebles/templates/inmuebles/propietario_confirm_delete.html:18
+msgid "Eliminar propietario"
+msgstr "Delete owner"
+
+#: apps/inmuebles/templates/inmuebles/propietario_detail.html:30
+#, python-format
+msgid "Inmuebles de %(nombre)s (%(count)s)"
+msgstr "Properties of %(nombre)s (%(count)s)"
+
+#: apps/inmuebles/templates/inmuebles/propietario_detail.html:52
+msgid "Este propietario no tiene inmuebles asociados."
+msgstr "This owner has no associated properties."
+
+#: apps/inmuebles/templates/inmuebles/propietario_list.html:45
+msgid "No hay propietarios registrados."
+msgstr "No owners are registered."
+
+#: apps/users/services.py:91
+msgid "Verificá tu correo electrónico"
+msgstr "Verify your email address"
+
+#~ msgid "Panel de control de tu portfolio inmobiliario"
+#~ msgstr "Your real estate portfolio control panel"
+
+#~ msgid "Activos"
+#~ msgstr "Active"

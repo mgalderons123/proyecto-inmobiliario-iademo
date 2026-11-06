@@ -1,0 +1,83 @@
+name: casarent-qa
+
+services:
+  db:
+    image: postgres:16-alpine
+    env_file:
+      - .env.qa
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - qa_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+    networks:
+      - backend
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - qa_redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+    networks:
+      - backend
+
+  mailpit:
+    image: axllent/mailpit:v1.27
+    ports:
+      - "127.0.0.1:8025:8025"
+    restart: unless-stopped
+    networks:
+      - backend
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env.qa
+    environment:
+      DJANGO_SETTINGS_MODULE: PRY_INMOB.settings_qa
+    ports:
+      - "127.0.0.1:4100:8000"
+    volumes:
+      - qa_public_media:/app/data/public
+      - qa_private_media:/app/data/private
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/', timeout=3)"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    restart: unless-stopped
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  qa_postgres:
+  qa_redis:
+  qa_public_media:
+  qa_private_media:

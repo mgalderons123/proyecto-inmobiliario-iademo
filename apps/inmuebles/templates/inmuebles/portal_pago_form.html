@@ -1,0 +1,72 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Subir Comprobante" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+{% block content %}
+<div style="max-width:600px; margin:0 auto;">
+  <a href="{% url 'inmuebles:portal_cuotas' contrato_pk=cuota.contrato.pk %}" class="back-link">← {% trans "Volver a cuotas" %}</a>
+
+  <div class="form-card">
+    <div class="form-card__header">
+      <h1 class="form-card__title">{% trans "Subir Comprobante de Pago" %}</h1>
+      <p class="form-card__subtitle">{% trans "Cuota" %} {{ cuota.numero }} — {{ cuota.contrato.inmueble.titulo }} — {% trans "Vence:" %} {{ cuota.fecha_vencimiento|date:"d/m/Y" }}</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="form">
+      {% csrf_token %}
+
+      <div class="card__body">
+        {% if form.non_field_errors %}
+          <div class="non-field-error">
+            {% for e in form.non_field_errors %}{{ e }}{% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="form-section">
+          <span class="form-section__label">{% trans "Datos del pago" %}</span>
+
+          <div class="form-row">
+            <div class="form__field{% if form.monto.errors %} form__field--error{% endif %}">
+              <label class="form__label" for="id_monto">{% trans "Monto a pagar" %}</label>
+              {{ form.monto }}
+              {% if form.monto.errors %}<div class="form__error">{{ form.monto.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="form__field{% if form.fecha_pago.errors %} form__field--error{% endif %}">
+              <label class="form__label" for="id_fecha_pago">{% trans "Fecha de pago" %}</label>
+              {{ form.fecha_pago }}
+              {% if form.fecha_pago.errors %}<div class="form__error">{{ form.fecha_pago.errors.0 }}</div>{% endif %}
+            </div>
+          </div>
+
+          <div class="form__field{% if form.metodo_pago.errors %} form__field--error{% endif %}">
+            <label class="form__label" for="id_metodo_pago">{% trans "Método de pago" %}</label>
+            {{ form.metodo_pago }}
+            {% if form.metodo_pago.errors %}<div class="form__error">{{ form.metodo_pago.errors.0 }}</div>{% endif %}
+          </div>
+        </div>
+
+        <div class="form-section">
+          <span class="form-section__label">{% trans "Comprobante" %}</span>
+
+          <div class="form__field{% if form.archivo_comprobante.errors %} form__field--error{% endif %}">
+            <label class="form__label" for="id_archivo_comprobante">{% trans "Archivo del comprobante" %}</label>
+            {{ form.archivo_comprobante }}
+            {% if form.archivo_comprobante.errors %}<div class="form__error">{{ form.archivo_comprobante.errors.0 }}</div>{% endif %}
+            <span class="form__help">{% trans "Imágenes o PDF (máx. 5 MB)" %}</span>
+          </div>
+
+          <div class="form__field{% if form.observaciones.errors %} form__field--error{% endif %}">
+            <label class="form__label" for="id_observaciones">{% trans "Notas (opcional)" %}</label>
+            {{ form.observaciones }}
+            {% if form.observaciones.errors %}<div class="form__error">{{ form.observaciones.errors.0 }}</div>{% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="form__actions">
+        <a href="{% url 'inmuebles:portal_cuotas' contrato_pk=cuota.contrato.pk %}" class="btn-ghost">{% trans "Cancelar" %}</a>
+        <button type="submit" class="btn-primary">{% trans "Enviar comprobante" %}</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

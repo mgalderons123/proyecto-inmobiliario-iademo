@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Recibo {{ recibo.codigo }}</title>
+  <style>
+    @page { size: A4; margin: 2cm; }
+    body { font-family: Helvetica, Arial, sans-serif; font-size: 11pt; color: #134E4A; }
+    h1 { font-size: 18pt; color: #0F766E; margin: 0 0 4px; }
+    .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #0F766E; padding-bottom: 16px; }
+    .codigo { font-size: 10pt; color: #475569; }
+    .datos { margin-bottom: 24px; }
+    .datos td { padding: 4px 8px; }
+    .datos td:first-child { color: #475569; width: 140px; }
+    .total { font-size: 14pt; font-weight: bold; color: #0F766E; }
+    .footer { margin-top: 40px; font-size: 9pt; color: #475569; text-align: center; border-top: 1px solid #D8EDE8; padding-top: 12px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Recibo de Pago</h1>
+    <div class="codigo">N° {{ recibo.codigo }}</div>
+    <div style="font-size:9pt; color:#475569;">Emitido el {{ recibo.creado_en|date:"d/m/Y H:i" }}</div>
+  </div>
+
+  <table class="datos">
+    <tr><td>Inmueble</td><td>{{ inmueble.titulo }}</td></tr>
+    <tr><td>Dirección</td><td>{{ inmueble.direccion_normalizada|default:inmueble.direccion }}</td></tr>
+    <tr><td>Contrato</td><td>{{ contrato.get_tipo_display }}</td></tr>
+    <tr><td>Inquilino</td><td>{{ contrato.inquilino_registrado.nombre|default:contrato.inquilino_nombre }}</td></tr>
+    <tr><td>Cuota</td><td>{{ cuota.descripcion }}</td></tr>
+    <tr><td>Período</td><td>{{ cuota.fecha_vencimiento|date:"M/Y" }}</td></tr>
+    <tr><td>Método de pago</td><td>{{ pago.get_metodo_pago_display }}</td></tr>
+    <tr><td>Fecha de pago</td><td>{{ pago.fecha_pago|date:"d/m/Y" }}</td></tr>
+  </table>
+
+  <div style="margin-top:20px; padding:16px; background:#F0FDFA; border-radius:6px; text-align:right;">
+    <div style="font-size:10pt; color:#475569;">Total pagado</div>
+    <div class="total">{{ pago.moneda }} {{ pago.monto|floatformat:2 }}</div>
+  </div>
+
+  <div class="footer">
+    PRY_INMOB — Sistema de Gestión Inmobiliaria<br>
+    Este es un comprobante digital válido.
+  </div>
+</body>
+</html>

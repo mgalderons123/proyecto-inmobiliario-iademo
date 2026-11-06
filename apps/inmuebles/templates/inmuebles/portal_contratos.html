@@ -1,0 +1,55 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Mis Contratos" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+{% block content %}
+<div style="max-width:900px; margin:0 auto;">
+  <a href="{% url 'inmuebles:portal' %}" class="back-link">← {% trans "Volver al portal" %}</a>
+  <div class="page-header">
+    <h1 class="page-title">{% trans "Mis Contratos" %}</h1>
+  </div>
+  {% if contratos %}
+    <div class="card">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>{% trans "Inmueble" %}</th>
+            <th>{% trans "Tipo" %}</th>
+            <th>{% trans "Inicio" %}</th>
+            <th>{% trans "Fin" %}</th>
+            <th>{% trans "Monto" %}</th>
+            <th>{% trans "Estado" %}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in contratos %}
+            <tr>
+              <td>{{ c.inmueble.titulo }}</td>
+              <td>{{ c.get_tipo_display }}</td>
+              <td>{{ c.fecha_inicio|date:"d/m/Y" }}</td>
+              <td>{{ c.fecha_fin|date:"d/m/Y"|default:"-" }}</td>
+              <td>{{ c.moneda }} {{ c.monto|floatformat:2 }}</td>
+              <td>
+                {% if c.estado == "activo" %}
+                  <span class="badge badge--active">{{ c.get_estado_display }}</span>
+                {% else %}
+                  <span class="badge badge--muted">{{ c.get_estado_display }}</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if c.estado == "activo" %}
+                  <a href="{% url 'inmuebles:portal_cuotas' contrato_pk=c.pk %}" class="btn-ghost btn--sm">{% trans "Cuotas" %}</a>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <p>{% trans "No tiene contratos registrados." %}</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

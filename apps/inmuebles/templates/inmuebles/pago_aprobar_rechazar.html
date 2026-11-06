@@ -1,0 +1,81 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Revisar Pago" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div class="container-md">
+    <dl class="summary-ledger">
+      <div class="summary-ledger__header">{% trans "Detalle del pago" %}</div>
+      <div class="summary-ledger__row"><dt>{% trans "Cuota" %}</dt><dd>{{ pago.cuota.descripcion }}</dd></div>
+      <div class="summary-ledger__row"><dt>{% trans "Inmueble" %}</dt><dd>{{ pago.cuota.contrato.inmueble.titulo }}</dd></div>
+      <div class="summary-ledger__row"><dt>{% trans "Monto" %}</dt><dd>{{ pago.moneda }} {{ pago.monto|floatformat:2 }}</dd></div>
+      <div class="summary-ledger__row"><dt>{% trans "Fecha de pago" %}</dt><dd>{{ pago.fecha_pago|date:"d/m/Y" }}</dd></div>
+      <div class="summary-ledger__row"><dt>{% trans "Método" %}</dt><dd>{{ pago.get_metodo_pago_display }}</dd></div>
+      <div class="summary-ledger__row"><dt>{% trans "Inquilino" %}</dt><dd>{{ pago.cuota.contrato.inquilino_registrado.nombre|default:pago.cuota.contrato.inquilino_nombre }}</dd></div>
+      {% if pago.observaciones %}
+        <div class="summary-ledger__row"><dt>{% trans "Observaciones" %}</dt><dd>{{ pago.observaciones|linebreaks }}</dd></div>
+      {% endif %}
+      {% if pago.archivo_comprobante %}
+        <div class="summary-ledger__row"><dt>{% trans "Comprobante" %}</dt><dd><a href="{% url 'inmuebles:descargar_comprobante' pago.pk %}" class="btn-secondary" style="padding:4px 12px; font-size:0.82rem; text-decoration:none;">{% trans "Ver archivo" %}</a></dd></div>
+      {% elif pago.comprobante %}
+        <div class="summary-ledger__row"><dt>{% trans "Comprobante" %}</dt><dd>{{ pago.comprobante }}</dd></div>
+      {% endif %}
+    </dl>
+
+    <div class="form-card">
+      <div class="form-card__header">
+        <a href="{% url 'inmuebles:pago_pendientes' %}" class="back-link">← {% trans "Volver a pendientes" %}</a>
+        <h1 class="form-card__title">{% trans "Revisar Pago" %}</h1>
+      </div>
+      <div class="card__body">
+        <form method="post" class="form" novalidate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="non-field-error">{{ form.non_field_errors|join:" " }}</div>
+          {% endif %}
+
+          <div class="form__field">
+            <span class="form__label">{% trans "Acción" %}</span>
+            <div class="filter-bar__pills" role="radiogroup" aria-label="{% trans 'Acción' %}">
+              {% for radio in form.accion %}
+                <label class="checkbox-pill">
+                  {{ radio.tag }}
+                  <span>{{ radio.choice_label }}</span>
+                </label>
+              {% endfor %}
+            </div>
+            {% if form.accion.errors %}
+              <div class="form__error">{{ form.accion.errors|join:" " }}</div>
+            {% endif %}
+          </div>
+
+          <div id="motivo-field"{% if form.accion.value != "rechazar" and not form.motivo_rechazo.errors %} hidden{% endif %}>
+            {% include "core/_field.html" with field=form.motivo_rechazo %}
+          </div>
+
+          <div class="form__actions">
+            <button type="submit" class="btn-primary">{% trans "Confirmar decisión" %}</button>
+            <a href="{% url 'inmuebles:pago_pendientes' %}" class="btn-ghost">{% trans "Cancelar" %}</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var radios = document.querySelectorAll('input[name="accion"]');
+      var motivoField = document.getElementById('motivo-field');
+      var motivoTextarea = document.querySelector('textarea[name="motivo_rechazo"]');
+      function update() {
+        var selected = document.querySelector('input[name="accion"]:checked');
+        var show = selected && selected.value === 'rechazar';
+        motivoField.hidden = !show;
+        motivoTextarea.required = Boolean(show);
+      }
+      radios.forEach(function (radio) { radio.addEventListener('change', update); });
+      update();
+    })();
+  </script>
+{% endblock %}

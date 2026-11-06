@@ -1,0 +1,78 @@
+{% extends "core/base.html" %}
+{% load i18n form_tags %}
+
+{% block title %}{% trans "Catálogo de formularios" %} - Casarent App{% endblock %}
+
+{% block content %}
+  <main class="form-page form-page--wide">
+    <header class="form-page__intro">
+      <div>
+        <p class="form-page__eyebrow">HTML handoff</p>
+        <h1 class="form-page__title">{% trans "Catálogo vivo de formularios" %}</h1>
+        <p class="form-page__description">{% trans "Referencia productiva para diseño, accesibilidad, estados y comportamiento responsive." %}</p>
+      </div>
+    </header>
+
+    <div class="form-stack">
+    <section class="form-card form-card--dossier">
+      <div class="form-card__header">
+        <h2 class="form-card__title">{% trans "Estado vacío" %}</h2>
+        <p class="form-card__subtitle">{% trans "Campos, ayudas, opciones, archivos y controles deshabilitados." %}</p>
+      </div>
+      <div class="card__body">
+        <form class="form" novalidate>
+          <div class="form-grid">
+            {% form_field empty_form.nombre %}
+            {% form_field empty_form.email %}
+            {% form_field empty_form.tipo %}
+            {% form_field empty_form.activo %}
+            {% form_field empty_form.documento %}
+            {% form_field empty_form.referencia %}
+            <div class="form-grid__wide">{% form_field empty_form.notas %}</div>
+          </div>
+          <div class="form__actions">
+            <button class="btn-primary" type="button">{% trans "Guardar cambios" %}</button>
+            <button class="btn-ghost" type="button">{% trans "Cancelar" %}</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="form-card form-card--dossier">
+      <div class="form-card__header">
+        <h2 class="form-card__title">{% trans "Estado con errores" %}</h2>
+        <p class="form-card__subtitle">{% trans "Resumen enfocable y errores vinculados a cada control." %}</p>
+      </div>
+      <div class="card__body">
+        <form class="form" novalidate>
+          {% include "core/components/form_error_summary.html" with form=invalid_form %}
+          <div class="form-grid">
+            {% form_field invalid_form.nombre %}
+            {% form_field invalid_form.email %}
+            {% form_field invalid_form.tipo %}
+            {% form_field invalid_form.activo %}
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="form-card form-card--dossier">
+      <div class="form-card__header">
+        <h2 class="form-card__title">{% trans "Estado completo" %}</h2>
+        <p class="form-card__subtitle">{% trans "Ejemplo para revisar jerarquía, densidad y textos extensos." %}</p>
+      </div>
+      <div class="card__body">
+        <form class="form" novalidate>
+          <div class="form-grid">
+            {% form_field filled_form.nombre %}
+            {% form_field filled_form.email %}
+            {% form_field filled_form.tipo %}
+            {% form_field filled_form.activo %}
+            <div class="form-grid__wide">{% form_field filled_form.notas %}</div>
+          </div>
+        </form>
+      </div>
+    </section>
+    </div>
+  </main>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Propietarios" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div style="max-width:1100px; margin:0 auto;">
+    <div class="page-header">
+      <h1>{% trans "Propietarios" %}</h1>
+      <a href="{% url 'inmuebles:propietario_create' %}" class="btn-primary">+ {% trans "Nuevo Propietario" %}</a>
+    </div>
+
+    {% if propietarios %}
+      <div class="card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{% trans "Nombre" %}</th>
+              <th>{% trans "Documento" %}</th>
+              <th>Email</th>
+              <th>{% trans "Teléfono" %}</th>
+              <th>{% trans "Inmuebles" %}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in propietarios %}
+              <tr>
+                <td><a href="{% url 'inmuebles:propietario_detail' pk=p.pk %}">{{ p.nombre }}</a></td>
+                <td>{{ p.documento|default:"-" }}</td>
+                <td>{{ p.email|default:"-" }}</td>
+                <td>{{ p.telefono|default:"-" }}</td>
+                <td>{{ p.inmuebles.count }}</td>
+                <td>
+                  <a href="{% url 'inmuebles:propietario_update' pk=p.pk %}" style="margin-right:8px;">{% trans "Editar" %}</a>
+                  <a href="{% url 'inmuebles:propietario_delete' pk=p.pk %}" style="color:var(--color-danger);">{% trans "Eliminar" %}</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="card empty-state">
+        <p>{% trans "No hay propietarios registrados." %}</p>
+        <a href="{% url 'inmuebles:propietario_create' %}" class="btn-primary">+ {% trans "Nuevo Propietario" %}</a>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

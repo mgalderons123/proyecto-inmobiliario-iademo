@@ -1,0 +1,96 @@
+{% extends "core/base.html" %}
+{% block title %}Próximos Pagos - Casarent App{% endblock %}
+{% block content %}
+<div style="max-width:900px; margin:0 auto;">
+  <div class="hero--sm">
+    <div class="hero--sm-body">
+      <h1 class="hero--sm-title">Próximos Pagos</h1>
+      <p class="hero--sm-subtitle">{{ inquilino.nombre }}</p>
+    </div>
+  </div>
+
+  <h2 style="margin-bottom:16px;">Pendientes</h2>
+  {% if cuotas_pendientes %}
+    <div class="card" style="margin-bottom:32px;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Contrato</th>
+            <th>Inmueble</th>
+            <th>Vence</th>
+            <th>Monto</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cuota in cuotas_pendientes %}
+            <tr>
+              <td>#{{ cuota.numero }}</td>
+              <td>{{ cuota.contrato.inmueble.titulo }}</td>
+              <td>{{ cuota.fecha_vencimiento|date:"d/m/Y" }}</td>
+              <td>{{ cuota.moneda }} {{ cuota.total|floatformat:2 }}</td>
+              <td>
+                {% if cuota.estado == "VENCIDO" %}
+                  <span class="badge badge--danger">Vencido</span>
+                {% elif cuota.estado == "PARCIAL" %}
+                  <span class="badge badge--warning">Parcial</span>
+                {% else %}
+                  <span class="badge badge--pending">Pendiente</span>
+                {% endif %}
+              </td>
+              <td><a href="{% url 'inmuebles:portal_cuotas' contrato_pk=cuota.contrato.pk %}" class="btn-ghost btn--sm">Pagar</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="empty-state" style="margin-bottom:32px;">
+      <p>No tiene cuotas pendientes. ¡Todo al día!</p>
+    </div>
+  {% endif %}
+
+  <h2 style="margin-bottom:16px;">Pagos recientes</h2>
+  {% if pagos_recientes %}
+    <div class="card">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Inmueble</th>
+            <th>Fecha</th>
+            <th>Monto</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pago in pagos_recientes %}
+            <tr>
+              <td>{{ pago.cuota.contrato.inmueble.titulo }}</td>
+              <td>{{ pago.fecha_pago|date:"d/m/Y" }}</td>
+              <td>{{ pago.moneda }} {{ pago.monto|floatformat:2 }}</td>
+              <td>
+                {% if pago.estado == "APROBADO" %}
+                  <span class="badge badge--success">Aprobado</span>
+                {% else %}
+                  <span class="badge badge--pending">Pendiente</span>
+                {% endif %}
+              </td>
+              <td><a href="{% url 'inmuebles:portal_pago_detalle' pk=pago.pk %}" class="btn-ghost btn--sm">Detalle</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <p>No tiene pagos registrados.</p>
+    </div>
+  {% endif %}
+
+  <div style="margin-top:24px;">
+    <a href="{% url 'inmuebles:portal' %}" class="btn-ghost">← Volver al Portal</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "core/base.html" %}
+{% load i18n form_tags %}
+
+{% block title %}
+  {% if contact_type == "tenant" %}
+    {% if editando %}{% trans "Editar Inquilino" %}{% else %}{% trans "Nuevo Inquilino" %}{% endif %}
+  {% else %}
+    {% if editando %}{% trans "Editar Propietario" %}{% else %}{% trans "Nuevo Propietario" %}{% endif %}
+  {% endif %}
+  - {{ project_name|default:'Casarent App' }}
+{% endblock %}
+
+{% block content %}
+  {% trans "Guardando..." as loading_label %}
+  <main class="form-page">
+    <header class="form-page__intro">
+      <div>
+        <p class="form-page__eyebrow">{% trans "Directorio de personas" %}</p>
+        <h1 class="form-page__title">
+          {% if contact_type == "tenant" %}
+            {% if editando %}{% trans "Editar inquilino" %}{% else %}{% trans "Registrar inquilino" %}{% endif %}
+          {% else %}
+            {% if editando %}{% trans "Editar propietario" %}{% else %}{% trans "Registrar propietario" %}{% endif %}
+          {% endif %}
+        </h1>
+        <p class="form-page__description">
+          {% if contact_type == "tenant" %}
+            {% trans "Centralizá sus datos de contacto y documentación para asociarlos a contratos." %}
+          {% else %}
+            {% trans "Centralizá sus datos de contacto y documentación para asociarlos a inmuebles." %}
+          {% endif %}
+        </p>
+      </div>
+      {% if contact_type == "tenant" %}
+        <a href="{% url 'inmuebles:inquilino_list' %}" class="back-link">← {% trans "Volver a inquilinos" %}</a>
+      {% else %}
+        <a href="{% url 'inmuebles:propietario_list' %}" class="back-link">← {% trans "Volver a propietarios" %}</a>
+      {% endif %}
+    </header>
+
+    <section class="form-card form-card--dossier" aria-labelledby="contact-form-title">
+      <div class="form-card__header">
+        <h2 id="contact-form-title" class="form-card__title">{% trans "Expediente de contacto" %}</h2>
+        <p class="form-card__subtitle">{% trans "Los campos marcados con * son obligatorios." %}</p>
+      </div>
+      <div class="card__body">
+        <form method="post" class="form" novalidate data-submit-feedback>
+          {% csrf_token %}
+          {% include "core/components/form_error_summary.html" with form=form %}
+
+          <fieldset class="form-section" aria-labelledby="identity-section-title">
+            <legend id="identity-section-title" class="form-section__label">{% trans "Identificación y contacto" %}</legend>
+            <div class="form-grid">
+              <div class="form-grid__wide">{% form_field form.nombre %}</div>
+              {% form_field form.email %}
+              {% form_field form.telefono %}
+              <div class="form-grid__wide">{% form_field form.documento %}</div>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section" aria-labelledby="details-section-title">
+            <legend id="details-section-title" class="form-section__label">{% trans "Información complementaria" %}</legend>
+            <div class="form-grid form-grid--single">
+              {% form_field form.direccion %}
+              {% form_field form.notas %}
+            </div>
+          </fieldset>
+
+          <div class="form__actions">
+            <button type="submit" class="btn-primary" data-loading-label="{{ loading_label }}">
+              {% if editando %}{% trans "Guardar cambios" %}{% elif contact_type == "tenant" %}{% trans "Crear inquilino" %}{% else %}{% trans "Crear propietario" %}{% endif %}
+            </button>
+            {% if contact_type == "tenant" %}
+              <a href="{% url 'inmuebles:inquilino_list' %}" class="btn-ghost">{% trans "Cancelar" %}</a>
+            {% else %}
+              <a href="{% url 'inmuebles:propietario_list' %}" class="btn-ghost">{% trans "Cancelar" %}</a>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+{% endblock %}

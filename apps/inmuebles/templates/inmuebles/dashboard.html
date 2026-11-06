@@ -1,0 +1,301 @@
+{% extends "core/base.html" %}
+{% block title %}Dashboard - Reportes{% endblock %}
+{% block content %}
+
+<style>
+  .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .dashboard-full { grid-column: 1 / -1; }
+  .summary-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .summary-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 20px; text-align: center; }
+  .summary-card__value { font-size: 1.8rem; font-weight: 700; color: var(--color-primary); }
+  .summary-card__label { font-size: 0.8rem; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+  .chart-container { position: relative; height: 260px; }
+  canvas { max-height: 260px; }
+  @media (max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } .summary-cards { grid-template-columns: 1fr; } }
+</style>
+
+<h1 style="margin:0 0 4px;">Dashboard</h1>
+<p class="page-subtitle">Reportes de ingresos y cartera vencida</p>
+
+<form method="get" class="filter-bar">
+  <div class="form__field">
+    <label for="desde">Desde</label>
+    <input type="date" id="desde" name="desde" value="{{ desde }}" class="form__control">
+  </div>
+  <div class="form__field">
+    <label for="hasta">Hasta</label>
+    <input type="date" id="hasta" name="hasta" value="{{ hasta }}" class="form__control">
+  </div>
+  <div class="form__field">
+    <label for="inmueble">Inmueble</label>
+    <select id="inmueble" name="inmueble" class="form__control">
+      <option value="">Todos</option>
+      {% for i in inmuebles %}
+        <option value="{{ i.pk }}" {% if filtro_inmueble == i.pk|stringformat:"s" %}selected{% endif %}>{{ i.titulo }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form__field">
+    <label for="tipo_alquiler">Tipo Alquiler</label>
+    <select id="tipo_alquiler" name="tipo_alquiler" class="form__control">
+      <option value="">Todos</option>
+      <option value="completa" {% if filtro_tipo_alquiler == 'completa' %}selected{% endif %}>Completa</option>
+      <option value="por_habitaciones" {% if filtro_tipo_alquiler == 'por_habitaciones' %}selected{% endif %}>Por habitaciones</option>
+    </select>
+  </div>
+  <div class="form__field">
+    <label for="inquilino">Inquilino</label>
+    <select id="inquilino" name="inquilino" class="form__control">
+      <option value="">Todos</option>
+      {% for i in inquilinos %}
+        <option value="{{ i.pk }}" {% if filtro_inquilino == i.pk|stringformat:"s" %}selected{% endif %}>{{ i.nombre }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form__field">
+    <span class="form__label">Estado Inquilino</span>
+    <div class="filter-bar__pills">
+      <input type="hidden" name="inquilino_estado" id="inquilinoEstadoHidden" value="{{ filtro_inquilino_estado }}">
+      <label class="checkbox-pill">
+        <input type="checkbox" class="inquilino-estado-cb" data-value="todos" onchange="marcarInquilinoEstado('todos')" {% if not filtro_inquilino_estado or filtro_inquilino_estado == 'todos' %}checked{% endif %}> Todos
+      </label>
+      <label class="checkbox-pill">
+        <input type="checkbox" class="inquilino-estado-cb" data-value="activo" onchange="marcarInquilinoEstado('activo')" {% if filtro_inquilino_estado == 'activo' %}checked{% endif %}> Activo
+      </label>
+      <label class="checkbox-pill">
+        <input type="checkbox" class="inquilino-estado-cb" data-value="no_activo" onchange="marcarInquilinoEstado('no_activo')" {% if filtro_inquilino_estado == 'no_activo' %}checked{% endif %}> No activo
+      </label>
+    </div>
+  </div>
+  <div class="form__field">
+    <span class="form__label">Estado de Pago</span>
+    <div class="filter-bar__pills">
+      <input type="hidden" name="estado_pago" id="estadoPagoHidden" value="{{ filtro_estado_pago }}">
+      <label class="checkbox-pill">
+        <input type="checkbox" class="estado-pago-cb" data-value="todos" onchange="marcarEstado('todos')" {% if not filtro_estado_pago or filtro_estado_pago == 'todos' %}checked{% endif %}> Todos
+      </label>
+      <label class="checkbox-pill">
+        <input type="checkbox" class="estado-pago-cb" data-value="pendiente" onchange="marcarEstado('pendiente')" {% if filtro_estado_pago == 'pendiente' %}checked{% endif %}> Pendiente
+      </label>
+      <label class="checkbox-pill">
+        <input type="checkbox" class="estado-pago-cb" data-value="aprobado" onchange="marcarEstado('aprobado')" {% if filtro_estado_pago == 'aprobado' %}checked{% endif %}> Aprobado
+      </label>
+      <label class="checkbox-pill">
+        <input type="checkbox" class="estado-pago-cb" data-value="rechazado" onchange="marcarEstado('rechazado')" {% if filtro_estado_pago == 'rechazado' %}checked{% endif %}> Rechazado
+      </label>
+    </div>
+  </div>
+  <div class="form__actions" style="margin-top:0;">
+    <button type="submit" class="btn-primary btn--sm" style="padding:8px 16px;">Filtrar</button>
+    <a href="{% url 'inmuebles:dashboard_pdf' %}?desde={{ desde }}&hasta={{ hasta }}{% if filtro_inmueble %}&inmueble={{ filtro_inmueble }}{% endif %}{% if filtro_tipo_alquiler %}&tipo_alquiler={{ filtro_tipo_alquiler }}{% endif %}{% if filtro_inquilino %}&inquilino={{ filtro_inquilino }}{% endif %}{% if filtro_inquilino_estado %}&inquilino_estado={{ filtro_inquilino_estado }}{% endif %}{% if filtro_estado_pago %}&estado_pago={{ filtro_estado_pago }}{% endif %}" class="btn-secondary btn--sm" style="padding:8px 16px;text-decoration:none;">Exportar PDF</a>
+  </div>
+</form>
+
+<div class="dashboard-grid">
+  <div class="card card--accent dashboard-full">
+    <div class="card__header">
+      <h2>Ingresos Mensuales</h2>
+    </div>
+    <div class="card__body">
+      {% if ingresos %}
+        <div class="chart-container">
+          <canvas id="chart-ingresos"></canvas>
+        </div>
+      {% else %}
+        <p style="color:var(--color-text-secondary);text-align:center;padding:32px 0;">No hay ingresos registrados en este período.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card card--accent dashboard-full">
+    <div class="card__header">
+      <h2>Detalle de Ingresos</h2>
+    </div>
+    <div class="card__body table-region" tabindex="0" aria-label="Detalle de ingresos" style="padding:0;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Mes</th>
+            <th>Cantidad de Pagos</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in ingresos %}
+            <tr>
+              <td>{{ item.label }}</td>
+              <td>{{ item.cantidad }}</td>
+              <td class="money"><strong>{{ item.moneda }} {{ item.total|floatformat:2 }}</strong></td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="3" style="text-align:center;padding:24px;color:var(--color-text-secondary);">Sin datos</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card card--accent dashboard-full">
+    <div class="card__header">
+      <h2>Cartera Vencida</h2>
+    </div>
+    <div class="card__body">
+      <div class="summary-cards">
+        <div class="summary-card">
+          <div class="summary-card__value">{% for item in resumen.totales_adeudados %}<span class="money">{{ item.moneda }} {{ item.total|floatformat:2 }}</span>{% if not forloop.last %}<br>{% endif %}{% empty %}USD 0.00{% endfor %}</div>
+          <div class="summary-card__label">Total Adeudado</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-card__value">{{ resumen.cantidad_cuotas }}</div>
+          <div class="summary-card__label">Cuotas Vencidas</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-card__value">{{ resumen.cantidad_contratos }}</div>
+          <div class="summary-card__label">Contratos Afectados</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card__body table-region" tabindex="0" aria-label="Cartera vencida" style="padding:0;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Inmueble</th>
+            <th>Inquilino</th>
+            <th>Cuota</th>
+            <th>Vencimiento</th>
+            <th>Días Vencido</th>
+            <th>Monto</th>
+            <th>Multa</th>
+            <th>Total</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cuota in vencidas %}
+            <tr>
+              <td>{{ cuota.contrato.inmueble.titulo }}</td>
+              <td>{{ cuota.contrato.inquilino_nombre|default:"—" }}</td>
+              <td>#{{ cuota.numero }}</td>
+              <td>{{ cuota.fecha_vencimiento|date:"d/m/Y" }}</td>
+              <td>{{ cuota.dias_vencido }}</td>
+              <td class="money">{{ cuota.moneda }} {{ cuota.monto|floatformat:2 }}</td>
+              <td class="money">{{ cuota.moneda }} {{ cuota.monto_multa|floatformat:2 }}</td>
+              <td class="money"><strong>{{ cuota.moneda }} {{ cuota.total|floatformat:2 }}</strong></td>
+              <td>
+                {% if cuota.estado == "vencido" %}
+                  <span class="badge badge--danger">{{ cuota.get_estado_display }}</span>
+                {% elif cuota.estado == "parcial" %}
+                  <span class="badge badge--warning">{{ cuota.get_estado_display }}</span>
+                {% else %}
+                  <span class="badge badge--info">{{ cuota.get_estado_display }}</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="9" style="text-align:center;padding:24px;color:var(--color-text-secondary);">No hay cartera vencida en este período.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card card--accent dashboard-full">
+    <div class="card__header">
+      <h2>Pagos por Inquilino e Inmueble</h2>
+    </div>
+    <div class="card__body table-region" tabindex="0" aria-label="Pagos por inquilino e inmueble" style="padding:0;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Inquilino</th>
+            <th>Inmueble</th>
+            <th>Cuota</th>
+            <th>Vencimiento</th>
+            <th style="text-align:right;">Monto</th>
+            <th>Pagado el</th>
+            <th>Método</th>
+            <th>Estado</th>
+            <th>Recibo</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in pagos %}
+            <tr>
+              <td>{{ p.inquilino }}</td>
+              <td>{{ p.inmueble }}</td>
+              <td>#{{ p.cuota_numero }} {{ p.cuota_descripcion }}</td>
+              <td>{{ p.vencimiento|date:"d/m/Y" }}</td>
+              <td class="money" style="text-align:right;"><strong>{{ p.moneda }} {{ p.monto|floatformat:2 }}</strong></td>
+              <td>{{ p.fecha_pago|date:"d/m/Y" }}</td>
+              <td>{{ p.metodo_pago }}</td>
+              <td>{{ p.estado_pago }}</td>
+              <td>{% if p.recibo_codigo %}{{ p.recibo_codigo }}{% else %}—{% endif %}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="9" style="text-align:center;padding:24px;color:var(--color-text-secondary);">No hay pagos registrados en este período.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function marcarEstado(valor) {
+  document.querySelectorAll('.estado-pago-cb').forEach(cb => {
+    cb.checked = cb.dataset.value === valor;
+  });
+  document.getElementById('estadoPagoHidden').value = valor;
+  document.querySelector('.filter-bar').submit();
+}
+function marcarInquilinoEstado(valor) {
+  document.querySelectorAll('.inquilino-estado-cb').forEach(cb => {
+    cb.checked = cb.dataset.value === valor;
+  });
+  document.getElementById('inquilinoEstadoHidden').value = valor;
+  document.querySelector('.filter-bar').submit();
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+<script>
+{% if ingresos_json %}
+  const labels = {{ ingresos_json|safe|default:"[]" }}.map(i => i.label + ' · ' + i.moneda);
+  const totals = {{ ingresos_json|safe|default:"[]" }}.map(i => i.total);
+  const counts = {{ ingresos_json|safe|default:"[]" }}.map(i => i.cantidad);
+  new Chart(document.getElementById('chart-ingresos'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Ingresos por moneda',
+        data: totals,
+        backgroundColor: 'rgba(15, 118, 110, 0.7)',
+        borderColor: 'rgba(15, 118, 110, 1)',
+        borderWidth: 1,
+        borderRadius: 4,
+        yAxisID: 'y',
+      }, {
+        label: 'Cantidad de Pagos',
+        data: counts,
+        backgroundColor: 'rgba(21, 128, 61, 0.3)',
+        borderColor: 'rgba(74, 138, 90, 0.8)',
+        borderWidth: 1,
+        borderRadius: 4,
+        yAxisID: 'y1',
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'top' } },
+      scales: {
+        y: { beginAtZero: true, ticks: { callback: v => v.toFixed(2) } },
+        y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, ticks: { stepSize: 1 } },
+      }
+    }
+  });
+{% endif %}
+</script>
+{% endblock %}

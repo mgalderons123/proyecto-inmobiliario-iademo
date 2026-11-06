@@ -1,0 +1,35 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block sidebar %}
+  <div class="auth-brand">
+    <span class="auth-brand__tagline">{% trans "Gestión inmobiliaria simple y profesional." %}</span>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-card__header">
+        <a href="{% url 'core:home' %}" class="auth-logo" aria-label="Casarent App">
+          <svg viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="2" y="8" width="20" height="18" rx="1" stroke="#0F766E" stroke-width="1.8"/>
+            <rect x="5.5" y="10.5" width="5" height="5" rx="0.5" fill="#0F766E" opacity="0.4"/>
+            <rect x="13.5" y="10.5" width="5" height="5" rx="0.5" fill="#0F766E" opacity="0.4"/>
+            <rect x="9" y="18" width="6" height="8" rx="0.5" fill="#0F766E" opacity="0.25"/>
+          </svg>
+        </a>
+      </div>
+
+      {% block auth_card %}{% endblock %}
+    </div>
+
+    <footer class="auth-footer">
+      <span>© {% now "Y" %} Casarent App</span>
+      <span class="auth-footer__sep">·</span>
+      <a href="{% url 'core:home' %}">{% trans "Privacidad" %}</a>
+    </footer>
+  </div>
+
+  {% block auth_scripts %}{% endblock %}
+{% endblock %}

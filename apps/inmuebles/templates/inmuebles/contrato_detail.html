@@ -1,0 +1,271 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Contrato" %} - {{ contrato.inmueble.titulo }} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div class="container-md">
+    <a href="{% url 'inmuebles:contrato_global_list' %}" class="back-link">← {% trans "Volver a contratos" %}</a>
+
+    <div class="page-header" style="margin-top:16px;">
+      <h1 style="margin:0;">{{ contrato.get_tipo_display }}</h1>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <a href="{% url 'inmuebles:contrato_update' pk=contrato.pk %}" class="btn-secondary">{% trans "Editar" %}</a>
+        <button onclick="abrirModal({{ contrato.pk }})" class="btn-secondary" type="button">{% trans "Subir documento" %}</button>
+        {% if contrato.estado == 'activo' %}
+          <a href="{% url 'inmuebles:contrato_renovar' pk=contrato.pk %}" class="btn-secondary">{% trans "Renovar" %}</a>
+          <a href="{% url 'inmuebles:contrato_finalizar' pk=contrato.pk %}" class="btn-ghost btn--sm" style="padding:10px 20px; color:var(--color-success); border-color:var(--color-success);">{% trans "Finalizar" %}</a>
+          <a href="{% url 'inmuebles:contrato_rescindir' pk=contrato.pk %}" class="btn-ghost btn--sm" style="padding:10px 20px; color:var(--color-danger); border-color:var(--color-danger);">{% trans "Rescindir" %}</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__body">
+        <table style="width:100%; border-collapse:collapse;">
+          <tr><td style="padding:8px 0; color:var(--color-text-secondary); width:160px;">{% trans "Inmueble" %}</td><td style="padding:8px 0;"><a href="{% url 'inmuebles:detail' pk=contrato.inmueble.pk %}">{{ contrato.inmueble.titulo }}</a></td></tr>
+          <tr><td style="padding:8px 0; color:var(--color-text-secondary);">{% trans "Estado" %}</td><td style="padding:8px 0;">
+            <span class="badge
+              {% if contrato.estado == 'activo' %}badge--active
+              {% elif contrato.estado == 'finalizado' %}badge--success
+              {% else %}badge--danger{% endif %}">{{ contrato.get_estado_display }}</span>
+          </td></tr>
+          <tr><td style="padding:8px 0; color:var(--color-text-secondary);">{% trans "Tipo" %}</td><td style="padding:8px 0;">{{ contrato.get_tipo_display }}</td></tr>
+          <tr><td style="padding:8px 0; color:var(--color-text-secondary);">{% trans "Inquilino" %}</td><td style="padding:8px 0;">
+            {% if contrato.inquilino_registrado %}
+              <a href="{% url 'inmuebles:inquilino_detail' pk=contrato.inquilino_registrado.pk %}">{{ contrato.inquilino_registrado.nombre }}</a>
+            {% else %}
+              {{ contrato.inquilino|default:contrato.inquilino_nombre }}
+            {% endif %}
+          </td></tr>
+          {% if contrato.inquilino_email %}<tr><td style="padding:8px 0; color:var(--color-text-secondary);">Email</td><td style="padding:8px 0;">{{ contrato.inquilino_email }}</td></tr>{% endif %}
+          {% if contrato.inquilino_telefono %}<tr><td style="padding:8px 0; color:var(--color-text-secondary);">{% trans "Teléfono" %}</td><td style="padding:8px 0;">{{ contrato.inquilino_telefono }}</td></tr>{% endif %}
+          <tr><td style="padding:8px 0; color:var(--color-text-secondary);">{% trans "Fecha inicio" %}</td><td style="padding:8px 0;">{{ contrato.fecha_inicio|date:"d/m/Y" }}</td></tr>
+          {% if contrato.fecha_fin %}<tr><td style="padding:8px 0; color:var(--color-text-secondary);">{% trans "Fecha fin" %}</td><td style="padding:8px 0;">{{ contrato.fecha_fin|date:"d/m/Y" }}</td></tr>{% endif %}
+          {% if contrato.fecha_finalizacion %}<tr><td style="padding:8px 0; color:var(--color-text-secondary);">{% trans "Finalizado el" %}</td><td style="padding:8px 0;">{{ contrato.fecha_finalizacion|date:"d/m/Y" }}</td></tr>{% endif %}
+          <tr><td style="padding:8px 0; color:var(--color-text-secondary);">{% trans "Monto" %}</td><td style="padding:8px 0; font-weight:600;">{{ contrato.moneda }} {{ contrato.monto|floatformat:2 }}</td></tr>
+          {% if contrato.comision %}<tr><td style="padding:8px 0; color:var(--color-text-secondary);">{% trans "Comisión" %}</td><td style="padding:8px 0;">{{ contrato.moneda }} {{ contrato.comision|floatformat:2 }}</td></tr>{% endif %}
+          <tr><td style="padding:8px 0; color:var(--color-text-secondary);">{% trans "Creado" %}</td><td style="padding:8px 0;">{{ contrato.created_at|date:"d/m/Y H:i" }}</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:24px;">
+      <div class="card__header">
+        <h2 style="font-size:1rem; font-weight:600; margin:0;">{% trans "Cuotas" %}</h2>
+        <a href="{% url 'inmuebles:cuota_list' contrato_pk=contrato.pk %}" class="btn-secondary">{% trans "Ver cuotas" %}</a>
+      </div>
+      <div class="card__body">
+        {% with cuotas=contrato.cuotas.all %}
+          {% if cuotas %}
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                   <th>{% trans "Descripción" %}</th>
+                   <th>{% trans "Vencimiento" %}</th>
+                   <th>{% trans "Total" %}</th>
+                   <th>{% trans "Estado" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for c in cuotas|slice:":5" %}
+                  <tr>
+                    <td>{{ c.numero }}</td>
+                    <td>{{ c.descripcion }}</td>
+                    <td>{{ c.fecha_vencimiento|date:"d/m/Y" }}</td>
+                    <td>{{ c.moneda }} {{ c.total|floatformat:2 }}</td>
+                    <td>
+                      <span class="badge
+                        {% if c.estado == 'pagado' %}badge--success
+                        {% elif c.estado == 'vencido' %}badge--danger
+                        {% elif c.estado == 'parcial' %}badge--active
+                        {% else %}badge--muted{% endif %}">{{ c.get_estado_display }}</span>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% if cuotas|length > 5 %}
+              <div style="text-align:center; margin-top:12px;">
+                <a href="{% url 'inmuebles:cuota_list' contrato_pk=contrato.pk %}" style="font-size:0.85rem;">{% blocktrans with count=cuotas|length %}Ver las {{ count }} cuotas{% endblocktrans %} →</a>
+              </div>
+            {% endif %}
+          {% else %}
+            <div class="empty-state">
+              <p>{% trans "No hay cuotas registradas." %}</p>
+              <a href="{% url 'inmuebles:cuota_list' contrato_pk=contrato.pk %}" class="btn-primary" style="display:inline-block;">{% trans "Ir a cuotas" %}</a>
+            </div>
+          {% endif %}
+        {% endwith %}
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:24px;">
+      <div class="card__header">
+        <h2 style="font-size:1rem; font-weight:600; margin:0;">{% trans "Documentos" %}</h2>
+        <button onclick="abrirModal({{ contrato.pk }})" class="btn-secondary" type="button">+ {% trans "Subir" %}</button>
+      </div>
+      <div class="card__body">
+        {% if contrato.documentos.all %}
+          <table class="table" id="documentosTable">
+            <thead>
+              <tr>
+                <th>{% trans "Nombre" %}</th>
+                <th>{% trans "Subido" %}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for doc in contrato.documentos.all %}
+                <tr>
+                  <td>{{ doc.nombre|default:_('Documento') }}</td>
+                  <td>{{ doc.fecha_subida|date:"d/m/Y H:i" }}</td>
+                  <td><a href="{% url 'inmuebles:descargar_documento' pk=doc.pk %}" style="font-size:0.85rem;">{% trans "Descargar" %}</a></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <div class="empty-state" id="sinDocs">
+            <p>{% trans 'No hay documentos. Arrastrá un archivo con el botón "Subir".' %}</p>
+          </div>
+        {% endif %}
+        <div class="upload-feedback" id="uploadFeedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal upload -->
+  <div class="modal-overlay" id="uploadModal">
+    <div class="modal">
+      <div class="modal__header">
+        <h2>{% trans "Subir documento" %}</h2>
+        <button onclick="cerrarModal()">×</button>
+      </div>
+      <div class="modal__body">
+        <div class="form__field">
+          <label class="form__label" for="docNombre">{% trans "Nombre del documento" %}</label>
+          <input type="text" id="docNombre" class="form__control" placeholder="{% trans 'Ej: Contrato firmado' %}">
+        </div>
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+          <div class="drop-zone__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 28" width="32" height="37" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 2h11l5 5v19H4z" stroke="currentColor" stroke-width="1.8" fill="rgba(255,255,255,0.6)"/>
+              <path d="M15 2v6h5" stroke="currentColor" stroke-width="1.8" fill="none"/>
+              <rect x="8" y="13" width="8" height="1.6" rx="0.8" fill="currentColor"/>
+              <rect x="8" y="17" width="8" height="1.6" rx="0.8" fill="currentColor"/>
+              <rect x="8" y="21" width="5" height="1.6" rx="0.8" fill="currentColor"/>
+            </svg>
+          </div>
+          <p>{% trans "Arrastrá un archivo aquí o hacé clic para seleccionar" %}</p>
+          <input type="file" id="fileInput" hidden accept=".pdf,.png,.jpg,.jpeg">
+        </div>
+        <div id="previewArea" hidden style="margin-top:16px;">
+          <div class="preview-box" id="previewContent"></div>
+          <div class="preview-info" id="previewInfo"></div>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="btn-secondary" onclick="cerrarModal()">{% trans "Cancelar" %}</button>
+        <button class="btn-primary" id="btnAceptar" disabled onclick="subirDocumento({{ contrato.pk }})">{% trans "Aceptar" %}</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let archivoSeleccionado = null;
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const previewArea = document.getElementById('previewArea');
+    const previewContent = document.getElementById('previewContent');
+    const previewInfo = document.getElementById('previewInfo');
+    const btnAceptar = document.getElementById('btnAceptar');
+
+    function abrirModal(contratoId) {
+      archivoSeleccionado = null;
+      previewArea.hidden = true;
+      btnAceptar.disabled = true;
+      document.getElementById('uploadModal').classList.add('is-open');
+    }
+
+    function cerrarModal() {
+      document.getElementById('uploadModal').classList.remove('is-open');
+      archivoSeleccionado = null;
+      previewArea.hidden = true;
+      btnAceptar.disabled = true;
+      fileInput.value = '';
+    }
+
+    dropZone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      this.classList.add('drop-zone--active');
+    });
+    dropZone.addEventListener('dragleave', function(e) {
+      this.classList.remove('drop-zone--active');
+    });
+    dropZone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.classList.remove('drop-zone--active');
+      if (e.dataTransfer.files.length) {
+        mostrarPreview(e.dataTransfer.files[0]);
+      }
+    });
+    fileInput.addEventListener('change', function() {
+      if (this.files.length) {
+        mostrarPreview(this.files[0]);
+      }
+    });
+
+    function mostrarPreview(file) {
+      archivoSeleccionado = file;
+      previewArea.hidden = false;
+      btnAceptar.disabled = false;
+      const size = (file.size / 1024).toFixed(1) + ' KB';
+      previewInfo.textContent = file.name + ' (' + size + ')';
+      if (file.type.startsWith('image/')) {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        previewContent.innerHTML = '';
+        previewContent.appendChild(img);
+      } else if (file.type === 'application/pdf') {
+        const embed = document.createElement('embed');
+        embed.src = URL.createObjectURL(file);
+        embed.type = 'application/pdf';
+        previewContent.innerHTML = '';
+        previewContent.appendChild(embed);
+      } else {
+        previewContent.innerHTML = '<svg viewBox="0 0 24 28" width="56" height="66" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="color:var(--color-text-secondary);"><path d="M4 2h11l5 5v19H4z" stroke="currentColor" stroke-width="1.8" fill="rgba(255,255,255,0.6)"/><path d="M15 2v6h5" stroke="currentColor" stroke-width="1.8" fill="none"/><rect x="8" y="13" width="8" height="1.6" rx="0.8" fill="currentColor"/><rect x="8" y="17" width="8" height="1.6" rx="0.8" fill="currentColor"/><rect x="8" y="21" width="5" height="1.6" rx="0.8" fill="currentColor"/></svg>';
+      }
+    }
+
+    async function subirDocumento(contratoId) {
+      btnAceptar.disabled = true;
+      btnAceptar.textContent = '{% trans "Subiendo..." %}';
+      const fd = new FormData();
+      fd.append('contrato', contratoId);
+      fd.append('archivo', archivoSeleccionado);
+      fd.append('nombre', document.getElementById('docNombre').value || archivoSeleccionado.name);
+      try {
+        const resp = await fetch('/api/v1/inmuebles/documentos/', {
+          method: 'POST',
+          body: fd,
+          headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+        });
+        if (!resp.ok) {
+          const text = await resp.text().catch(() => '');
+          console.error('Upload error:', resp.status, text);
+          throw new Error('Error al subir');
+        }
+        cerrarModal();
+        location.reload();
+      } catch (err) {
+        btnAceptar.disabled = false;
+        btnAceptar.textContent = '{% trans "Aceptar" %}';
+        const fb = document.getElementById('uploadFeedback');
+        fb.textContent = '{% trans "Error al subir el documento. Intentalo de nuevo." %}';
+        fb.className = 'upload-feedback upload-feedback--error';
+      }
+    }
+  </script>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Pagos Pendientes" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div style="max-width:900px; margin:0 auto;">
+    <div class="page-header">
+      <h1>{% trans "Pagos Pendientes de Aprobación" %}</h1>
+    </div>
+
+    {% if pagos %}
+      <div class="card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{% trans "Cuota" %}</th>
+              <th>{% trans "Inmueble" %}</th>
+              <th>{% trans "Monto" %}</th>
+              <th>{% trans "Fecha" %}</th>
+              <th>{% trans "Método" %}</th>
+              <th>{% trans "Comprobante" %}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in pagos %}
+              <tr>
+                <td>{{ p.cuota.descripcion }}</td>
+                <td>{{ p.cuota.contrato.inmueble.titulo }}</td>
+                <td><strong>{{ p.moneda }} {{ p.monto|floatformat:2 }}</strong></td>
+                <td>{{ p.fecha_pago|date:"d/m/Y" }}</td>
+                <td>{{ p.get_metodo_pago_display }}</td>
+                <td>
+                  {% if p.archivo_comprobante %}
+                    <a href="{% url 'inmuebles:descargar_comprobante' p.pk %}">{% trans "Ver" %}</a>
+                  {% else %}
+                    {{ p.comprobante|default:"-" }}
+                  {% endif %}
+                </td>
+                <td style="white-space:nowrap;">
+                  <a href="{% url 'inmuebles:pago_aprobar_rechazar' pk=p.pk %}" class="btn-primary" style="padding:6px 10px; font-size:0.8rem;">{% trans "Revisar" %}</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="card empty-state">
+        <p>{% trans "No hay pagos pendientes de aprobación." %}</p>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

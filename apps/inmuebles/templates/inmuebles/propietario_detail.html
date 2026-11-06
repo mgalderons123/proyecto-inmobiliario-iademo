@@ -1,0 +1,55 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ propietario.nombre }} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div style="max-width:800px; margin:0 auto;">
+    <a href="{% url 'inmuebles:propietario_list' %}" style="color:var(--color-text-secondary); font-size:0.88rem;">← {% trans "Volver a propietarios" %}</a>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin:16px 0 24px;">
+      <h1 style="margin:0;">{{ propietario.nombre }}</h1>
+      <div style="display:flex; gap:8px;">
+        <a href="{% url 'inmuebles:propietario_update' pk=propietario.pk %}" class="btn-secondary" style="padding:8px 16px;">{% trans "Editar" %}</a>
+        <a href="{% url 'inmuebles:propietario_delete' pk=propietario.pk %}" class="btn-secondary" style="padding:8px 16px; border-color:var(--color-danger); color:var(--color-danger);">{% trans "Eliminar" %}</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__body">
+        <table class="table">
+          <tr><td style="color:var(--color-text-secondary); width:140px; border:none; padding:8px 0;">{% trans "Documento" %}</td><td style="border:none; padding:8px 0;">{{ propietario.documento|default:"-" }}</td></tr>
+          <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">Email</td><td style="border:none; padding:8px 0;">{{ propietario.email|default:"-" }}</td></tr>
+          <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Teléfono" %}</td><td style="border:none; padding:8px 0;">{{ propietario.telefono|default:"-" }}</td></tr>
+          <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Dirección" %}</td><td style="border:none; padding:8px 0;">{{ propietario.direccion|linebreaks|default:"-" }}</td></tr>
+          {% if propietario.notas %}<tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Notas" %}</td><td style="border:none; padding:8px 0;">{{ propietario.notas|linebreaks }}</td></tr>{% endif %}
+        </table>
+      </div>
+    </div>
+
+    <h2 style="margin-bottom:16px; margin-top:32px;">{% blocktrans with nombre=propietario.nombre count=inmuebles|length %}Inmuebles de {{ nombre }} ({{ count }}){% endblocktrans %}</h2>
+
+    {% if inmuebles %}
+      <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px;">
+        {% for inmueble in inmuebles %}
+          <div class="card">
+            <div class="card__body">
+              <h3 style="margin:0 0 6px;"><a href="{% url 'inmuebles:detail' pk=inmueble.pk %}">{{ inmueble.titulo }}</a></h3>
+              <p style="color:var(--color-text-secondary); font-size:0.85rem; margin:0 0 4px;">{{ inmueble.direccion_normalizada|default:inmueble.direccion|truncatewords:12 }}</p>
+              <div style="display:flex; gap:8px; font-size:0.82rem; color:var(--color-text-secondary);">
+                <span>{{ inmueble.get_tipo_display }}</span>
+                <span class="badge
+                  {% if inmueble.estado == 'disponible' %}badge--success
+                  {% elif inmueble.estado == 'alquilado' %}badge--active
+                  {% elif inmueble.estado == 'vendido' %}badge--muted
+                  {% else %}badge--danger{% endif %}">{{ inmueble.get_estado_display }}</span>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p style="color:var(--color-text-secondary);">{% trans "Este propietario no tiene inmuebles asociados." %}</p>
+    {% endif %}
+  </div>
+{% endblock %}

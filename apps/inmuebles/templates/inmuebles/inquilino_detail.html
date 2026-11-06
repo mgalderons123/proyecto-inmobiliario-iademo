@@ -1,0 +1,119 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ inquilino.nombre }} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div style="max-width:900px; margin:0 auto;">
+    <a href="{% url 'inmuebles:inquilino_list' %}" style="color:var(--color-text-secondary); font-size:0.88rem;">← {% trans "Volver a inquilinos" %}</a>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin:16px 0 24px;">
+      <h1 style="margin:0;">{{ inquilino.nombre }}</h1>
+      <div style="display:flex; gap:8px;">
+        <a href="{% url 'inmuebles:inquilino_update' pk=inquilino.pk %}" class="btn-secondary" style="padding:8px 16px;">{% trans "Editar" %}</a>
+        <a href="{% url 'inmuebles:inquilino_delete' pk=inquilino.pk %}" class="btn-secondary" style="padding:8px 16px; border-color:var(--color-danger); color:var(--color-danger);">{% trans "Eliminar" %}</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__body">
+        <table class="table">
+          <tr><td style="color:var(--color-text-secondary); width:140px; border:none; padding:8px 0;">{% trans "Documento" %}</td><td style="border:none; padding:8px 0;">{{ inquilino.documento|default:"-" }}</td></tr>
+          <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">Email</td><td style="border:none; padding:8px 0;">{{ inquilino.email|default:"-" }}</td></tr>
+          <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Teléfono" %}</td><td style="border:none; padding:8px 0;">{{ inquilino.telefono|default:"-" }}</td></tr>
+          <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Dirección" %}</td><td style="border:none; padding:8px 0;">{{ inquilino.direccion|linebreaks|default:"-" }}</td></tr>
+          {% if inquilino.notas %}<tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Notas" %}</td><td style="border:none; padding:8px 0;">{{ inquilino.notas|linebreaks }}</td></tr>{% endif %}
+        </table>
+      </div>
+    </div>
+
+    <h2 style="margin-bottom:16px; margin-top:32px;">{% trans "Usuario vinculado" %}</h2>
+    <div class="card">
+      <div class="card__body">
+        {% if inquilino.user %}
+          <table class="table">
+            <tr><td style="color:var(--color-text-secondary); width:140px; border:none; padding:8px 0;">Username</td><td style="border:none; padding:8px 0;">{{ inquilino.user.username }}</td></tr>
+            <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">Email</td><td style="border:none; padding:8px 0;">{{ inquilino.user.email|default:"-" }}</td></tr>
+            <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Último login" %}</td><td style="border:none; padding:8px 0;">{{ inquilino.user.last_login|date:"d/m/Y H:i"|default:_('Nunca') }}</td></tr>
+            <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Estado" %}</td><td style="border:none; padding:8px 0;">{% if inquilino.user.is_active %}<span class="badge badge--success">{% trans "Activo" %}</span>{% else %}<span class="badge badge--danger">{% trans "Inactivo" %}</span>{% endif %}</td></tr>
+          </table>
+          <form method="post" action="{% url 'inmuebles:inquilino_unlink_user' pk=inquilino.pk %}" style="margin-top:16px;" onsubmit="return confirm('{% trans "¿Desvincular este usuario? El inquilino perderá acceso al portal." %}')">
+            {% csrf_token %}
+            <button type="submit" class="btn-ghost btn--sm btn-ghost--danger">{% trans "Desvincular usuario" %}</button>
+          </form>
+        {% else %}
+          <p style="color:var(--color-text-secondary); margin-bottom:16px;">{% trans "Este inquilino no tiene un usuario vinculado. Creá uno para que pueda acceder al portal." %}</p>
+          <p style="color:var(--color-text-secondary); margin-bottom:16px;">{% trans "Se generará un usuario y contraseña temporal automáticamente, y se enviará un email con las credenciales de acceso." %}</p>
+          <form method="post" action="{% url 'inmuebles:inquilino_create_user' pk=inquilino.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn-primary btn--sm">{% trans "Crear usuario y enviar credenciales" %}</button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+
+    <h2 style="margin-bottom:16px; margin-top:32px;">{% trans "Contratos activos" %}</h2>
+    {% if contratos_activos %}
+      <div class="card" style="margin-bottom:24px;">
+        <table class="table">
+          <thead>
+            <tr style="background:#DCEFEA;">
+              <th>{% trans "Inmueble" %}</th>
+              <th>{% trans "Tipo" %}</th>
+              <th>{% trans "Inicio" %}</th>
+              <th>{% trans "Fin" %}</th>
+              <th>{% trans "Monto" %}</th>
+              <th>{% trans "Estado" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in contratos_activos %}
+              <tr>
+                <td><a href="{% url 'inmuebles:detail' pk=c.inmueble.pk %}">{{ c.inmueble.titulo }}</a></td>
+                <td>{{ c.get_tipo_display }}</td>
+                <td>{{ c.fecha_inicio|date:"d/m/Y" }}</td>
+                <td>{{ c.fecha_fin|date:"d/m/Y"|default:"-" }}</td>
+                <td>{{ c.moneda }} {{ c.monto|floatformat:2 }}</td>
+                <td><span class="badge badge--active">{{ c.get_estado_display }}</span></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p style="color:var(--color-text-secondary); margin-bottom:24px;">{% trans "No tiene contratos activos." %}</p>
+    {% endif %}
+
+    <h2 style="margin-bottom:16px;">{% trans "Contratos vencidos / finalizados" %}</h2>
+    {% if contratos_vencidos %}
+      <div class="card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{% trans "Inmueble" %}</th>
+              <th>{% trans "Tipo" %}</th>
+              <th>{% trans "Inicio" %}</th>
+              <th>{% trans "Fin" %}</th>
+              <th>{% trans "Monto" %}</th>
+              <th>{% trans "Estado" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in contratos_vencidos %}
+              <tr>
+                <td><a href="{% url 'inmuebles:detail' pk=c.inmueble.pk %}">{{ c.inmueble.titulo }}</a></td>
+                <td>{{ c.get_tipo_display }}</td>
+                <td>{{ c.fecha_inicio|date:"d/m/Y" }}</td>
+                <td>{{ c.fecha_fin|date:"d/m/Y"|default:"-" }}</td>
+                <td>{{ c.moneda }} {{ c.monto|floatformat:2 }}</td>
+                <td><span class="badge badge--muted">{{ c.get_estado_display }}</span></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p style="color:var(--color-text-secondary);">{% trans "No tiene contratos vencidos ni finalizados." %}</p>
+    {% endif %}
+  </div>
+{% endblock %}

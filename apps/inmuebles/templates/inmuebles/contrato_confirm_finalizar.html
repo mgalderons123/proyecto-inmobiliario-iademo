@@ -1,0 +1,30 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% if accion == "rescindir" %}{% trans "Rescindir Contrato" %}{% else %}{% trans "Finalizar Contrato" %}{% endif %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div class="container-sm">
+    <div class="card confirm-card">
+      <h1 class="confirm-card__title">{% if accion == "rescindir" %}{% trans "Rescindir Contrato" %}{% else %}{% trans "Finalizar Contrato" %}{% endif %}</h1>
+      <p class="confirm-card__text">
+        {% if accion == "rescindir" %}
+          {% blocktrans with tipo=contrato.get_tipo_display titulo=contrato.inmueble.titulo %}¿Estás seguro de rescindir el contrato de <strong>{{ tipo }}</strong> para <strong>{{ titulo }}</strong>? Esta acción liberará el inmueble.{% endblocktrans %}
+        {% else %}
+          {% blocktrans with tipo=contrato.get_tipo_display titulo=contrato.inmueble.titulo %}¿Estás seguro de finalizar el contrato de <strong>{{ tipo }}</strong> para <strong>{{ titulo }}</strong>?{% endblocktrans %}
+        {% endif %}
+      </p>
+      <p class="confirm-card__meta">{% trans "Inquilino:" %} {{ contrato.inquilino|default:contrato.inquilino_nombre }}</p>
+
+      <form method="post" class="confirm-card__actions">
+        {% csrf_token %}
+        <a href="{% url 'inmuebles:contrato_detail' pk=contrato.pk %}" class="btn-ghost">{% trans "Cancelar" %}</a>
+        {% if accion == "rescindir" %}
+          <button type="submit" class="btn-danger">{% trans "Rescindir contrato" %}</button>
+        {% else %}
+          <button type="submit" class="btn-success">{% trans "Finalizar contrato" %}</button>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+{% endblock %}

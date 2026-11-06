@@ -1,0 +1,116 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Mi Portal" %} - {{ project_name|default:'Casarent App' }}{% endblock %}
+{% block content %}
+<div style="max-width:900px; margin:0 auto;">
+  <div class="hero--sm">
+    <div class="hero--sm-body">
+      <h1 class="hero--sm-title">{% trans "Mi Portal" %}</h1>
+      <p class="hero--sm-subtitle">{% blocktrans with nombre=inquilino.nombre %}Bienvenido, {{ nombre }}{% endblocktrans %}</p>
+    </div>
+    <div class="hero--sm-stats">
+      <div class="hero--sm-stat">
+        <div class="hero--sm-stat-value">{{ contratos_activos_count }}</div>
+        <div class="hero--sm-stat-label">{% trans "Contratos activos" %}</div>
+      </div>
+      <div class="hero--sm-stat">
+        <div class="hero--sm-stat-value">{{ cuotas_pendientes_count }}</div>
+        <div class="hero--sm-stat-label">{% trans "Cuotas pendientes" %}</div>
+      </div>
+      <div class="hero--sm-stat">
+        <div class="hero--sm-stat-value">{{ totales_adeudados|length }}</div>
+        <div class="hero--sm-stat-label">{% trans "Total adeudado" %}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-grid" style="margin-bottom:32px;">
+    <div class="stat-cell" style="border-left:3px solid var(--color-primary);">
+      <div class="stat-cell__title">{% trans "Contratos activos" %}</div>
+      <div class="stat-cell__line">{{ contratos_activos_count }}</div>
+    </div>
+    <div class="stat-cell" style="border-left:3px solid var(--color-warning);">
+      <div class="stat-cell__title">{% trans "Cuotas pendientes" %}</div>
+      <div class="stat-cell__line">{{ cuotas_pendientes_count }}</div>
+    </div>
+    <div class="stat-cell" style="border-left:3px solid var(--color-danger);">
+      <div class="stat-cell__title">{% trans "Total adeudado" %}</div>
+      <div class="stat-cell__line">
+        {% for currency, total in totales_adeudados %}{{ currency }} {{ total|floatformat:2 }}{% if not forloop.last %}<br>{% endif %}{% empty %}USD 0.00{% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:16px; margin-bottom:32px; flex-wrap:wrap;">
+    <a href="{% url 'inmuebles:portal_contratos' %}" class="btn-primary btn--sm">{% trans "Mis Contratos" %}</a>
+    <a href="{% url 'inmuebles:portal_proximos_pagos' %}" class="btn-secondary btn--sm">{% trans "Próximos Pagos" %}</a>
+  </div>
+
+  {% if cuotas_pendientes %}
+    <h2 style="margin-bottom:16px;">{% trans "Próximos vencimientos" %}</h2>
+    <div class="card table-region" tabindex="0" aria-label="{% trans 'Próximos vencimientos' %}" style="margin-bottom:32px;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>{% trans "Contrato" %}</th>
+            <th>{% trans "Vence" %}</th>
+            <th>{% trans "Monto" %}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cuota in cuotas_pendientes|slice:":5" %}
+            <tr>
+              <td>{{ cuota.contrato.inmueble.titulo }}</td>
+              <td>{{ cuota.fecha_vencimiento|date:"d/m/Y" }}</td>
+              <td>{{ cuota.moneda }} {{ cuota.total|floatformat:2 }}</td>
+              <td><a href="{% url 'inmuebles:portal_cuotas' contrato_pk=cuota.contrato.pk %}" class="btn-ghost btn--sm">{% trans "Ver" %}</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+
+  <h2 style="margin-bottom:16px;">{% trans "Mis contratos" %}</h2>
+  {% if contratos_recientes %}
+    <div class="card table-region" tabindex="0" aria-label="{% trans 'Mis contratos' %}">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>{% trans "Inmueble" %}</th>
+            <th>{% trans "Tipo" %}</th>
+            <th>{% trans "Inicio" %}</th>
+            <th>{% trans "Fin" %}</th>
+            <th>{% trans "Monto" %}</th>
+            <th>{% trans "Estado" %}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in contratos_recientes %}
+            <tr>
+              <td>{{ c.inmueble.titulo }}</td>
+              <td>{{ c.get_tipo_display }}</td>
+              <td>{{ c.fecha_inicio|date:"d/m/Y" }}</td>
+              <td>{{ c.fecha_fin|date:"d/m/Y"|default:"-" }}</td>
+              <td>{{ c.moneda }} {{ c.monto|floatformat:2 }}</td>
+              <td><span class="badge badge--active">{{ c.get_estado_display }}</span></td>
+              <td><a href="{% url 'inmuebles:portal_cuotas' contrato_pk=c.pk %}" class="btn-ghost btn--sm">{% trans "Cuotas" %}</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if contratos_activos_count > 5 %}
+      <div style="text-align:center; margin-top:16px;">
+        <a href="{% url 'inmuebles:portal_contratos' %}" class="btn-secondary">{% trans "Ver todos los contratos" %}</a>
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="empty-state">
+      <p>{% trans "No tiene contratos activos actualmente." %}</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

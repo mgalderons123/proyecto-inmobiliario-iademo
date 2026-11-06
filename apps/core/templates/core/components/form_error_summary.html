@@ -1,0 +1,16 @@
+{% load i18n %}
+{% if form.errors %}
+  <section class="form-error-summary" role="alert" tabindex="-1" data-form-error-summary aria-labelledby="form-error-title">
+    <h2 id="form-error-title" class="form-error-summary__title">{% trans "Revisá los campos indicados" %}</h2>
+    <p class="form-error-summary__intro">{% trans "Hay información que necesita corrección antes de continuar." %}</p>
+    <ul class="form-error-summary__list">
+      {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+      {% for field in form.visible_fields %}
+        {% for error in field.errors %}<li><a href="#{{ field.id_for_label }}">{{ field.label }}: {{ error }}</a></li>{% endfor %}
+      {% endfor %}
+      {% for field in form.hidden_fields %}
+        {% for error in field.errors %}<li>{{ field.label }}: {{ error }}</li>{% endfor %}
+      {% endfor %}
+    </ul>
+  </section>
+{% endif %}

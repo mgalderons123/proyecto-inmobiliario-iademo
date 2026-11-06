@@ -1,0 +1,133 @@
+{% extends "core/base.html" %}
+{% load static i18n %}
+
+{% block title %}{{ inmueble.titulo }} - {{ project_name|default:'Casarent App' }}{% endblock %}
+
+{% block content %}
+  <div style="max-width:800px; margin:0 auto;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <a href="{% url 'inmuebles:list' %}" style="color:var(--color-text-secondary); font-size:0.88rem;">← {% trans "Volver a mis inmuebles" %}</a>
+      <div style="display:flex; gap:8px;">
+        <a href="{% url 'inmuebles:update' pk=inmueble.pk %}" class="btn-secondary" style="padding:8px 16px;">{% trans "Editar" %}</a>
+        <a href="{% url 'inmuebles:delete' pk=inmueble.pk %}" class="btn-secondary" style="padding:8px 16px; border-color:var(--color-danger); color:var(--color-danger);">{% trans "Eliminar" %}</a>
+      </div>
+    </div>
+
+    <div class="card card--accent">
+      <div class="card__body">
+        <h1 style="margin:0 0 4px;">{{ inmueble.titulo }}</h1>
+        <p style="color:var(--color-text-secondary); margin:0 0 20px; font-size:0.9rem;">{{ inmueble.get_tipo_display }}</p>
+
+        {% if inmueble.fotos.first and inmueble.fotos.first.imagen %}
+          {% with total_fotos=inmueble.fotos.all|length %}
+          <div class="gallery">
+            <div class="gallery__main">
+              <img src="{{ inmueble.fotos.first.imagen.url }}" alt="{{ inmueble.titulo }}" id="galleryMain">
+              <button class="gallery__nav gallery__nav--prev{% if total_fotos < 2 %} gallery__nav--single{% endif %}" id="galleryPrev" aria-label="{% trans 'Anterior' %}">‹</button>
+              <button class="gallery__nav gallery__nav--next{% if total_fotos < 2 %} gallery__nav--single{% endif %}" id="galleryNext" aria-label="{% trans 'Siguiente' %}">›</button>
+            </div>
+            <div class="gallery__thumbs{% if total_fotos < 2 %} gallery__thumbs--single{% endif %}">
+              {% for foto in inmueble.fotos.all %}
+                {% if foto.imagen %}
+                <img src="{{ foto.imagen.url }}" alt="" class="gallery__thumb{% if forloop.first %} gallery__thumb--active{% endif %}" data-index="{{ forloop.counter0 }}">
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+          {% endwith %}
+        {% endif %}
+
+        <table class="table">
+          <tr><td style="color:var(--color-text-secondary); width:160px; border:none; padding:8px 0;">{% trans "Dirección" %}</td><td style="border:none; padding:8px 0;">{{ inmueble.direccion_normalizada|default:inmueble.direccion }}</td></tr>
+          {% if inmueble.propietario %}<tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Propietario" %}</td><td style="border:none; padding:8px 0;"><a href="{% url 'inmuebles:propietario_detail' pk=inmueble.propietario.pk %}">{{ inmueble.propietario.nombre }}</a></td></tr>{% endif %}
+          {% if inmueble.descripcion %}<tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Descripción" %}</td><td style="border:none; padding:8px 0;">{{ inmueble.descripcion|linebreaks }}</td></tr>{% endif %}
+          {% if inmueble.precio %}<tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Precio" %}</td><td class="money" style="border:none; padding:8px 0; font-weight:600;">{{ inmueble.moneda }} {{ inmueble.precio|floatformat:2 }}</td></tr>{% endif %}
+          {% if inmueble.superficie %}<tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Superficie" %}</td><td style="border:none; padding:8px 0;">{{ inmueble.superficie }} m²</td></tr>{% endif %}
+          {% if inmueble.habitaciones %}<tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Habitaciones" %}</td><td style="border:none; padding:8px 0;">{{ inmueble.habitaciones }}</td></tr>{% endif %}
+          <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Tipo de alquiler" %}</td><td style="border:none; padding:8px 0;">{{ inmueble.get_tipo_alquiler_display }}</td></tr>
+          {% if inmueble.tipo_alquiler == 'por_habitaciones' and inmueble.habitaciones %}
+            <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Habitaciones alquiladas" %}</td><td style="border:none; padding:8px 0;">{% blocktrans with ocupadas=contratos_alquiler_activos total=inmueble.habitaciones %}{{ ocupadas }} de {{ total }}{% endblocktrans %}</td></tr>
+          {% endif %}
+          {% if inmueble.banos %}<tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Baños" %}</td><td style="border:none; padding:8px 0;">{{ inmueble.banos }}</td></tr>{% endif %}
+          {% if inmueble.latitud %}
+            <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Coordenadas" %}</td><td style="border:none; padding:8px 0;">{{ inmueble.latitud }}, {{ inmueble.longitud }}</td></tr>
+          {% endif %}
+          <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Creado" %}</td><td style="border:none; padding:8px 0;">{{ inmueble.created_at|date:"d/m/Y H:i" }}</td></tr>
+          <tr><td style="color:var(--color-text-secondary); border:none; padding:8px 0;">{% trans "Actualizado" %}</td><td style="border:none; padding:8px 0;">{{ inmueble.updated_at|date:"d/m/Y H:i" }}</td></tr>
+        </table>
+
+        {% if inmueble.latitud and inmueble.longitud %}
+        <div style="margin-top:8px;">
+          <h3 style="font-size:1rem; font-weight:600; margin:0 0 12px;">{% trans "Ubicación en mapa" %}</h3>
+          <div id="map" style="height:350px; border-radius:8px; border:1px solid var(--color-border);"></div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'inmuebles/leaflet/leaflet.css' %}" />
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'inmuebles/leaflet/leaflet.js' %}"></script>
+<script>
+(function() {
+  var fotos = [{% for foto in inmueble.fotos.all %}{% if foto.imagen %}"{{ foto.imagen.url }}",{% endif %}{% endfor %}];
+  fotos = fotos.slice(0, -1);
+  if (fotos.length < 2) return;
+  var main = document.getElementById('galleryMain');
+  var thumbs = document.querySelectorAll('.gallery__thumb');
+  var current = 0;
+  function show(idx) {
+    if (idx < 0) idx = fotos.length - 1;
+    if (idx >= fotos.length) idx = 0;
+    current = idx;
+    main.src = fotos[current];
+    thumbs.forEach(function(t, i) { t.classList.toggle('gallery__thumb--active', i === current); });
+  }
+  document.getElementById('galleryPrev').addEventListener('click', function() { show(current - 1); });
+  document.getElementById('galleryNext').addEventListener('click', function() { show(current + 1); });
+  thumbs.forEach(function(t) {
+    t.addEventListener('click', function() { show(parseInt(t.dataset.index)); });
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') show(current - 1);
+    if (e.key === 'ArrowRight') show(current + 1);
+  });
+})();
+
+{% if inmueble.latitud and inmueble.longitud %}
+(function() {
+  var mapEl = document.getElementById('map');
+  if (!mapEl || typeof L === 'undefined') return;
+
+  try {
+    var lat = parseFloat('{{ inmueble.latitud|escapejs }}');
+    var lng = parseFloat('{{ inmueble.longitud|escapejs }}');
+    if (isNaN(lat) || isNaN(lng)) return;
+
+    var leafletBase = '{% static "inmuebles/leaflet/images/" %}';
+    L.Icon.Default.mergeOptions({
+      iconUrl: leafletBase + 'marker-icon.png',
+      iconRetinaUrl: leafletBase + 'marker-icon-2x.png',
+      shadowUrl: leafletBase + 'marker-shadow.png'
+    });
+
+    var map = L.map('map', { scrollWheelZoom: false }).setView([lat, lng], 16);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    L.marker([lat, lng]).addTo(map).bindPopup('{{ inmueble.titulo|escapejs }}').openPopup();
+  } catch(err) {
+    console.error('Error initializing map:', err);
+  }
+})();
+{% endif %}
+</script>
+{% endblock %}

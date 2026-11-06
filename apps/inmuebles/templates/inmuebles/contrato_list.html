@@ -1,0 +1,143 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}
+  {% if global %}{% trans "Contratos" %} - {{ project_name|default:'Casarent App' }}{% else %}{% trans "Contratos" %} - {{ inmueble.titulo }} - {{ project_name|default:'Casarent App' }}{% endif %}
+{% endblock %}
+
+{% block content %}
+  <div class="container-lg">
+
+    {% if not global %}
+      <a href="{% url 'inmuebles:detail' pk=inmueble.pk %}" class="back-link">← {% blocktrans with titulo=inmueble.titulo %}Volver a {{ titulo }}{% endblocktrans %}</a>
+    {% else %}
+      <a href="{% url 'core:home' %}" class="back-link">← {% trans "Inicio" %}</a>
+    {% endif %}
+
+    <div class="page-header">
+      <h1>{% if global %}{% trans "Todos los Contratos" %}{% else %}{% blocktrans with titulo=inmueble.titulo %}Contratos de {{ titulo }}{% endblocktrans %}{% endif %}</h1>
+      <div style="display:flex; gap:8px;">
+        <button onclick="abrirModalCarga()" class="btn-primary" type="button">{% trans "Carga de Contrato" %}</button>
+      </div>
+    </div>
+
+    {% if global %}
+      <div style="display:flex; gap:4px; margin-bottom:20px; border-bottom:1px solid var(--color-border); padding-bottom:0;">
+        <a href="{% url 'inmuebles:contrato_global_list' %}"
+           style="padding:8px 16px; font-size:0.85rem; font-weight:600; border-radius:6px 6px 0 0; {% if not tipo_actual %}background:var(--color-primary); color:#fff;{% else %}color:var(--color-text-secondary);{% endif %} text-decoration:none;">
+           {% trans "Todos" %} ({{ total_count }})
+        </a>
+        <a href="{% url 'inmuebles:contrato_global_list' %}?tipo=alquiler"
+           style="padding:8px 16px; font-size:0.85rem; font-weight:600; border-radius:6px 6px 0 0; {% if tipo_actual == 'alquiler' %}background:var(--color-primary); color:#fff;{% else %}color:var(--color-text-secondary);{% endif %} text-decoration:none;">
+           {% trans "Alquiler" %} ({{ alquiler_count }})
+        </a>
+        <a href="{% url 'inmuebles:contrato_global_list' %}?tipo=autorizacion_venta"
+           style="padding:8px 16px; font-size:0.85rem; font-weight:600; border-radius:6px 6px 0 0; {% if tipo_actual == 'autorizacion_venta' %}background:var(--color-primary); color:#fff;{% else %}color:var(--color-text-secondary);{% endif %} text-decoration:none;">
+           {% trans "Autorización de Venta" %} ({{ autorizacion_count }})
+        </a>
+      </div>
+    {% endif %}
+
+    {% if contratos %}
+      <div class="card">
+        <table class="table">
+          <thead>
+            <tr>
+              {% if global %}<th>{% trans "Inmueble" %}</th>{% endif %}
+              <th>{% trans "Tipo" %}</th>
+              <th>{% trans "Inquilino" %}</th>
+              <th>{% trans "Inicio" %}</th>
+              <th>{% trans "Fin" %}</th>
+              <th>{% trans "Monto" %}</th>
+              <th>{% trans "Estado" %}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in contratos %}
+              <tr>
+                {% if global %}<td><a href="{% url 'inmuebles:detail' pk=c.inmueble.pk %}">{{ c.inmueble.titulo }}</a></td>{% endif %}
+                <td>{{ c.get_tipo_display }}</td>
+                <td>{{ c.inquilino|default:c.inquilino_nombre }}</td>
+                <td>{{ c.fecha_inicio|date:"d/m/Y" }}</td>
+                <td>{{ c.fecha_fin|date:"d/m/Y"|default:"-" }}</td>
+                <td>{{ c.moneda }} {{ c.monto|floatformat:2 }}</td>
+                <td>
+                  <span class="badge
+                    {% if c.estado == 'activo' %}badge--active
+                    {% elif c.estado == 'finalizado' %}badge--success
+                    {% else %}badge--danger{% endif %}">{{ c.get_estado_display }}</span>
+                </td>
+                <td><a href="{% url 'inmuebles:contrato_detail' pk=c.pk %}">{% trans "Ver" %}</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="card empty-state">
+        <p>{% if global %}{% trans "No hay contratos registrados." %}{% else %}{% trans "Este inmueble no tiene contratos." %}{% endif %}</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Modal Carga de Contrato -->
+  <div class="modal-overlay" id="cargaModal">
+    <div class="modal">
+      <div class="modal__header">
+        <h2>{% trans "Cargar Contrato" %}</h2>
+        <button onclick="cerrarModalCarga()">×</button>
+      </div>
+      <div class="modal__body">
+        {% if global %}
+          <div class="form__field">
+            <label class="form__label" for="selInmueble">{% trans "Inmueble" %}</label>
+            <select id="selInmueble" class="form__control">
+              <option value="">{% trans "Seleccioná un inmueble" %}</option>
+              {% for inm in inmuebles %}
+                <option value="{{ inm.pk }}">{{ inm.titulo }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endif %}
+        <div class="form__field">
+          <label class="form__label" for="selTipo">{% trans "Tipo de Contrato" %}</label>
+          <select id="selTipo" class="form__control">
+            <option value="alquiler">{% trans "Contrato de Alquiler" %}</option>
+            <option value="venta">{% trans "Contrato de Venta" %}</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="btn-secondary" onclick="cerrarModalCarga()">{% trans "Cancelar" %}</button>
+        <button class="btn-primary" onclick="continuarCarga()">{% trans "Continuar" %}</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function abrirModalCarga() {
+      document.getElementById('cargaModal').classList.add('is-open');
+    }
+
+    function cerrarModalCarga() {
+      document.getElementById('cargaModal').classList.remove('is-open');
+    }
+
+    function continuarCarga() {
+      var tipo = document.getElementById('selTipo').value;
+      var inmueblePk;
+      {% if global %}
+        inmueblePk = document.getElementById('selInmueble').value;
+        if (!inmueblePk) {
+          alert('{% trans "Seleccioná un inmueble." %}');
+          return;
+        }
+      {% else %}
+        inmueblePk = {{ inmueble.pk }};
+      {% endif %}
+      var url = "{% url 'inmuebles:contrato_create' inmueble_pk=0 %}".replace('0', inmueblePk) + '?tipo=' + tipo;
+      window.location.href = url;
+    }
+  </script>
+{% endblock %}

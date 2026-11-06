@@ -1,0 +1,19 @@
+Hola {{ inquilino.nombre }},
+
+Se ha creado una cuenta para ti en {{ site_name }}.
+
+Tus datos de acceso:
+- Email: {{ user.email }}
+- Contraseña temporal: {{ temp_password }}
+
+Tu código de seguridad para el primer inicio de sesión es: {{ security_code }}
+
+Instrucciones:
+1. Ingresá con tu email y la contraseña temporal
+2. Entrá a tu perfil y cambiá la contraseña
+3. Guardá tu código de seguridad
+
+Si no esperabes este email, podés ignorarlo.
+
+Saludos,
+El equipo de {{ site_name }}
